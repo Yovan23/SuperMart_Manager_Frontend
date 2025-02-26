@@ -1,0 +1,46 @@
+<p-dialog 
+    [header]="dialogTitle" 
+    [(visible)]="visible" 
+    [modal]="true" 
+    [closable]="true"
+    [style]="{ width: '400px' }"
+    [contentStyle]="{ padding: '1.5rem' }"
+    (onHide)="closeDialog()"
+    class="shadow-4 border-round"
+>
+    <div class="text-center mb-4">
+        <i class="pi pi-exclamation-triangle text-5xl text-yellow-500 mb-3"></i>
+        <p class="text-lg font-medium text-gray-700 mb-2">{{ message }}</p>
+        <p class="text-gray-600">{{ description }}</p>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-end gap-2">
+            <button 
+                pButton 
+                icon="pi pi-times"
+                label="Cancel" 
+                (click)="closeDialog()" 
+                class="p-button-outlined p-button-secondary text-gray-700"
+                [style]="{
+                    'min-width': '85px',
+                    'height': '36px',
+                    'font-size': '14px'
+                }"
+            ></button>
+
+            <button 
+                pButton 
+                icon="pi pi-trash"
+                label="Delete" 
+                (click)="confirmDelete()" 
+                class="p-button-danger"
+                [style]="{
+                    'min-width': '85px',
+                    'height': '36px',
+                    'font-size': '14px'
+                }"
+            ></button>
+        </div>
+    </ng-template>
+</p-dialog>

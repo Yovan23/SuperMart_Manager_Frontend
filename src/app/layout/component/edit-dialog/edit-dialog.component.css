@@ -1,0 +1,11 @@
+.p-invalid {
+    border: 1px solid red !important;
+}
+
+.p-error {
+    color: #dc3545; 
+    font-size: 0.875rem; 
+    font-style: italic; 
+    display: block; 
+    margin-top: 0.25rem; 
+}

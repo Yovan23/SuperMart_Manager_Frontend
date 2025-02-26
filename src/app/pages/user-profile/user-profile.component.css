@@ -1,0 +1,31 @@
+.p-field {
+    margin-bottom: 1rem;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .p-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .p-button {
+    min-width: 100px;
+    padding: 0.5rem;
+  }
+  .error-message {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
+  }
+  
+  .dialog-content {
+    min-height: 200px; 
+  }
+  

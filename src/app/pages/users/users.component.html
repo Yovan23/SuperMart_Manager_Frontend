@@ -1,0 +1,125 @@
+<div class="p-d-flex p-jc-between p-ai-center p-mb-1">
+    <h2 class="p-mr-auto">User Management</h2>
+    <button pButton icon="pi pi-plus" class="p-button-text p-mr-2 p-button-sm p-mb-3"  
+    pTooltip="Add User" tooltipPosition="top" 
+    (click)="openAddDialog()">Add User
+    </button>
+</div>
+<div class="card">
+    <p-table #dt [value]="users" dataKey="_id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+            [paginator]="true" [globalFilterFields]="['name', 'email', 'EmployeeCode', 'role']"
+            styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component">
+        
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="p-2">Name</th>
+                <th class="p-2">Email</th>
+                <th class="p-2">Code</th>
+                <th class="p-2">Role</th>
+                <th class="p-2">Mobile</th>
+                <th class="p-2">DOB</th>
+                <th class="p-2">Status</th>
+                <th class="p-2">Actions</th>
+            </tr>
+            <tr>
+                <th class="p-2">
+                    <input pInputText type="text" #nameFilter (input)="dt.filter(nameFilter.value, 'name', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #emailFilter (input)="dt.filter(emailFilter.value, 'email', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #codeFilter (input)="dt.filter(codeFilter.value, 'EmployeeCode', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #roleFilter (input)="dt.filter(roleFilter.value, 'role', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #mobileFilter (input)="dt.filter(mobileFilter.value, 'mobileNumber', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="date" #dateFilter (input)="dt.filter(dateFilter.value, 'dateOfBirth', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2"><select pInputText #statusFilter (change)="dt.filter(statusFilter.value, 'isActive', 'equals')" class="p-column-filter">
+                <option [value]="">All</option>
+                <option [value]="true">Active</option>
+                <option [value]="false">Inactive</option>
+                </select>
+                </th>
+                <th class="p-2"></th>
+            </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td class="p-2"><img [src]="user?.profilePicture" *ngIf="user?.profilePicture" alt="userimage"
+                    class="user-image">{{ user.name }}</td>
+                <td class="p-2">{{ user.email }}</td>
+                <td class="p-2">{{ user.EmployeeCode }}</td>
+                <td class="p-2">{{ user.role }}</td>
+                <td class="p-2">{{ user.mobileNumber }}</td>
+                <td class="p-2">{{ user.dateOfBirth | date:'mediumDate' }}</td>    
+                <td class="p-2">
+                    <p-tag [value]="user.isActive ? 'Active' : 'Inactive'" [severity]="getSeverity(user.isActive)" />
+                </td>
+                <td class="p-2">
+                    <div class="flex gap-1">
+                        <button pButton icon="pi pi-pencil" class="p-button-text p-0"
+                                pTooltip="Edit User" tooltipPosition="top" 
+                                (click)="openEditDialog(user)">
+                        </button>
+                        <button pButton icon="pi pi-trash" class="p-button-text p-0"
+                                pTooltip="Delete User" tooltipPosition="top"
+                                (click)="openDeleteDialog(user)">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8" class="p-text-center">No users found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-edit-dialog
+    [visible]="editDialogVisible"
+    [dialogTitle]="'Edit User'"
+    [fields]="userEditFields"
+    [formData]="selectedUser"
+    (visibleChange)="editDialogVisible = $event"
+    (save)="updateUser($event)">
+</app-edit-dialog>
+
+<app-add-dialog
+  [visible]="addDialogVisible"
+  [dialogTitle]="'Add User'"
+  [fields]="userAddFields"
+  [useFormData]="true"
+  (visibleChange)="addDialogVisible = $event"
+  (save)="createUser($event)">
+</app-add-dialog>
+
+<app-delete-dialog
+    [(visible)]="deleteDialogVisible"
+    [dialogTitle]="'Delete User'"
+    [message]="'Are you sure you want to delete this user?'"
+    [description]="'This action cannot be undone. The user will lose all access to the system.'"
+    (confirm)="confirmDelete()">
+</app-delete-dialog>
+
+<app-snackbar
+    [(visible)]="snackbarVisible"
+    [type]="snackbarConfig.type"
+    [title]="snackbarConfig.title"
+    [message]="snackbarConfig.message">
+</app-snackbar>

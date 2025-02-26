@@ -1,0 +1,17 @@
+<div *ngIf="visible"
+     [ngClass]="getBackgroundClass()">
+    <div class="flex items-center p-4 gap-3">
+        <i [class]="getIcon()" [ngClass]="getIconClass()"></i>
+        <div class="flex-grow">
+            <div class="font-medium" [ngClass]="getTextClass()">
+                {{ title }}
+            </div>
+            <div class="text-sm" [ngClass]="getTextClass()">
+                {{ message }}
+            </div>
+        </div>
+        <button (click)="close()" class="text-current opacity-70 hover:opacity-100 transition-opacity">
+            <i class="pi pi-times"></i>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,122 @@
+<div class="flex justify-content-center mt-5">
+  <p-card class="w-35rem shadow-5 border-round-lg surface-card p-4 flex flex-column align-items-center">
+    <ng-template pTemplate="title">User Profile</ng-template>
+    <div class="flex justify-content-center">
+      <img 
+        [src]="userData?.profilePicture" 
+        alt="Profile Picture" 
+        class="border-circle w-10rem h-10rem shadow-3 mb-3"
+      />
+    </div>
+
+    <div class="flex flex-wrap align-items-center justify-content-between gap-5">
+      <div class="flex flex-column align-items-center text-center">
+        <h2 class="text-2xl font-semibold text-primary">{{ userData?.name }}</h2>
+        <p class="text-gray-500">{{ userData?.email }}</p>
+        <p class="text-sm font-medium text-secondary">Employee Code: {{ userData?.EmployeeCode }}</p>
+        <span class="p-tag p-tag-rounded p-tag-info text-lg px-3 py-2">{{ userData?.role }}</span>
+      </div>
+
+      <div class="flex flex-column justify-content-center w-full md:w-15rem">
+        <div class="p-fluid">
+          <div class="p-field flex align-items-center gap-2">
+            <i class="pi pi-phone text-primary"></i>
+            <p class="font-medium">Mobile: <span class="text-gray-700">{{ userData?.mobileNumber }}</span></p>
+          </div>
+          <div class="p-field flex align-items-center gap-2">
+            <i class="pi pi-calendar text-primary"></i>
+            <p class="font-medium">Birth Date: <span class="text-gray-700">{{ userData?.dateOfBirth | date:'longDate' }}</span></p>
+          </div>
+        </div>
+
+        <div class="flex justify-content-center gap-3 mt-3">
+          <button pButton label="Edit Profile" icon="pi pi-user-edit"  class="px-3 py-2 rounded-md p-button-primary"></button>
+          <button pButton label="Change Password" icon="pi pi-key" (click)="openChangePasswordDialog()" class="px-3 py-2 rounded-md p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>  
+<p-dialog header="Change Password" [(visible)]="showChangePasswordDialog" [modal]="true" [closable]="true">
+  <div class="p-fluid dialog-content">
+    <div class="p-field">
+      <label for="oldPassword">Old Password</label>
+      <input type="password" id="oldPassword" pInputText [(ngModel)]="oldPassword" />
+      <small class="error-message" *ngIf="isSubmitted && !oldPassword">This field is required.</small>
+      <small class="error-message" *ngIf="isSubmitted && isOldPasswordIncorrect">Incorrect old password.</small>
+    </div>
+    
+    <div class="p-field">
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" pInputText [(ngModel)]="newPassword" />
+      <small class="error-message" *ngIf="isSubmitted && !newPassword">This field is required.</small>
+      <small class="error-message" *ngIf="isSubmitted && newPassword.length > 0 && newPassword.length < 6">
+        Password must be at least 6 characters long.
+      </small>
+    </div>
+    
+    <div class="p-field">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" pInputText [(ngModel)]="confirmPassword" />
+      <small class="error-message" *ngIf="isSubmitted && !confirmPassword">This field is required.</small>
+      <small class="error-message" *ngIf="isSubmitted && confirmPassword.length > 0 && newPassword !== confirmPassword">
+        Passwords do not match.
+      </small>
+    </div>
+    <p-footer>
+      <div class="flex justify-content-end gap-2">
+        <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()"></button>
+        <button pButton label="Change" icon="pi pi-check" class="p-button-success" (click)="validateAndChangePassword()"></button>
+      </div>
+    </p-footer>
+    
+  </div>
+</p-dialog>
+
+
+<app-snackbar
+    [(visible)]="snackbarVisible"
+    [type]="snackbarConfig.type"
+    [title]="snackbarConfig.title"
+    [message]="snackbarConfig.message">
+</app-snackbar>
+
+
+
+
+<!-- 
+
+<p-card>
+  <ng-template pTemplate="title">User Profile</ng-template>
+  <ng-template pTemplate="content">
+    <div class="profile-container">
+      <img [src]="userData?.profilePicture" alt="Profile Picture" class="profile-img">
+      <h3>{{ userData?.name }}</h3>
+      <p>Email: {{ userData?.email }}</p>
+    </div>
+    <p-divider></p-divider>
+    <button pButton label="Change Password" icon="pi pi-lock" (click)="openChangePasswordDialog()" class="p-button-outlined"></button>
+  </ng-template>
+</p-card>
+
+<p-dialog header="Change Password" [(visible)]="showChangePasswordDialog" modal="true" [closable]="false">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="oldPassword">Old Password</label>
+      <input id="oldPassword" type="password" pInputText [(ngModel)]="oldPassword">
+    </div>
+    <div class="p-field">
+      <label for="newPassword">New Password</label>
+      <input id="newPassword" type="password" pInputText [(ngModel)]="newPassword">
+    </div>
+    <div class="p-field">
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password" pInputText [(ngModel)]="confirmPassword">
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="showChangePasswordDialog = false"></button>
+    <button pButton label="Change" icon="pi pi-check" (click)="changePassword()"></button>
+  </ng-template>
+</p-dialog>
+ -->

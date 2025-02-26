@@ -1,0 +1,10 @@
+:host {
+    position: fixed;
+    top: 50px;
+    right: 10px ;/* Move it to the right corner */
+    z-index: 99999;
+    min-width: 250px;
+    max-width: 350px;
+    border-radius: 8px;
+    min-height: 80px;
+}

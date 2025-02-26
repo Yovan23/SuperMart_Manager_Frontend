@@ -1,0 +1,43 @@
+/* 
+:host ::ng-deep .p-column-filter {
+    width: 100%;
+    min-width: 0;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-header {
+    padding: 0.5rem;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    padding: 0.5rem;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.5rem;
+}
+ */
+ .date-range-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-picker-wrapper {
+    margin-right: 1rem;
+}
+
+.date-input-group {
+    display: flex;         
+    align-items: center;  
+}
+
+.date-input-group label {
+    margin-right: 0.5rem; 
+    white-space: nowrap;  
+}
+
+.error-message {
+    color: red;
+    margin-top: 0.5rem;
+}

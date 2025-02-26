@@ -1,0 +1,67 @@
+<div class="layout-wrapper" [class.layout-sidebar-collapsed]="!sidebarVisible">
+  <div class="sidebar" [class.collapsed]="!sidebarVisible">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <img 
+        [src]="userData?.profilePicture" 
+        *ngIf="userData?.profilePicture" 
+        class="logo cursor-pointer"
+        alt="userimage"
+        (click)="openUserProfile()"
+      >      
+        <div class="user-info" *ngIf="sidebarVisible">
+          <h3 class="username">{{ userData?.name }}</h3>
+          <p class="user-details">{{ userData?.email }} | {{ userData?.EmployeeCode }}</p>
+          <span class="admin-badge">{{ userData?.role }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-list">
+      <a pRipple routerLink="/dashboard/home" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-th-large"></i>
+        <span *ngIf="sidebarVisible">Dashboard</span>
+      </a>
+      <a pRipple routerLink="/dashboard/category" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-chart-bar"></i>
+        <span *ngIf="sidebarVisible">Category</span>
+      </a>
+      <a pRipple routerLink="/dashboard/stock" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-inbox"></i>
+        <span *ngIf="sidebarVisible">Inventory</span>
+      </a>
+      <a pRipple routerLink="/dashboard/users" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-users"></i>
+        <span *ngIf="sidebarVisible">Users</span>
+      </a>
+      <a pRipple routerLink="/dashboard/product" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-cog"></i>
+        <span *ngIf="sidebarVisible">Product</span>
+      </a>
+      <a pRipple routerLink="/dashboard/supplier" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-users"></i>
+        <span *ngIf="sidebarVisible">Supplier</span>
+      </a>
+      <a pRipple routerLink="/dashboard/log" routerLinkActive="active" class="nav-item">
+        <i class="pi pi-users"></i>
+        <span *ngIf="sidebarVisible">log</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="layout-main">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button pButton icon="pi pi-bars" class="p-button-text menu-button" (click)="toggleSidebar()"></button>
+        <span class="app-title">SmartMart Manager</span>
+      </div>
+      <div class="toolbar-right">
+        <button pButton icon="pi pi-sign-out" class="p-button-text logout-button" (click)="logout()"></button>
+      </div>
+    </div>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
