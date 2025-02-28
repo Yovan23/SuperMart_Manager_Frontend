@@ -1,0 +1,14 @@
+/* 
+.custom-class{
+    background-color: aquamarine;
+} */
+.custom-link {
+    color: #ffffff; /* text-blue-600 equivalent */
+  }
+  
+  .custom-link:hover {
+    color: #1e40af; /* text-blue-800 equivalent */
+  }
+::ng-deep body{
+  background-color: #f0ebf8;
+}

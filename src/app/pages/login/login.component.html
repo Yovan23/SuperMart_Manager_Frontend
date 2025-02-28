@@ -1,72 +1,141 @@
-<div class="surface-ground flex align-items-center justify-content-center min-h-screen w-full" 
-     style="background-image: url('https://png.pngtree.com/background/20210710/original/pngtree-shopping-mall-supermarket-selection-merchandise-poster-background-material-picture-image_1048684.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat; 
-            margin: 0; 
-            padding: 0;
-            min-height: 100vh;
-            width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;">
-    <div class="surface-card p-4 shadow-4 border-round w-full lg:w-4">
+<div class="p-2 custom-class">
+  <div
+    class="grid m-2 border-3 ml-6 mr-6 mt-2 justify-content-between"
+    style="
+      height: 93vh;
+      border-radius: 3ch;
+      border-color: #f0ebf8;
+      overflow: hidden;
+      margin: 0;
+    "
+  >
+    <!-- Image section (70%) -->
+    <div
+      class="col-8 align-items-center justify-content-center"
+      style="
+        background-image: url('https://wallpapers.com/images/featured/supermarket-pictures-brhr0v0zqqxvtafp.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100%;
+        animation: fadeIn 2s ease-in;
+      "
+    >
+      <!-- Empty div for background image to take 70% width -->
+    </div>
+
+    <!-- Login section (30%) -->
+    <div
+      class="col-4 flex flex-row align-items-center justify-content-center"
+      style="background-color: rgb(3, 116, 69)"
+    >
+      <div class="w-full p-4 text-white">
         <div class="text-center mb-5">
-            <span class="text-600 font-medium">Sign in to continue</span>
+          <span class="text-5xl animate-pulse"> Sign in to continue </span>
         </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="mb-4">
-                <label for="email">Email</label>
-                <span class="p-float-label">
-                    <input 
-                        pInputText 
-                        id="email" 
-                        formControlName="email" 
-                        class="w-full"
-                        [ngClass]="{'ng-invalid ng-dirty': submitted && loginForm.get('email')?.invalid}"
-                    >
-                </span>
-                <small class="p-error block mt-1" *ngIf="submitted && loginForm.get('email')?.errors?.['required']" style="color: red;">
-                    Email is required
-                </small>
-                <small class="p-error block mt-1" *ngIf="submitted && loginForm.get('email')?.errors?.['email']" style="color: red;">
-                    Email is invalid
-                </small>
-            </div>
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="onSubmit()"
+          class="animate__animated animate__fadeInUp"
+        >
+          <!-- Email Input -->
+          <div class="mb-4">
+            <label for="email" class="block mb-2 font-semibold text-900"
+              >Email</label
+            >
+            <span class="p-float-label">
+              <input
+                pInputText
+                id="email"
+                formControlName="email"
+                placeholder="Enter your email address"
+                class="w-full p-3 border-round-md transition-colors duration-300 hover:border-primary focus:border-primary"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    submitted && loginForm.get('email')?.invalid
+                }"
+              />
+            </span>
+            <small
+              class="p-error block mt-1 animate__animated animate__shakeX"
+              *ngIf="submitted && loginForm.get('email')?.errors?.['required']"
+              style="color: #d32f2f"
+            >
+              Email is required
+            </small>
+            <small
+              class="p-error block mt-1 animate__animated animate__shakeX"
+              *ngIf="submitted && loginForm.get('email')?.errors?.['email']"
+              style="color: #d32f2f"
+            >
+              Email is invalid
+            </small>
+          </div>
 
-            <div class="mb-4">
-                <label for="password">Password</label>
-                <span class="p-float-label">
-                    <input 
-                        pInputText 
-                        type="password"
-                        id="password" 
-                        formControlName="password"
-                        class="w-full"
-                        [ngClass]="{'ng-invalid ng-dirty': submitted && loginForm.get('password')?.invalid}"
-                    />
-                </span>
-                <small class="p-error block mt-1" *ngIf="submitted && loginForm.get('password')?.errors?.['required']" style="color: red;">
-                    Password is required
-                </small>
-                <small class="p-error block mt-1" *ngIf="submitted && loginForm.get('password')?.errors?.['minlength']" style="color: red;">
-                    Password must be at least 6 characters
-                </small>
-            </div>
+          <!-- Password Input -->
+          <div class="mb-4">
+            <label for="password" class="block mb-2 font-semibold text-900"
+              >Password</label
+            >
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="password"
+                id="password"
+                placeholder="Enter your Password"
+                formControlName="password"
+                class="w-full p-3 border-round-md transition-colors duration-300 hover:border-primary focus:border-primary"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    submitted && loginForm.get('password')?.invalid
+                }"
+              />
+            </span>
+            <small
+              class="p-error block mt-1 animate__animated animate__shakeX"
+              *ngIf="submitted && loginForm.get('password')?.errors?.['required']"
+              style="color: #d32f2f"
+            >
+              Password is required
+            </small>
+            <small
+              class="p-error block mt-1 animate__animated animate__shakeX"
+              *ngIf="submitted && loginForm.get('password')?.errors?.['minlength']"
+              style="color: #d32f2f"
+            >
+              Password must be at least 6 characters
+            </small>
+          </div>
 
-            <div class="flex align-items-center justify-content-between mb-4">
-                <a class="font-medium no-underline ml-2 text-right cursor-pointer" 
-                    style="color: var(--primary-color)"
-                    (click)="sendResetLink()">
-                    Forgot password?
-                </a>
-            </div>
+          <!-- Forgot Password Link -->
+          <div class="flex align-items-center justify-content-between mb-4">
+            <a
+              class="font-medium font-bold no-underline ml-2 text-right cursor-pointer custom-link transition-colors duration-300"
+              (click)="sendResetLink()"
+            >
+              Forgot password?
+            </a>
+          </div>
 
-            <div *ngIf="errorMessage" class="p-error block mb-3 text-center" style="color: red;">
-                {{ errorMessage }}
-            </div>
-            <button pButton type="submit" label="Sign In" class="w-full"></button>
+          <!-- Error Message -->
+          <div
+            *ngIf="errorMessage"
+            class="p-error block mb-3 text-center animate__animated animate__bounceIn"
+            style="color: #d32f2f"
+          >
+            {{ errorMessage }}
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            pButton
+            type="submit"
+            label="Sign In"
+            class="w-full p-3  border-round-md hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
+          ></button>
         </form>
+      </div>
     </div>
+  </div>
 </div>
