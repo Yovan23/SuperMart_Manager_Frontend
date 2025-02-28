@@ -10,6 +10,12 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 
+interface LogExtended extends Log {
+    name?: string;
+    EmployeeCode?: string;
+    role?: string;
+}
+
 @Component({
     selector: 'app-log',
     standalone: true,
@@ -44,21 +50,26 @@ export class LogComponent implements OnInit, OnDestroy {
         this.today.setHours(0, 0, 0, 0);
         this.form = this.fb.group({
             fromDate: [this.fromDate, Validators.required],
-            toDate: [this.today, Validators.required] // Initialize toDate with today's date
+            toDate: [this.today, Validators.required] 
         });
     }
 
     ngOnInit(): void {
         this.fetchLogs();
     }
-
+    
     fetchLogs(): void {
         this.loading = true;
         if (this.logSubscription) this.logSubscription.unsubscribe();
-
+    
         this.logSubscription = this.logService.getAllLogs().subscribe(
             (response) => {
-                this.logs = response.data.reverse();
+                this.logs = response.data.map((log: Log) => ({
+                    ...log,
+                    name: log.userId?.name, 
+                    EmployeeCode: log.userId?.EmployeeCode,
+                    role: log.userId?.role
+                })) as LogExtended[];
                 this.loading = false;
             },
             (error) => {
@@ -67,6 +78,7 @@ export class LogComponent implements OnInit, OnDestroy {
             }
         );
     }
+    
 
     fetchLogsByDateRange(): void {
         this.fromDateError = '';

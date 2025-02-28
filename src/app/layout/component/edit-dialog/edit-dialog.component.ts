@@ -352,15 +352,21 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RippleModule } from 'primeng/ripple';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 export interface Field {
+    minDate?: Date|null|undefined;
+    maxDate?: Date|null|undefined;
+    suggestions?: { label: string; value: any; }[];
+    suggestionServiceMethod?: string;
     name: string;
     label: string;
-    type: 'text' | 'email' | 'password' | 'file' | 'select' | 'date' | 'tel' | 'number';
+    type: 'text' | 'email' | 'password' | 'file' | 'select' | 'date' | 'tel' | 'number' | 'autocomplete';
     options?: { label: string; value: any }[];
     value?: any;
     required?: boolean;
     pattern?: string;
+    selectedSuggestion?: any; 
 }
 
 @Component({
@@ -380,6 +386,7 @@ export interface Field {
         SelectModule,
         RippleModule,
         InputTextModule,
+        AutoCompleteModule,
     ],
     providers: [DatePipe]
 })
@@ -427,10 +434,10 @@ export class EditDialogComponent implements OnInit, OnChanges {
               validators.push(Validators.pattern(field.pattern));
           }
 
-        if (field.type === 'date') {
-            validators.push(this.dateNotFutureValidator());  // Add custom validator
-        }
-
+          if (field.type === 'autocomplete') {
+            field.suggestions = [];
+            field.selectedSuggestion = null;
+          }
           formGroupConfig[field.name] = [this.formData?.[field.name] || '', validators];
       });
 
@@ -517,6 +524,26 @@ export class EditDialogComponent implements OnInit, OnChanges {
       });
     }
   }
+
+  filterSuggestions(event: any, field: Field) {
+      const query = event.query;
+      console.log('Query:', query);
+  
+      if (!query) {
+          field.suggestions = [];
+      } else {
+          const filtered = (field.options || []).filter(option =>
+              option.label.toLowerCase().includes(query.toLowerCase())
+          );
+          field.suggestions = filtered;
+      }
+  }
+  onSuggestionSelected(event: any, field: any) {
+      const selectedValue = event.value.value; 
+      this.dynamicForm.get(field.name)?.setValue(selectedValue);
+      this.formData[field.name] = selectedValue; 
+    }
+  
 
   getFormControl(name: string): AbstractControl | null {
       return this.dynamicForm.get(name);

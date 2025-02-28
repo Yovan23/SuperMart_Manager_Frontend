@@ -73,7 +73,6 @@
                                  [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
                              />
                          </ng-container>
-
                          <ng-container *ngSwitchCase="'file'">
                              <div class="flex flex-column gap-2">
                                  <div class="flex align-items-center gap-2">
@@ -113,12 +112,30 @@
                                  [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
                              ></p-select>
                          </ng-container>
-
+                         <ng-container *ngSwitchCase="'autocomplete'">
+                            <div class="w-full">
+                                <p-autoComplete
+                                    fluid="true"
+                                    [id]="field.name + i"
+                                    [formControlName]="field.name"
+                                    [suggestions]="field.suggestions || []"
+                                    (completeMethod)="filterSuggestions($event, field)"
+                                    (onSelect)="onSuggestionSelected($event, field)"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [ngClass]="{
+                                        'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)
+                                    }"
+                                ></p-autoComplete>
+                            </div>
+                        </ng-container>                        
                          <ng-container *ngSwitchCase="'date'">
                              <p-datePicker
                                  [inputId]="field.name + i"
                                  [formControlName]="field.name"
                                  [showIcon]="true"
+                                 [minDate]="field.minDate"
+                                 [maxDate]="field.maxDate"
                                  [style]="{'width':'100%'}"
                                  [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
                              ></p-datePicker>
@@ -128,7 +145,7 @@
                          <span *ngIf="getFormControl(field.name)?.hasError('required')">This field is required.</span>
                          <!-- <span *ngIf="field.type === 'email' && getFormControl(field.name)?.hasError('email')">Invalid email format.</span> -->
                          <span *ngIf="getFormControl(field.name)?.hasError('pattern')">Invalid format.</span>
-                         <span *ngIf="getFormControl(field.name)?.hasError('futureDate')">Date of Birth cannot be in the future.</span>
+                         <!-- <span *ngIf="getFormControl(field.name)?.hasError('futureDate')">Date of Birth cannot be in the future.</span> -->
                      </small>
                  </div>
              </div>

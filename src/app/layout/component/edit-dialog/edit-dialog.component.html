@@ -70,6 +70,8 @@
                                         [inputId]="field.name + i"
                                         [formControlName]="field.name"
                                         [showIcon]="true"
+                                        [minDate]="field.minDate"
+                                        [maxDate]="field.maxDate"
                                         [style]="{'width':'100%'}"
                                         [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
                                     ></p-datePicker>
@@ -114,6 +116,23 @@
                                         <span *ngIf="fileError" class="text-red-500 text-sm">{{ fileError }}</span>
                                     </div>
                                 </ng-container>
+                                <ng-container *ngSwitchCase="'autocomplete'">
+                                    <div class="w-full">
+                                        <p-autoComplete
+                                            fluid="true"
+                                            [id]="field.name + i"
+                                            [formControlName]="field.name"
+                                            [suggestions]="field.suggestions || []"
+                                            (completeMethod)="filterSuggestions($event, field)"
+                                            (onSelect)="onSuggestionSelected($event, field)"
+                                            optionLabel="label"
+                                            optionValue="value"
+                                            [ngClass]="{
+                                                'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)
+                                            }"
+                                        ></p-autoComplete>
+                                    </div>
+                                </ng-container>  
                             </ng-container>
                             <small *ngIf="getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)" class="p-error block mt-1">
                                 <span *ngIf="getFormControl(field.name)?.hasError('required')">This field is required.</span>

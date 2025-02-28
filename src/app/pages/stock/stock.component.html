@@ -1,1 +1,105 @@
-<p>stock works!</p>
+<div class="p-d-flex p-jc-between p-ai-center p-mb-1">
+    <h2 class="p-mr-auto">Stock Management</h2>
+    <button pButton icon="pi pi-plus" class="p-button-text p-mr-2" 
+    pTooltip="Add Stock" tooltipPosition="top" 
+    (click)="openAddDialog()">Add Stock
+    </button>
+</div>
+
+<div class="card">
+    <p-table #dt [value]="stocks" dataKey="_id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+            [paginator]="true" [globalFilterFields]="['ProductName', 'qty', 'buying_price', 'expiryDate', 'Supplier','addedBy']"
+            styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component">
+        
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="p-2">Product Name</th>
+                <th class="p-2">Quantity</th>
+                <th class="p-2">Buying Price</th>
+                <th class="p-2">Expiry Date</th>
+                <th class="p-2">Supplier</th>
+                <th class="p-2">Added By</th>
+                <th class="p-2">Actions</th>
+            </tr>
+            <tr>
+                <th class="p-2">
+                    <input pInputText type="text" #productNameFilter (input)="dt.filter(productNameFilter.value, 'ProductName', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #qtyFilter (input)="dt.filter(qtyFilter.value, 'qty', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #buyingPriceFilter (input)="dt.filter(buyingPriceFilter.value, 'buying_price', 'contains')" 
+                           placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="date" #expiryDateFilter (input)="dt.filter(expiryDateFilter.value, 'expiryDate', 'contains')" 
+                           class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #supplierFilter 
+                        (input)="applyFilter($event, 'supplierId.name')" 
+                        placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>
+                <th class="p-2">
+                    <input pInputText type="text" #addedByFilter 
+                        (input)="applyFilter($event, 'addedBy.EmployeeCode')" 
+                        placeholder="Search" class="p-column-filter w-full p-1 text-sm">
+                </th>                
+                <th class="p-2"></th>
+            </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="body" let-stock>
+            <tr>
+                <td class="p-2">{{ stock.ProductName }}</td>
+                <td class="p-2">{{ stock.qty }}</td>
+                <td class="p-2">{{ stock.buying_price }}</td>
+                <td class="p-2">{{ stock.expiryDate | date }}</td>
+                <td class="p-2">{{ stock.supplierId.name }}</td>
+                <td class="p-2">{{ stock.addedBy.EmployeeCode }}</td>
+                <td class="p-2">
+                    <div class="flex gap-1">
+                        <button pButton icon="pi pi-pencil" class="p-button-text p-0"
+                                pTooltip="Edit Stock" tooltipPosition="top" 
+                                (click)="openEditDialog(stock)">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" class="p-text-center">No stock records found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-edit-dialog
+    [visible]="editDialogVisible"
+    [dialogTitle]="'Edit Stock'"
+    [fields]="stockEditFields"
+    [formData]="selectedStock"
+    (visibleChange)="editDialogVisible = $event"
+    (save)="updateStock($event)">
+</app-edit-dialog>
+
+<app-add-dialog
+  [visible]="addDialogVisible"
+  [dialogTitle]="'Add Stock'"
+  [fields]="stockAddFields"
+  [useFormData]="false"
+  (visibleChange)="addDialogVisible = $event"
+  (save)="createStock($event)">
+</app-add-dialog>
+
+<app-snackbar
+    [(visible)]="snackbarVisible"
+    [type]="snackbarConfig.type"
+    [title]="snackbarConfig.title"
+    [message]="snackbarConfig.message">
+</app-snackbar>
