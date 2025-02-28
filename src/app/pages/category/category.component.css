@@ -1,9 +1,9 @@
-
+/* 
  :host ::ng-deep .p-column-filter {
     width: 100%;
     min-width: 0;
-}
-
+} */
+/* 
 :host ::ng-deep .p-datatable .p-datatable-header {
     padding: 0.5rem;
 }
@@ -14,4 +14,4 @@
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
     padding: 0.5rem;
-}
+} */

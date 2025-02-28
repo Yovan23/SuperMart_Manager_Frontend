@@ -1,8 +1,10 @@
-:host ::ng-deep .p-column-filter {
+/* :host ::ng-deep .p-column-filter {
     width: 100%;
     min-width: 0;
+} */
+::ng-deep .p-inputtext{
+    width: 140px;
 }
-
 :host ::ng-deep .p-datatable .p-datatable-header {
     padding: 0.5rem;
 }
@@ -22,5 +24,3 @@
     margin-right: 8px; 
     vertical-align: middle; 
 }
-
-

@@ -1,7 +1,7 @@
 /* navigation.component.scss */
 .layout-wrapper {
   display: flex;
-  min-height: 100vh;
+  min-height: auto;
 }
 
 .sidebar {
@@ -110,7 +110,7 @@
 .layout-sidebar-collapsed {
   .layout-main {
     margin-left: 70px;
-    width: calc(100% - 70px);
+     
   }
 
   .toolbar {
@@ -156,9 +156,10 @@
 }
 
 .content {
-  padding: 70px 20px 20px 20px;
+  padding: 70px 10px 10px ;
   width: 100%;
   min-height: calc(100vh - 50px);
+  background-color: #ffffff;
 }
 
 /* Responsive styles */

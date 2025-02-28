@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -17,6 +17,7 @@ import { UserService } from '../../services/user.services';
     PasswordModule,
     CheckboxModule,
     ButtonModule,
+    FormsModule,
     ReactiveFormsModule,
     CommonModule
   ],
