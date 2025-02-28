@@ -84,6 +84,7 @@ export class UsersComponent implements OnInit, OnDestroy {
             name: 'dateOfBirth',
             label: 'Date Of Birth',
             type: 'date',
+            maxDate: new Date(),
             required: true,
         },
         {
@@ -136,6 +137,7 @@ export class UsersComponent implements OnInit, OnDestroy {
             name: 'dateOfBirth',
             label: 'Date Of Birth',
             type: 'date',
+            maxDate: new Date(),
             required: true,
         },
         {

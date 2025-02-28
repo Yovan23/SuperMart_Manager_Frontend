@@ -11,26 +11,26 @@ import { ApiResponse } from "../models/apiResponse.model";
 ({
     providedIn: 'root'
 })
-export class CategoryService {
+export class StockService {
     private apiUrl =  `${environment.baseUrl}/stock`;
     authService: any;
 
     constructor(private http: HttpClient) {}
 
-    getAllCategory(): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(`${this.apiUrl}/getAllProductStock`, {
+    getAllStock(): Observable<ApiResponse> {
+        return this.http.get<ApiResponse>(`${this.apiUrl}/getAllStock`, {
           headers: getAuthHeaders()
         })
     }
 
-    createCategory(stock: Stock): Observable<Stock> {
+    createStock(stock: Stock): Observable<Stock> {
         return this.http.post<Stock>(`${this.apiUrl}/addStock`, stock, {
             headers: getAuthHeaders()
         });
     }
    
-    updateCategory({ stock, _id }: { stock: Stock; _id: string; }): Observable<Stock> {
-        return this.http.put<Stock>(`${this.apiUrl}/updateStock/${_id}`, stock, {
+    updateStock({ stock, _id }: { stock: Stock; _id: string; }): Observable<Stock> {
+        return this.http.post<Stock>(`${this.apiUrl}/updateStock/${_id}`, stock, {
             headers: getAuthHeaders()
         });
     }

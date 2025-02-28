@@ -27,7 +27,7 @@
 
 <div class="card">
     <p-table #dt [value]="logs" dataKey="_id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-        [paginator]="true" [globalFilterFields]="['name', 'EmployeeCode', 'role', 'loggedAt']"
+    [paginator]="true" [globalFilterFields]="['userId.name', 'userId.EmployeeCode', 'userId.role', 'loggedAt']"
         styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter">
 
         <ng-template pTemplate="header">
@@ -38,11 +38,12 @@
                 <th>Timestamp</th>
             </tr>
             <tr>
-                <th><input pInputText type="text" #nameFilter (input)="dt.filter(nameFilter.value, 'name', 'contains')" placeholder="Search by name"></th>
-                <th><input pInputText type="text" #employeeCodeFilter (input)="dt.filter(employeeCodeFilter.value, 'EmployeeCode', 'contains')" placeholder="Search by Employee Code"></th>
-                <th><input pInputText type="text" #roleFilter (input)="dt.filter(roleFilter.value, 'role', 'contains')" placeholder="Search by Role"></th>
-                <th><input pInputText type="text" #timestampFilter (input)="dt.filter(timestampFilter.value, 'loggedAt', 'contains')" placeholder="Search by Timestamp"></th>
-            </tr>
+                <tr>
+                    <th><input pInputText type="text" #nameFilter (input)="dt.filter(nameFilter.value, 'name', 'contains')" placeholder="Search by Name"></th>
+                    <th><input pInputText type="text" #employeeCodeFilter (input)="dt.filter(employeeCodeFilter.value, 'EmployeeCode', 'contains')" placeholder="Search by Employee Code"></th>
+                    <th><input pInputText type="text" #roleFilter (input)="dt.filter(roleFilter.value, 'role', 'contains')" placeholder="Search by Role"></th>
+                    <th><input pInputText type="text" #timestampFilter (input)="dt.filter(timestampFilter.value, 'loggedAt', 'contains')" placeholder="Search by Timestamp"></th>
+                </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-log>
