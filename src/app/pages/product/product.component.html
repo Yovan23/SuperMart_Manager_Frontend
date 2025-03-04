@@ -1,43 +1,55 @@
-<div class="p-d-flex p-jc-between p-ai-center p-mb-1">
+<div class="p-d-2 p-jc-between p-ai-center p-mb-1">
   <h2 class="p-mr-auto">Product Management</h2>
-  <button
-    pButton
-    icon="pi pi-plus"
-    class="p-button-text p-mr-2"
-    style="color: aliceblue; background-color: rgb(1, 118, 30)"
-    pTooltip="Add Product"
-    tooltipPosition="top"
-    (click)="openAddDialog()"
-  >
-    Add Product
-  </button>
 </div>
-<br>
+<br />
 
 <!-- <div class="card mb-3">
-    <div class="flex flex-wrap gap-2">
-        <p-selectButton [options]="categoryOptions" [(ngModel)]="selectedCategory" 
-            optionLabel="name" optionValue="_id" 
-            (onChange)="onCategoryChange($event)">
-            <ng-template let-item>
-                <div class="px-3 py-2">{{ item.name }}</div>
-            </ng-template>
-        </p-selectButton>
-    </div>
-</div> -->
+      <div class="flex flex-wrap gap-2">
+          <p-selectButton [options]="categoryOptions" [(ngModel)]="selectedCategory" 
+              optionLabel="name" optionValue="_id" 
+              (onChange)="onCategoryChange($event)">
+              <ng-template let-item>
+                  <div class="px-3 py-2">{{ item.name }}</div>
+              </ng-template>
+          </p-selectButton>
+      </div>
+  </div> -->
 
 <div class="card">
   <p-table
     #dt
+    [columns]="cols"
     [value]="products"
     dataKey="_id"
     [rows]="10"
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
     [paginator]="true"
+    [scrollable]="true"
+    scrollHeight="430px"
     [globalFilterFields]="['name', 'description', 'categoryId', 'barcode']"
     styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component"
+    selectionMode="multiple"
+    [(selection)]="selectedProducts"
+    [exportHeader]="'customExportHeader'"
   >
+    <ng-template #caption>
+      <div class="text-end p-2 flex gap-5 justify-content-end">
+        <p-button
+          icon="pi pi-plus"
+          label="Add Product"
+          class="p-button-text p-mr-2"
+          pTooltip="Add Product"
+          tooltipPosition="top"
+          (click)="openAddDialog()"
+        />
+        <p-button
+          icon="pi pi-external-link"
+          label="Export"
+          (click)="dt.exportCSV()"
+        />
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th class="p-2">Name</th>
@@ -150,12 +162,18 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-product>
-      <tr>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-product>
+      <tr [pSelectableRow]="rowData">
         <td class="p-2">{{ product.name }}</td>
         <td class="p-2">{{ product.description }}</td>
         <td class="p-2">{{ getCategoryName(product.categoryId) }}</td>
-        <td class="p-2">{{ product.quantity }}</td>
+
+        <td>
+          <p-badge
+            [value]="product.quantity"
+            [severity]="stockSeverity(product)"
+          />
+        </td>
         <td class="p-2">{{ product.price }}</td>
         <td class="p-2">{{ product.barcode }}</td>
         <td class="p-2">{{ product.volume }}</td>

@@ -314,31 +314,18 @@ export const MyPreset = definePreset(Aura, {
         iconSize: "1rem",
         anchorGutter: "2px",
         primary: {
-            50: "#  d1fae5",
-            100: "#d1fae5",
-            200: "#a7f3d0",
-            300: "#6ee7b7",
-            400: "#34d399",
-            500: "#10b981",
-            600: "#059669",
-            700: "#047857",
-            800: "#065f46",
-            900: "#064e3b",
-            950: "#022c22"
+            50: "#f5f9ff",
+            100: "#d0e1fd",
+            200: "#abc9fb",
+            300: "#85b2f9",
+            400: "#609af8",
+            500: "#3b82f6",
+            600: "#326fd1",
+            700: "#295bac",
+            800: "#204887",
+            900: "#183462",
+            950: "#0f213e"
         },
-        // primary: {
-        //     50: "black",
-        //     100: "black",
-        //     200: "black",
-        //     300: "black",
-        //     400: "black",
-        //     500: "black",
-        //     600: "black",
-        //     700: "black",
-        //     800: "black",
-        //     900: "black",
-        //     950: "black"
-        // },
         formField: {
             paddingX: "0.75rem",
             paddingY: "0.5rem",
@@ -675,13 +662,3 @@ export const MyPreset = definePreset(Aura, {
     }
 });
 
-// export const appConfig: ApplicationConfig = {
-//     providers: [
-//         provideAnimationsAsync(),
-//         providePrimeNG({
-//             theme: {
-//                preset: MyPreset,
-//             }
-//         })
-//     ]
-// };

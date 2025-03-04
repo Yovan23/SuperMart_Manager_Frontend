@@ -17,16 +17,14 @@ export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(HttpClientModule, CommonModule),
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    ),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: MyPreset,
         options: {
-          darkModeSelector: 'false',
-      }
+          darkModeSelector: false || 'none',
+        },
       },
     }),
   ],

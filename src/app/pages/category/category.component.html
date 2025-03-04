@@ -1,144 +1,133 @@
 <div class="p-d-flex p-jc-between p-ai-center p-mb-4">
-    <h2 class="p-mr-auto">Category Management</h2>
-    <button
-      pButton
-      icon="pi pi-plus"
-      class="p-button-text p-mr-2"
-      [style]="{ color: 'aliceblue', 'background-color': 'rgb(1, 118, 30)' }"
-      pTooltip="Add Category"
-      tooltipPosition="top"
-      (click)="openAddDialog()"
-    >
-      Add Category
-    </button>
-  </div>
-  <br />
-  <div class="card">
-    <p-table
-      #dt
-      [value]="category"
-      dataKey="_id"
-      [rows]="10"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [loading]="loading"
-      [paginator]="true"
-      [globalFilterFields]="['name', 'description']"
-      styleClass="p-datatable-gridlines"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Sr. No.</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-        <tr>
-          <th></th>
-          <th>
-            <p-columnFilter
-              type="text"
-              field="name"
-              placeholder="Search by name"
-              ariaLabel="Filter Name"
-            ></p-columnFilter>
-          </th>
-          <th>
-            <p-columnFilter
-              type="text"
-              field="description"
-              placeholder="Search by description"
-              ariaLabel="Filter Description"
-            ></p-columnFilter>
-          </th>
-          <th>
-            <p-columnFilter field="isVisible" matchMode="equals" [showMenu]="false">
-              <ng-template #filter let-value let-filter="filterCallback">
-                <p-dropdown
-                  [(ngModel)]="selectedStatus"
-                  [options]="statuses"
-                  (onChange)="filter($event.value)"
-                  placeholder="Select One"
-                  [showClear]="true"
-                  [style]="{ 'min-width': '12rem' }"
-                >
-                  <ng-template let-option #item>
-                    <p-tag
-                      [value]="option.value ? 'Visible' : 'Hidden'"
-                      [severity]="getSeverity(option.value)"
-                    />
-                  </ng-template>
-                </p-dropdown>
-              </ng-template>
-            </p-columnFilter>
-          </th>
-          <th></th>
-        </tr>
-      </ng-template>
-  
-      <ng-template pTemplate="body" let-category let-i="rowIndex">
-        <tr>
-          <td [style]="{ 'text-align': 'center' }">{{ i + 1 }}</td>
-          <td [style]="{ 'text-align': 'center' }">{{ category.name }}</td>
-          <td [style]="{ 'text-align': 'center' }">{{ category.description }}</td>
-          <td [style]="{ 'text-align': 'center' }">
-            <p-tag
-              [value]="category.isVisible ? 'Visible' : 'Hidden'"
-              [severity]="getSeverity(category.isVisible)"
-            />
-          </td>
-          <td>
-            <button
-              pButton
-              icon="pi pi-pencil"
-              class="p-button-text p-mr-2"
-              pTooltip="Edit Category"
-              tooltipPosition="top"
-              (click)="openEditDialog(category)"
-            ></button>
-            <button
-              pButton
-              icon="pi pi-trash"
-              class="p-button-text"
-              pTooltip="Delete Category"
-              tooltipPosition="top"
-              (click)="openDeleteDialog(category)"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-  
-  <app-edit-dialog
-    [visible]="editDialogVisible"
-    [dialogTitle]="'Edit Category'"
-    [fields]="categoryEditFields"
-    [formData]="selectedCategory"
-    (visibleChange)="editDialogVisible = $event"
-    (save)="updateCategory($event)"
-  ></app-edit-dialog>
-  
-  <app-add-dialog
-    [visible]="addDialogVisible"
-    [dialogTitle]="'Add Category'"
-    [fields]="categoryAddFields"
-    [useFormData]="false"
-    (visibleChange)="addDialogVisible = $event"
-    (save)="createCategory($event)"
-  ></app-add-dialog>
-  
-  <app-delete-dialog
-    [(visible)]="deleteDialogVisible"
-    [dialogTitle]="'Delete Category'"
-    [message]="'Are you sure you want to delete this category?'"
-    [description]="'This action cannot be undone. The category will be permanently deleted.'"
-    (confirm)="confirmDelete()"
-  ></app-delete-dialog>
-  
-  <app-snackbar
-    [(visible)]="snackbarVisible"
-    [type]="snackbarConfig.type"
-    [title]="snackbarConfig.title"
-    [message]="snackbarConfig.message"
-  ></app-snackbar>
+  <h2 class="p-mr-auto">Category Management</h2>
+  <p-button
+    pButton
+    icon="pi pi-plus"
+    class="p-button-text p-mr-2"
+    pTooltip="Add Category"
+    tooltipPosition="top"
+    (click)="openAddDialog()"
+    label="Add Category"
+  />
+</div>
+<br />
+<div class="card">
+  <p-table
+    #dt
+    [value]="category"
+    dataKey="_id"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="430px"
+    [paginator]="true"
+    [globalFilterFields]="['name', 'description', 'isVisible', 'productCount']"
+    styleClass="p-datatable-gridlines"
+  >
+    <ng-template #caption>
+      <div class="flex">
+        <p-iconfield iconPosition="left" class="ml-auto">
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+          <input
+            pInputText
+            type="text"
+            (input)="applyGlobalFilter($event, dt)"
+            placeholder="Search keyword"
+          />
+        </p-iconfield>
+      </div>
+    </ng-template>
+    <ng-template #header>
+      <tr>
+        <th class="p-2">Sr. No.</th>
+        <th class="p-2">Name</th>
+        <th class="p-2">Description</th>
+        <th class="p-2">Status</th>
+        <th class="p-2">Product Count</th>
+        <th class="p-2">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-category let-i="rowIndex">
+      <tr>
+        <td class="p-2">{{ i + 1 }}</td>
+        <td class="p-2">
+          {{ category.name }}
+        </td>
+        <td class="p-2">
+          {{ category.description }}
+        </td>
+        <td class="p-2">
+          <p-tag
+            [value]="category.isVisible ? 'Visible' : 'Hidden'"
+            [severity]="getSeverity(category.isVisible)"
+          />
+        </td>
+        <td class="p-3">
+          {{ category.productCount }}
+        </td>
+        <td class="p-2">
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-text p-mr-2"
+            pTooltip="Edit Category"
+            tooltipPosition="top"
+            (click)="openEditDialog(category)"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-text"
+            pTooltip="Delete Category"
+            tooltipPosition="top"
+            (click)="openDeleteDialog(category)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="8" class="p-text-center">No users found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-edit-dialog
+  [visible]="editDialogVisible"
+  [dialogTitle]="'Edit Category'"
+  [fields]="categoryEditFields"
+  [formData]="selectedCategory"
+  (visibleChange)="editDialogVisible = $event"
+  (save)="updateCategory($event)"
+></app-edit-dialog>
+
+<app-add-dialog
+  [visible]="addDialogVisible"
+  [dialogTitle]="'Add Category'"
+  [fields]="categoryAddFields"
+  [useFormData]="false"
+  (visibleChange)="addDialogVisible = $event"
+  (save)="createCategory($event)"
+></app-add-dialog>
+
+<app-delete-dialog
+  [(visible)]="deleteDialogVisible"
+  [dialogTitle]="'Delete Category'"
+  [message]="'Are you sure you want to delete this category?'"
+  [description]="
+    'This action cannot be undone. The category will be permanently deleted.'
+  "
+  (confirm)="confirmDelete()"
+></app-delete-dialog>
+
+<app-snackbar
+  [(visible)]="snackbarVisible"
+  [type]="snackbarConfig.type"
+  [title]="snackbarConfig.title"
+  [message]="snackbarConfig.message"
+></app-snackbar>
