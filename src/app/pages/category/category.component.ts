@@ -34,7 +34,7 @@ import { InputText } from 'primeng/inputtext';
     EditDialogComponent,
     DeleteDialogComponent,
     AddDialogComponent,
-    TableModule, // Includes p-table and p-columnFilter
+    TableModule,
     CommonModule,
     TagModule,
     ButtonModule,
