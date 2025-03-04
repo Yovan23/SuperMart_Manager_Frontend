@@ -1,10 +1,16 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CategoryService } from '../../services/category.service';
-import { SnackbarService, SnackbarConfig } from '../../services/snackbar.service';
+import {
+  SnackbarService,
+  SnackbarConfig,
+} from '../../services/snackbar.service';
 import { Category } from '../../models/category.model';
 import { ApiResponse } from '../../models/apiResponse.model';
 import { SnackbarComponent } from '../../layout/component/snackbar/snackbar.component';
-import { AddDialogComponent, Field } from '../../layout/component/add-dialog/add-dialog.component';
+import {
+  AddDialogComponent,
+  Field,
+} from '../../layout/component/add-dialog/add-dialog.component';
 import { EditDialogComponent } from '../../layout/component/edit-dialog/edit-dialog.component';
 import { DeleteDialogComponent } from '../../layout/component/delete-dialog/delete-dialog.component';
 import { TableModule } from 'primeng/table';
@@ -16,6 +22,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
 import { Table } from 'primeng/table';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-category',
@@ -32,6 +41,9 @@ import { Table } from 'primeng/table';
     DropdownModule,
     FormsModule,
     TooltipModule,
+    IconFieldModule,
+    InputIconModule,
+    InputText,
   ],
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css'],
@@ -58,7 +70,24 @@ export class CategoryComponent implements OnInit, OnDestroy {
     { label: 'Visible', value: true },
     { label: 'Hidden', value: false },
   ];
+  applyGlobalFilter(event: Event, dt: Table): void {
+    const filterValue = (event.target as HTMLInputElement).value
+      ?.trim()
+      .toLowerCase();
 
+    if (!dt) {
+      return;
+    }
+    dt.filters = {};
+    if ('visible'.startsWith(filterValue) && filterValue.length >= 1) {
+      dt.filter(true, 'isVisible', 'equals');
+    } else if ('hidden'.startsWith(filterValue) && filterValue.length >= 1) {
+      dt.filter(false, 'isVisible', 'equals');
+    } else {
+      dt.filterGlobal(filterValue, 'contains');
+    }
+
+  }
   categoryEditFields: Field[] = [
     {
       name: 'name',

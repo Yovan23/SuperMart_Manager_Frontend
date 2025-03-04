@@ -1,16 +1,12 @@
 <div class="p-d-flex p-jc-between p-ai-center p-mb-1">
   <h2 class="p-mr-auto">User Management</h2>
-  <button
+  <p-button
     pButton
     icon="pi pi-plus"
     class="p-button-text p-mr-2 p-button-sm p-mb-3"
-    style="color: aliceblue; background-color: rgb(1, 118, 30)"
-    pTooltip="Add User"
-    tooltipPosition="top"
     (click)="openAddDialog()"
-  >
-    Add User
-  </button>
+    label="Add User"
+  />
 </div>
 
 <div class="card" style="border: 2; border-color: black; border-radius: 1ch">
@@ -22,6 +18,8 @@
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
     [paginator]="true"
+    [scrollable]="true"
+    scrollHeight="400px"
     [globalFilterFields]="[
       'name',
       'email',
@@ -95,9 +93,9 @@
         <th>
           <p-columnFilter
             type="text"
-            field="EmployeeCode"
-            placeholder="Search by EC"
-            ariaLabel="Filter EC"
+            field="mobileNumber"
+            placeholder="Search by MobileNumber"
+            ariaLabel="Filter MobileNumber"
           ></p-columnFilter>
         </th>
         <th class="p-2"></th>

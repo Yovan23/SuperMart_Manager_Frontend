@@ -19,4 +19,64 @@ app-root {
     height: 100%;
 }
 
+html.my-app-dark {
+    body {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+  
+    /* PrimeNG component overrides */
+    .p-card {
+      background-color: #2d2d2d;
+      color: #ffffff;
+    }
+  
+    .p-table {
+      background-color: #2d2d2d;
+      color: #ffffff;
+  
+      .p-datatable-gridlines {
+        .p-datatable-thead > tr > th {
+          background-color: #333;
+          color: #ffffff;
+          border-color: #444;
+        }
+  
+        .p-datatable-tbody > tr {
+          background-color: #2d2d2d;
+          color: #ffffff;
+          border-color: #444;
+        }
+  
+        .p-datatable-tbody > tr:hover {
+          background-color: #3a3a3a;
+        }
+      }
+    }
+  
+    .p-button {
+      background-color: #444;
+      color: #ffffff;
+      border: none;
+  
+      &:hover {
+        background-color: #555;
+      }
+    }
+  
+    .p-inputtext {
+      background-color: #333;
+      color: #ffffff;
+      border-color: #444;
+    }
+  
+    .p-tag {
+      &.p-tag-success {
+        background-color: #1a5e1a;
+      }
+      &.p-tag-danger {
+        background-color: #8b1a1a;
+      }
+    }
+  }
 

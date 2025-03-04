@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  Validators,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -19,20 +24,20 @@ import { UserService } from '../../services/user.services';
     ButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [AuthService, UserService],
   standalone: true,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
   resetSent = false;
-  errorMessage: string = ''; 
-  resetEmail: "" | undefined;
-  
+  errorMessage: string = '';
+  resetEmail: '' | undefined;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +48,7 @@ export class LoginComponent {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      rememberMe: [false],
     });
   }
 
@@ -54,10 +59,11 @@ export class LoginComponent {
     if (this.loginForm.invalid) {
       return;
     }
-
+    this.isLoading = true;
     const loginData = this.loginForm.value;
     this.authService.login(loginData).subscribe({
       next: (response) => {
+        this.isLoading = false;
         if (loginData.rememberMe) {
           localStorage.setItem('token', response.accessToken);
         } else {
@@ -68,6 +74,7 @@ export class LoginComponent {
         console.log('Login successful!', response);
       },
       error: (err) => {
+        this.isLoading = false;
         this.errorMessage = err.error.message || 'Invalid email or password';
         console.log('Login error:', err);
       },
@@ -79,20 +86,23 @@ export class LoginComponent {
       this.errorMessage = 'Please enter your email to send a reset link';
       return;
     }
-    
-    this.userService.sendResetPasswordEmail(this.loginForm.value.email).subscribe({
-      next: (response) => {
-        this.resetSent = true;
-        this.errorMessage = '';
-        
-      },
-      error: (error) => {
-        console.error("Reset link error:", error);
-        this.errorMessage = error.error.message || 'Failed to send reset link';
-      }
-    });
-  }
-  
 
-  get f() { return this.loginForm.controls; }
+    this.userService
+      .sendResetPasswordEmail(this.loginForm.value.email)
+      .subscribe({
+        next: (response) => {
+          this.resetSent = true;
+          this.errorMessage = '';
+        },
+        error: (error) => {
+          console.error('Reset link error:', error);
+          this.errorMessage =
+            error.error.message || 'Failed to send reset link';
+        },
+      });
+  }
+
+  get f() {
+    return this.loginForm.controls;
+  }
 }

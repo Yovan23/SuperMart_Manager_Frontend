@@ -1,64 +1,140 @@
 <div class="p-d-flex p-jc-between p-ai-center p-mb-1">
-    <h2 class="p-mr-auto">Log Management</h2>
+  <h2 class="p-mr-auto">Log Management</h2>
 </div>
 
-<div class="p-d-flex p-ai-center p-mb-3 date-range-container" [formGroup]="form">
-    <div class="date-picker-wrapper">
-        <div class="date-input-group">
-            <label for="fromDate" class="p-text-bold">From Date:</label>
-            <p-datePicker id="fromDate" [formControlName]="'fromDate'" dateFormat="yy-mm-dd" showIcon [maxDate]="today"></p-datePicker>
-        </div>
+<div
+  class="p-d-flex p-ai-center p-mb-3 date-range-container"
+  [formGroup]="form"
+>
+  <div class="date-picker-wrapper">
+    <div class="date-input-group">
+      <label for="fromDate" class="p-text-bold">From Date:</label>
+      <p-datePicker
+        id="fromDate"
+        [formControlName]="'fromDate'"
+        dateFormat="yy-mm-dd"
+        showIcon
+        [maxDate]="today"
+      ></p-datePicker>
     </div>
+  </div>
 
-    <div class="date-picker-wrapper">
-        <div class="date-input-group">
-            <label for="toDate" class="p-text-bold">To Date:</label>
-            <p-datePicker id="toDate" [formControlName]="'toDate'" dateFormat="yy-mm-dd" showIcon [maxDate]="today"></p-datePicker>
-        </div>
+  <div class="date-picker-wrapper">
+    <div class="date-input-group">
+      <label for="toDate" class="p-text-bold">To Date:</label>
+      <p-datePicker
+        id="toDate"
+        [formControlName]="'toDate'"
+        dateFormat="yy-mm-dd"
+        showIcon
+        [maxDate]="today"
+      ></p-datePicker>
     </div>
-    <div>
-        <button pButton type="button" label="Search" icon="pi pi-search" class="p-button-primary p-button-sm p-ai-center" (click)="fetchLogsByDateRange()"></button>
-    </div>
-    <div>
-        <button pButton type="button" label="All" class="p-button-primary p-button-sm p-ai-center m-3" (click)="fetchLogs()"></button>
-    </div>
-    <div *ngIf="fromDateError" class="error-message">{{ fromDateError }}</div>
+  </div>
+  <div>
+    <button
+      pButton
+      type="button"
+      label="Search"
+      icon="pi pi-search"
+      class="p-button-primary p-button-sm p-ai-center"
+      (click)="fetchLogsByDateRange()"
+    ></button>
+  </div>
+  <div>
+    <button
+      pButton
+      type="button"
+      label="All"
+      class="p-button-primary p-button-sm p-ai-center m-3"
+      (click)="fetchLogs()"
+    ></button>
+  </div>
+  <div *ngIf="fromDateError" class="error-message">{{ fromDateError }}</div>
 </div>
 
 <div class="card">
-    <p-table #dt [value]="logs" dataKey="_id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
-    [paginator]="true" [globalFilterFields]="['userId.name', 'userId.EmployeeCode', 'userId.role', 'loggedAt']"
-        styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter">
+  <p-table
+    #dt
+    [value]="logs"
+    dataKey="_id"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="430px"    
+    [paginator]="true"
+    [globalFilterFields]="[
+      'userId.name',
+      'userId.EmployeeCode',
+      'userId.role',
+      'loggedAt'
+    ]"
+    styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Employee Code</th>
+        <th>Role</th>
+        <th>Timestamp</th>
+      </tr>
+      <tr></tr>
+      <tr>
+        <th>
+          <input
+            pInputText
+            type="text"
+            #nameFilter
+            (input)="dt.filter(nameFilter.value, 'name', 'contains')"
+            placeholder="Search by Name"
+          />
+        </th>
+        <th>
+          <input
+            pInputText
+            type="text"
+            #employeeCodeFilter
+            (input)="
+              dt.filter(employeeCodeFilter.value, 'EmployeeCode', 'contains')
+            "
+            placeholder="Search by Employee Code"
+          />
+        </th>
+        <th>
+          <input
+            pInputText
+            type="text"
+            #roleFilter
+            (input)="dt.filter(roleFilter.value, 'role', 'contains')"
+            placeholder="Search by Role"
+          />
+        </th>
+        <th>
+          <input
+            pInputText
+            type="text"
+            #timestampFilter
+            (input)="dt.filter(timestampFilter.value, 'loggedAt', 'contains')"
+            placeholder="Search by Timestamp"
+          />
+        </th>
+      </tr>
+    </ng-template>
 
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Name</th>
-                <th>Employee Code</th>
-                <th>Role</th>
-                <th>Timestamp</th>
-            </tr>
-            <tr>
-                <tr>
-                    <th><input pInputText type="text" #nameFilter (input)="dt.filter(nameFilter.value, 'name', 'contains')" placeholder="Search by Name"></th>
-                    <th><input pInputText type="text" #employeeCodeFilter (input)="dt.filter(employeeCodeFilter.value, 'EmployeeCode', 'contains')" placeholder="Search by Employee Code"></th>
-                    <th><input pInputText type="text" #roleFilter (input)="dt.filter(roleFilter.value, 'role', 'contains')" placeholder="Search by Role"></th>
-                    <th><input pInputText type="text" #timestampFilter (input)="dt.filter(timestampFilter.value, 'loggedAt', 'contains')" placeholder="Search by Timestamp"></th>
-                </tr>
-        </ng-template>
+    <ng-template pTemplate="body" let-log>
+      <tr>
+        <td>{{ log.userId?.name }}</td>
+        <td>{{ log.userId?.EmployeeCode }}</td>
+        <td>{{ log.userId?.role }}</td>
+        <td>{{ log.loggedAt }}</td>
+      </tr>
+    </ng-template>
 
-        <ng-template pTemplate="body" let-log>
-            <tr>
-                <td>{{ log.userId?.name }}</td>
-                <td>{{ log.userId?.EmployeeCode }}</td>
-                <td>{{ log.userId?.role }}</td>
-                <td>{{ log.loggedAt  }}</td>
-            </tr>
-        </ng-template>
-
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="4" class="p-text-center">No logs found.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="p-text-center">No logs found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
