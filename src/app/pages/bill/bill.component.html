@@ -1,0 +1,113 @@
+    <div class="container">
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <label for="companyName">Phone no</label>
+          <input pInputText type="text" id="companyName" class="w-full" [(ngModel)]="customerPhone" (keydown.enter)="createBill()">
+        </div>
+
+        <div class="col-12 md:col-6">
+          <label for="invoiceId">Email</label>
+          <input pInputText type="text" id="invoiceId" class="w-full" [(ngModel)]="customerEmail" (keydown.enter)="createBill()">
+        </div>
+
+        <div class="col-12 md:col-12">
+          <p-button label="Create Bill" styleClass="p-button-primary" (click)="createBill()"></p-button>
+        </div>
+
+        <div class="col-12 md:col-6">
+          <label for="billNumber">Bill Number</label>
+          <input pInputText type="text" id="billNumber" class="w-full" [value]="submittedBill?.billNumber || ''" disabled>
+        </div>
+
+        <div class="col-12 md:col-6">
+          <label for="cashierId">cashier Name</label>
+          <input pInputText type="text" id="cashierId" class="w-full" [value]="submittedBill?.cashierName || ''" disabled>
+        </div>
+      </div>
+
+      <div class="p-fluid">
+        <div class="grid">
+            <div class="col-12 md:col-4">
+                <label for="barcode">Barcode</label>
+                <input pInputText id="barcode" type="text" #itemInput class="w-full" (keydown.enter)="addProductToBill()"/>
+            </div>      
+            <div class="col-12 md:col-4">
+                <label for="quantity">Quantity</label>
+                <input pInputText id="quantity" type="number" class="w-full" (keydown.enter)="addProductToBill()" [defaultValue]= 1 />
+            </div>
+        </div>
+    </div>
+
+    <p-button label="+ Add Item" styleClass="p-button-secondary" (click)="addProductToBill()"></p-button>
+
+    <div  class="p-3" style="background-color: skyblue; border-radius: 10px;">
+      <h3 class=" text-lg font-bold mb-3">Products Added:</h3>
+
+      <table class="p-datatable w-full">
+        <thead>
+          <tr class="bg-blue-800">
+            <th>Product Name</th>
+            <th>QTY</th>
+            <th>Unit Price</th>
+            <th>Tax</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="submittedBill?.items?.length">
+          <tr *ngFor="let item of submittedBill?.items; let i = index" class="bg-blue-100">
+            <td>
+              <input pInputText type="text" class="w-full p-inputtext-sm" [(ngModel)]="item.productName" disabled>
+            </td>
+            <td>
+              <input pInputText type="text" class="w-full p-inputtext-sm" [(ngModel)]="item.quantity" disabled>
+            </td>
+            <td>
+              <input pInputText type="text" class="w-full p-inputtext-sm" [(ngModel)]="item.unitPrice" disabled>
+            </td>
+            <td>
+              <input pInputText type="number" class="w-full p-inputtext-sm" [(ngModel)]="item.tax" disabled>
+            </td>
+            <td>
+              <input pInputText type="text" class="w-full p-inputtext-sm font-bold" [(ngModel)]="item.subtotal" disabled>
+            </td>
+            <td>
+              <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm"></button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" class="text-right ">Total</td>
+            <td>
+              <input pInputText type="text" class="w-full p-inputtext-sm font-bold" [value]="submittedBill?.totalAmount" disabled>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      
+
+
+    <div class="col-12 md:col-6">
+      <label for="paymentMethod">Payment Method</label>
+      <select id="paymentMethod" class="w-full p-inputtext" [(ngModel)]="paymentMethod">
+        <option value="CASH">Cash</option>
+        <option value="CARD">Card</option>
+        <option value="UPI">UPI</option>
+        <option value="OTHER">Other</option>
+      </select>
+    </div>
+
+
+    <div class="col-12">
+      <p-button label="Make Payment" styleClass="p-button-success" (click)="processPayment()"></p-button>
+    </div>
+
+
+      <!-- <div class="field">
+        <label for="notes">Notes</label>
+        <textarea rows="5" cols="30" pInputTextarea class="w-full"></textarea>
+      </div> -->
+      <div class="flex justify-content-center">
+        <p-button label="Create Invoice" icon="pi pi-file" styleClass="p-button-primary"></p-button>
+      </div>
+    </div>
