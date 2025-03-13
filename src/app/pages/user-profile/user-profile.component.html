@@ -1,122 +1,252 @@
-<div class="flex justify-content-center mt-5">
-  <p-card class="w-35rem shadow-5 border-round-lg surface-card p-4 flex flex-column align-items-center">
-    <ng-template pTemplate="title">User Profile</ng-template>
-    <div class="flex justify-content-center">
-      <img 
-        [src]="userData?.profilePicture" 
-        alt="Profile Picture" 
-        class="border-circle w-10rem h-10rem shadow-3 mb-3"
-      />
-    </div>
-
-    <div class="flex flex-wrap align-items-center justify-content-between gap-5">
-      <div class="flex flex-column align-items-center text-center">
-        <h2 class="text-2xl font-semibold text-primary">{{ userData?.name }}</h2>
-        <p class="text-gray-500">{{ userData?.email }}</p>
-        <p class="text-sm font-medium text-secondary">Employee Code: {{ userData?.EmployeeCode }}</p>
-        <span class="p-tag p-tag-rounded p-tag-info text-lg px-3 py-2">{{ userData?.role }}</span>
+<div class="flex justify-content-center">
+  <p-card class="w-8 surface-card border-round-xl">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between align-items-center p-4">
+        <h1 class="text-2xl font-bold m-0">User Profile</h1>
       </div>
+    </ng-template>
 
-      <div class="flex flex-column justify-content-center w-full md:w-15rem">
-        <div class="p-fluid">
-          <div class="p-field flex align-items-center gap-2">
-            <i class="pi pi-phone text-primary"></i>
-            <p class="font-medium">Mobile: <span class="text-gray-700">{{ userData?.mobileNumber }}</span></p>
-          </div>
-          <div class="p-field flex align-items-center gap-2">
-            <i class="pi pi-calendar text-primary"></i>
-            <p class="font-medium">Birth Date: <span class="text-gray-700">{{ userData?.dateOfBirth | date:'longDate' }}</span></p>
-          </div>
+    <form
+      #profileForm="ngForm"
+      (ngSubmit)="saveProfile(profileForm)"
+      class="flex flex-column gap-4 p-4"
+    >
+      <div class="flex flex-column md:flex-row gap-5">
+        <div class="flex flex-column align-items-center">
+          <img
+            [src]="userData?.profilePicture || 'assets/default-profile.png'"
+            alt="Profile Picture"
+            class="border-circle w-10rem h-10rem shadow-3 mb-3 object-fit-cover"
+          />
         </div>
 
-        <div class="flex justify-content-center gap-3 mt-3">
-          <button pButton label="Edit Profile" icon="pi pi-user-edit"  class="px-3 py-2 rounded-md p-button-primary"></button>
-          <button pButton label="Change Password" icon="pi pi-key" (click)="openChangePasswordDialog()" class="px-3 py-2 rounded-md p-button-secondary"></button>
+        <div class="text-xxl flex-1 flex flex-column gap-3">
+          <!-- Name -->
+          <div class=" flex flex-row align-items-center gap-3">
+            <label class="font-bold w-3">Name</label>
+            <div class="flex-1">
+              <input
+                *ngIf="editMode"
+                pInputText
+                [(ngModel)]="userData.name"
+                name="name"
+                required
+                class="w-full"
+              />
+              <h2
+                *ngIf="!editMode"
+                class="text-xl font-semibold text-primary m-0"
+              >
+                {{ userData?.name }}
+              </h2>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-row align-items-center gap-3">
+            <label class="font-medium w-3">Email</label>
+            <div class="flex-1">
+              <input
+                *ngIf="editMode"
+                pInputText
+                [(ngModel)]="userData.email"
+                name="email"
+                required
+                email
+                class="w-full"
+              />
+              <p *ngIf="!editMode" class="text-gray-500 m-0">
+                {{ userData?.email }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Employee Code -->
+          <div class="flex flex-row align-items-center gap-3">
+            <label class="font-medium w-3">Employee Code</label>
+            <p class="text-sm font-medium text-secondary m-0 flex-1">
+              {{ userData?.EmployeeCode }}
+            </p>
+          </div>
+
+          <!-- Role -->
+          <div class="flex flex-row align-items-center gap-3">
+            <label class="font-medium w-3">Role</label>
+            <p class="text-sm font-medium text-secondary m-0 flex-1">
+              {{ userData?.role }}
+            </p>
+          </div>
+
+          <!-- Mobile Number -->
+          <div class="flex flex-row align-items-center gap-3">
+            <label class="font-medium w-3">Mobile Number</label>
+            <div class="flex-1">
+              <input
+                *ngIf="editMode"
+                pInputText
+                [(ngModel)]="userData.mobileNumber"
+                name="mobileNumber"
+                required
+                pattern="^\+?[1-9]\d{1,14}$"
+                class="w-full"
+              />
+              <p *ngIf="!editMode" class="m-0">
+                <i class="pi pi-phone text-primary mr-2"></i>
+                {{ userData?.mobileNumber }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Birth Date -->
+          <div class="flex flex-row align-items-center gap-3">
+            <label class="font-medium w-3">Birth Date</label>
+            <div class="flex-1">
+              <p-date-picker
+                *ngIf="editMode"
+                fluid="true"
+                [(ngModel)]="userData.dateOfBirth"
+                name="dateOfBirth"
+                [required]="true"
+                [showIcon]="true"
+                dateFormat="mm/dd/yy"
+                class="w-full"
+              ></p-date-picker>
+              <p *ngIf="!editMode" class="m-0">
+                <i class="pi pi-calendar text-primary mr-2"></i>
+                {{ userData?.dateOfBirth | date : "longDate" }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <div class="flex justify-content-end gap-3">
+        <p-button
+          *ngIf="!editMode"
+          label="Edit Profile"
+          icon="pi pi-user-edit"
+          class="p-button-primary"
+          (click)="toggleEditMode()"
+        ></p-button>
+        <p-button
+          *ngIf="editMode"
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (click)="cancelEdit()"
+        ></p-button>
+        <p-button
+          *ngIf="editMode"
+          label="Save"
+          icon="pi pi-save"
+          type="submit"
+          class="p-button-success"
+          [disabled]="!profileForm.valid"
+        ></p-button>
+        <p-button
+          *ngIf="!editMode"
+          label="Change Password"
+          icon="pi pi-key"
+          class="p-button-secondary"
+          (click)="openChangePasswordDialog()"
+        ></p-button>
+      </div>
+    </form>
   </p-card>
-</div>  
-<p-dialog header="Change Password" [(visible)]="showChangePasswordDialog" [modal]="true" [closable]="true">
+</div>
+
+<!-- Change Password Dialog -->
+<p-dialog
+  header="Change Password"
+  [(visible)]="showChangePasswordDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '25rem' }"
+>
   <div class="p-fluid dialog-content">
     <div class="p-field">
       <label for="oldPassword">Old Password</label>
-      <input type="password" id="oldPassword" pInputText [(ngModel)]="oldPassword" />
-      <small class="error-message" *ngIf="isSubmitted && !oldPassword">This field is required.</small>
-      <small class="error-message" *ngIf="isSubmitted && isOldPasswordIncorrect">Incorrect old password.</small>
+      <p-password
+        id="oldPassword"
+        [(ngModel)]="oldPassword"
+        [feedback]="false"
+        styleClass="w-full"
+        fluid="true"
+      ></p-password>
+      <small class="p-error" *ngIf="isSubmitted && !oldPassword"
+        >This field is required.</small
+      >
+      <small class="p-error" *ngIf="isSubmitted && isOldPasswordIncorrect"
+        >Incorrect old password.</small
+      >
     </div>
-    
+
     <div class="p-field">
       <label for="newPassword">New Password</label>
-      <input type="password" id="newPassword" pInputText [(ngModel)]="newPassword" />
-      <small class="error-message" *ngIf="isSubmitted && !newPassword">This field is required.</small>
-      <small class="error-message" *ngIf="isSubmitted && newPassword.length > 0 && newPassword.length < 6">
+      <p-password
+        id="newPassword"
+        [(ngModel)]="newPassword"
+        styleClass="w-full"
+        fluid="true"
+        [feedback]="false"
+      ></p-password>
+      <small class="p-error" *ngIf="isSubmitted && !newPassword"
+        >This field is required.</small
+      >
+      <small
+        class="p-error"
+        *ngIf="isSubmitted && newPassword.length > 0 && newPassword.length < 6"
+      >
         Password must be at least 6 characters long.
       </small>
     </div>
-    
+
     <div class="p-field">
       <label for="confirmPassword">Confirm Password</label>
-      <input type="password" id="confirmPassword" pInputText [(ngModel)]="confirmPassword" />
-      <small class="error-message" *ngIf="isSubmitted && !confirmPassword">This field is required.</small>
-      <small class="error-message" *ngIf="isSubmitted && confirmPassword.length > 0 && newPassword !== confirmPassword">
+      <p-password
+        id="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        styleClass="w-full"
+        fluid="true"
+        [feedback]="false"
+      ></p-password>
+      <small class="p-error" *ngIf="isSubmitted && !confirmPassword"
+        >This field is required.</small
+      >
+      <small
+        class="p-error"
+        *ngIf="
+          isSubmitted &&
+          confirmPassword.length > 0 &&
+          newPassword !== confirmPassword
+        "
+      >
         Passwords do not match.
       </small>
     </div>
-    <p-footer>
-      <div class="flex justify-content-end gap-2">
-        <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()"></button>
-        <button pButton label="Change" icon="pi pi-check" class="p-button-success" (click)="validateAndChangePassword()"></button>
-      </div>
-    </p-footer>
-    
-  </div>
-</p-dialog>
-
-
-<app-snackbar
-    [(visible)]="snackbarVisible"
-    [type]="snackbarConfig.type"
-    [title]="snackbarConfig.title"
-    [message]="snackbarConfig.message">
-</app-snackbar>
-
-
-
-
-<!-- 
-
-<p-card>
-  <ng-template pTemplate="title">User Profile</ng-template>
-  <ng-template pTemplate="content">
-    <div class="profile-container">
-      <img [src]="userData?.profilePicture" alt="Profile Picture" class="profile-img">
-      <h3>{{ userData?.name }}</h3>
-      <p>Email: {{ userData?.email }}</p>
-    </div>
-    <p-divider></p-divider>
-    <button pButton label="Change Password" icon="pi pi-lock" (click)="openChangePasswordDialog()" class="p-button-outlined"></button>
-  </ng-template>
-</p-card>
-
-<p-dialog header="Change Password" [(visible)]="showChangePasswordDialog" modal="true" [closable]="false">
-  <div class="p-fluid">
-    <div class="p-field">
-      <label for="oldPassword">Old Password</label>
-      <input id="oldPassword" type="password" pInputText [(ngModel)]="oldPassword">
-    </div>
-    <div class="p-field">
-      <label for="newPassword">New Password</label>
-      <input id="newPassword" type="password" pInputText [(ngModel)]="newPassword">
-    </div>
-    <div class="p-field">
-      <label for="confirmPassword">Confirm Password</label>
-      <input id="confirmPassword" type="password" pInputText [(ngModel)]="confirmPassword">
-    </div>
   </div>
   <ng-template pTemplate="footer">
-    <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="showChangePasswordDialog = false"></button>
-    <button pButton label="Change" icon="pi pi-check" (click)="changePassword()"></button>
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="closeDialog()"
+      ></p-button>
+      <p-button
+        label="Change"
+        icon="pi pi-check"
+        class="p-button-success"
+        (click)="processPasswordChange()"
+      ></p-button>
+    </div>
   </ng-template>
 </p-dialog>
- -->
+
+<p-toast></p-toast>
+<app-snackbar
+  [(visible)]="snackbarVisible"
+  [type]="snackbarConfig.type"
+  [title]="snackbarConfig.title"
+  [message]="snackbarConfig.message"
+></app-snackbar>

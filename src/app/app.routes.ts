@@ -11,26 +11,41 @@ import { LogComponent } from './pages/log/log.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { StockComponent } from './pages/stock/stock.component';
 import { BillComponent } from './pages/bill/bill.component';
+import { AuthGuardService } from './auth/auth-guard';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: LoginComponent },
-    { path: 'dashboard', 
-        component: NavigationComponent,
-        canActivate: [authGuard],
-        children: [
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: DashboardComponent },
-            { path: 'users', component: UsersComponent },
-            { path: 'category', component: CategoryComponent },
-            { path: 'product', component: ProductComponent} ,
-            { path: 'supplier', component: SupplierComponent },
-            { path: 'log', component: LogComponent},
-            { path: 'userProfile', component: UserProfileComponent},
-            { path: 'stock', component: StockComponent},
-        ]
-    },
-    { path: '**', redirectTo: 'login' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent ,canActivate:[AuthGuardService]},
+  {
+    path: 'dashboard',
+    component: NavigationComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: DashboardComponent, title: 'Dashboard-SMM' },
+      { path: 'users', component: UsersComponent, title: 'User-SMM' },
+      {
+        path: 'category',
+        component: CategoryComponent,
+        title: 'Category-SMM',
+      },
+      { path: 'product', component: ProductComponent, title: 'Product-SMM' },
+      {
+        path: 'supplier',
+        component: SupplierComponent,
+        title: 'Supplier-SMM',
+      },
+      { path: 'log', component: LogComponent, title: 'Log-SMM' },
+      {
+        path: 'userProfile',
+        component: UserProfileComponent,
+        title: 'UserProfile-SMM',
+      },
+      { path: 'stock', component: StockComponent, title: 'Stock-SMM' },
+      { path: 'bill', component: BillComponent, title: 'Bill-SMM' },
+    ],
+  },
+  { path: '**', redirectTo: 'login' },
 ];
 
 // import { Routes } from '@angular/router';

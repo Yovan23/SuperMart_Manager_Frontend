@@ -1,19 +1,42 @@
-/* 
-.custom-class{
-    background-color: aquamarine;
-} */
+.custom-class {
+  background-color: rgb(255, 255, 255);
+  height: 100vh; /* Ensure full height */
+}
 
 .custom-link {
-    color: #ffffff; /* text-blue-600 equivalent */
-  }
-  
-  .custom-link:hover {
-    color: #1e40af; /* text-blue-800 equivalent */
-  }
-::ng-deep body{
+  color: #ffffff;
+}
+
+.custom-link:hover {
+  color: #1e40af;
+}
+
+::ng-deep body {
   background-color: #f0ebf8;
+  margin: 0; /* Remove default margin */
 }
 
 .p-button.loading .p-button-spinner {
-  color: #ffffff; /* Match your text color */
+  color: #ffffff;
+}
+
+/* Ensure form takes full height on mobile */
+@media (max-width: 576px) {
+  .custom-class {
+    padding: 0; /* Remove padding on mobile */
+  }
+
+  .grid {
+    height: 100vh; /* Full height on mobile */
+    border: none; /* Remove border on mobile */
+    border-radius: 0; /* Remove border radius on mobile */
+  }
+
+  .w-full {
+    max-width: 100%; /* Ensure form width is manageable */
+  }
+
+  .text-5xl {
+    font-size: 2.5rem; /* Smaller title on mobile */
+  }
 }

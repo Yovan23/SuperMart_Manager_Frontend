@@ -20,6 +20,7 @@
           alt="userimage"
           (click)="openUserProfile()"
         />
+
         <div class="user-info" *ngIf="sidebarVisible">
           <h3 class="username">{{ userData?.name }}</h3>
           <p class="user-details">
@@ -30,75 +31,101 @@
       </div>
     </div>
 
-    <div class="nav-list">
-      <a
-        pRipple
-        routerLink="/dashboard/home"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-th-large"></i>
-        <span *ngIf="sidebarVisible">Dashboard</span>
-      </a>
-      <a
-        pRipple
-        routerLink="/dashboard/category"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-chart-bar"></i>
-        <span *ngIf="sidebarVisible">Category</span>
-      </a>
-      <a
-        pRipple
-        routerLink="/dashboard/stock"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-inbox"></i>
-        <span *ngIf="sidebarVisible">Inventory</span>
-      </a>
-      <a
-        pRipple
-        routerLink="/dashboard/users"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-users"></i>
-        <span *ngIf="sidebarVisible">Users</span>
-      </a>
-      <a
-        pRipple
-        routerLink="/dashboard/product"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-cog"></i>
-        <span *ngIf="sidebarVisible">Product</span>
-      </a>
-      <a
-        pRipple
-        routerLink="/dashboard/supplier"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-users"></i>
-        <span *ngIf="sidebarVisible">Supplier</span>
-      </a>
-      <a
-        pRipple
-        routerLink="/dashboard/log"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        <i class="pi pi-users"></i>
-        <span *ngIf="sidebarVisible">Log</span>
-      </a>
-      <a pRipple routerLink="/dashboard/bill" routerLinkActive="active" class="nav-item">
-        <i class="pi pi-users"></i>
-        <span *ngIf="sidebarVisible">Bill</span>
-      </a>
-    </div>
+    <a
+      pRipple
+      routerLink="/dashboard/home"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Dashboard' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-th-large"></i>
+      <span *ngIf="sidebarVisible">Dashboard</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/category"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Category' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-chart-bar"></i>
+      <span *ngIf="sidebarVisible">Category</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/stock"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Inventory' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-inbox"></i>
+      <span *ngIf="sidebarVisible">Inventory</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/users"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Users' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-users"></i>
+      <span *ngIf="sidebarVisible">Users</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/product"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Product' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-cog"></i>
+      <span *ngIf="sidebarVisible">Product</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/supplier"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Supplier' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-users"></i>
+      <span *ngIf="sidebarVisible">Supplier</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/log"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Log' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-objects-column"></i>
+      <span *ngIf="sidebarVisible">Log</span>
+    </a>
+
+    <a
+      pRipple
+      routerLink="/dashboard/bill"
+      routerLinkActive="active"
+      class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Bill' : undefined"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-receipt"></i>
+      <span *ngIf="sidebarVisible">Bill</span>
+    </a>
   </div>
 
   <div class="layout-main">
@@ -113,12 +140,19 @@
         <span class="app-title">SmartMart Manager</span>
       </div>
       <div class="toolbar-right">
-        <button
+        <!-- <button
           pButton
           icon="pi pi-sign-out"
           class="p-button-text logout-button"
           (click)="logout()"
-        ></button>
+        ></button> -->
+        <p-toast />
+        <p-confirmdialog />
+        <p-button
+          (click)="confirm1($event)"
+          icon="pi pi-sign-out"
+          [outlined]="true"
+        />
       </div>
     </div>
 
