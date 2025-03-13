@@ -29,7 +29,7 @@ import { UserService } from '../../services/user.services';
   providers: [AuthService, UserService],
   standalone: true,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
