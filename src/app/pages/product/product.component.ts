@@ -103,6 +103,12 @@ export class ProductComponent implements OnInit, OnDestroy {
       pattern: '^[1-9][0-9]*$',
     },
     {
+      name: 'tax',
+      label: 'Tax(%)',
+      type: 'number',
+      pattern: '^[1-9][0-9]*$',
+    },
+    {
       name: 'categoryId',
       label: 'Category',
       type: 'select',
@@ -164,6 +170,12 @@ export class ProductComponent implements OnInit, OnDestroy {
       pattern: '^[1-9][0-9]*$',
     },
     {
+      name: 'tax',
+      label: 'Tax(%)',
+      type: 'number',
+      pattern: '^[1-9][0-9]*$',
+    },
+    {
       name: 'categoryId',
       label: 'Category',
       type: 'select',
@@ -221,6 +233,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       { field: 'description', header: 'Description' },
       { field: 'quantity', header: 'Quantity' },
       { field: 'price', header: 'Price' },
+      { field: 'tax', header: "Tax(%)"},
       { field: 'barcode', header: 'Barcode' },
       { field: 'volume', header: 'Volume' },
       { field: 'unit', header: 'Unit' },
@@ -248,7 +261,7 @@ export class ProductComponent implements OnInit, OnDestroy {
             value: category._id,
           }));
 
-        const categoryFieldIndex = 3;
+        const categoryFieldIndex = 4;
         if (this.productAddFields[categoryFieldIndex]) {
           this.productAddFields[categoryFieldIndex].options = categoryOptions;
         }

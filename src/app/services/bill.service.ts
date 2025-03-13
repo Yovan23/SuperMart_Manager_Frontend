@@ -47,7 +47,7 @@ export class BillService {
     }    
 
     addDiscountToBill({ discount, billId }: { discount: number; billId: string; }): Observable<Bill> {
-        return this.http.post<Bill>(`${this.apiUrl}/addDiscount`, { discount }, {
+        return this.http.post<Bill>(`${this.apiUrl}/addDiscount`, { discount, billId }, {
             headers: getAuthHeaders()
         });
     }
