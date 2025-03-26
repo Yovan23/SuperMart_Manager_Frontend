@@ -30,5 +30,11 @@ export class DashboardService {
           headers: getAuthHeaders(),
           params: httpParams
         })
-      }
+    }
+
+    sevendaysTotalSale(): Observable<ApiResponse> {
+        return this.http.get<ApiResponse>(`${this.apiUrl}/sevendaysTotalSale`, {
+          headers: getAuthHeaders()
+        })
+    }
 }    
