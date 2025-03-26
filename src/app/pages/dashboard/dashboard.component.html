@@ -1,67 +1,19 @@
 <div class="dashboard-container">
     <div class="grid">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-text">
-            <span class="card-title">Orders</span>
-            <div class="card-value">152</div>
-          </div>
-          <div class="card-icon">
-            <i class="pi pi-shopping-cart"></i>
-          </div>
+        <div class="card" *ngFor="let stat of stats">
+            <div class="card-header">
+                <div class="card-text">
+                    <span class="card-title">{{stat.title}}</span>
+                    <div class="card-value">{{stat.value}}</div>
+                </div>
+                <div class="card-icon" [style.color]="stat.iconColor">
+                    <i class="pi {{stat.icon}}"></i>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span class="positive-change">{{stat.change}} </span>
+                <span class="change-text">{{stat.changeText}}</span>
+            </div>
         </div>
-        <div class="card-footer">
-          <span class="positive-change">24 new </span>
-          <span class="change-text">since last visit</span>
-        </div>
-      </div>
-  
-      <div class="card">
-        <div class="card-header">
-          <div class="card-text">
-            <span class="card-title">Revenue</span>
-            <div class="card-value">$2,100</div>
-          </div>
-          <div class="card-icon">
-            <i class="pi pi-dollar"></i>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="positive-change">52%+ </span>
-          <span class="change-text">since last week</span>
-        </div>
-      </div>
-  
-      <div class="card">
-        <div class="card-header">
-          <div class="card-text">
-            <span class="card-title">Customers</span>
-            <div class="card-value">28,441</div>
-          </div>
-          <div class="card-icon">
-            <i class="pi pi-users"></i>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="positive-change">520 </span>
-          <span class="change-text">newly registered</span>
-        </div>
-      </div>
-  
-      <div class="card">
-        <div class="card-header">
-          <div class="card-text">
-            <span class="card-title">Comments</span>
-            <div class="card-value">152 Unread</div>
-          </div>
-          <div class="card-icon">
-            <i class="pi pi-comment"></i>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="positive-change">85 </span>
-          <span class="change-text">responded</span>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
