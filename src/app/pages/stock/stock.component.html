@@ -40,6 +40,7 @@
         <th class="p-2">Expiry Date</th>
         <th class="p-2">Supplier</th>
         <th class="p-2">Added By</th>
+        <th class="p-2">Added At</th>
         <th class="p-2">Actions</th>
       </tr>
       <tr>
@@ -120,6 +121,7 @@
         <td class="p-2">{{ stock.expiryDate | date }}</td>
         <td class="p-2">{{ stock.supplierId.name }}</td>
         <td class="p-2">{{ stock.addedBy.EmployeeCode }}</td>
+        <td class="p-2">{{ formatDate(stock.createdAt) }}</td>
         <td class="p-2">
           <div class="flex gap-1">
             <button

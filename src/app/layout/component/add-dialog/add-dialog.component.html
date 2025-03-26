@@ -109,6 +109,7 @@
                                  optionValue="value"
                                  placeholder="Select an option"
                                  [style]="{'width':'100%'}"
+                                 [appendTo]="'body'"
                                  [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
                              ></p-select>
                          </ng-container>
@@ -137,6 +138,7 @@
                                  [minDate]="field.minDate"
                                  [maxDate]="field.maxDate"
                                  [style]="{'width':'100%'}"
+                                 [appendTo]="'body'"
                                  [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
                              ></p-datePicker>
                          </ng-container>
