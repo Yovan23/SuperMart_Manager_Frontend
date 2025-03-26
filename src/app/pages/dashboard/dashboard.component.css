@@ -1,5 +1,8 @@
 .dashboard-container {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
   
   .grid {
@@ -8,6 +11,34 @@
     gap: 1rem;
   }
   
+  /* Improved chart card with title */
+  .chart-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .chart-title {
+    text-align: center;
+    color: #111827;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .chart-container {
+    width: 100%;
+    height: 300px;
+    position: relative;
+  }
+  
+  /* Card styles */
   .card {
     background: white;
     border-radius: 10px;
@@ -68,6 +99,199 @@
   }
   
   /* Specific icon colors */
-  .fa-dollar-sign { color: #f59e0b; }
-  .fa-users { color: #06b6d4; }
-  .fa-comments { color: #8b5cf6; }
+  .pi-dollar { color: #f59e0b; }
+  .pi-users { color: #06b6d4; }
+  .pi-comment { color: #8b5cf6; }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .chart-card {
+      padding: 1rem;
+    }
+    
+    .chart-title {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }.dashboard-container {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  /* Improved chart card with title */
+  .chart-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .chart-title {
+    text-align: center;
+    color: #111827;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .chart-container {
+    width: 100%;
+    height: 300px;
+    position: relative;
+  }
+  
+  /* Card styles */
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .card-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-title {
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-value {
+    color: #111827;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eff6ff;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .card-icon i {
+    color: #3b82f6;
+    font-size: 1.25rem;
+  }
+  
+  .card-footer {
+    font-size: 0.875rem;
+  }
+  
+  .positive-change {
+    color: #10b981;
+    font-weight: 500;
+  }
+  
+  .change-text {
+    color: #6b7280;
+  }
+  
+  /* Specific icon colors */
+  .pi-dollar { color: #f59e0b; }
+  .pi-users { color: #06b6d4; }
+  .pi-comment { color: #8b5cf6; }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .chart-card {
+      padding: 1rem;
+    }
+    
+    .chart-title {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Add to your existing dashboard.component.css */
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  
+  .chart-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 100%;
+  }
+  
+  .chart-title {
+    text-align: center;
+    color: #111827;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  .chart-container {
+    width: 100%;
+    height: 300px;
+    position: relative;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    .charts-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .chart-card {
+      padding: 1rem;
+    }
+    
+    .chart-container {
+      height: 250px;
+    }
+  }

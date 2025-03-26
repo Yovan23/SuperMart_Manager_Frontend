@@ -1,13 +1,16 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../services/dashboard.service';
 import { MessageService } from 'primeng/api';
 import { ApiResponse } from '../../models/apiResponse.model';
+import { ChangeDetectorRef, effect, inject, PLATFORM_ID } from '@angular/core';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChartModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -16,17 +19,23 @@ export class DashboardComponent implements OnInit {
   data: any = {};
   startDate: any;
   endDate: any;
+  data1: any = {};
+  constructor(
+    private dashboardService: DashboardService,
+    private messageService: MessageService,
+    private cd: ChangeDetectorRef
+  ) {}
 
-  constructor(private dashboardService: DashboardService, private messageService: MessageService) { }
-  
   ngOnInit(): void {
     this.loadData();
+    this.initChart();
   }
 
   loadData(): void {
     this.loading = true;
-    const params: { startDate?: string; endDate?: string; status?: string } = {};
-    
+    const params: { startDate?: string; endDate?: string; status?: string } =
+      {};
+
     if (this.startDate) {
       const start = new Date(this.startDate);
       start.setHours(0, 0, 0, 0);
@@ -96,4 +105,53 @@ export class DashboardComponent implements OnInit {
       iconColor: '#8b5cf6',
     },
   ];
+
+  options: any;
+
+  platformId = inject(PLATFORM_ID);
+
+  initChart() {
+    if (isPlatformBrowser(this.platformId)) {
+      const documentStyle = getComputedStyle(document.documentElement);
+      const textColor = documentStyle.getPropertyValue('--text-color');
+
+      this.data1 = {
+        labels: ['A', 'B', 'C', 'D'],
+        datasets: [
+          {
+            data: [540, 325, 702, 600],
+            backgroundColor: [
+              documentStyle.getPropertyValue('--p-cyan-500'),
+              documentStyle.getPropertyValue('--p-orange-500'),
+              documentStyle.getPropertyValue('--p-gray-500'),
+              documentStyle.getPropertyValue('--p-black-500'),
+            ],
+            hoverBackgroundColor: [
+              documentStyle.getPropertyValue('--p-cyan-400'),
+              documentStyle.getPropertyValue('--p-orange-400'),
+              documentStyle.getPropertyValue('--p-gray-400'),
+              documentStyle.getPropertyValue('--p-black-400'),
+            ],
+          },
+        ],
+      };
+
+      this.options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              usePointStyle: true,
+              color: textColor,
+              boxWidth: 12,
+              padding: 20,
+            },
+          },
+        },
+      };
+      this.cd.markForCheck();
+    }
+  }
 }

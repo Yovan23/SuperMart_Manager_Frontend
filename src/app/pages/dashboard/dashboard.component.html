@@ -1,19 +1,46 @@
 <div class="dashboard-container">
-    <div class="grid">
-        <div class="card" *ngFor="let stat of stats">
-            <div class="card-header">
-                <div class="card-text">
-                    <span class="card-title">{{stat.title}}</span>
-                    <div class="card-value">{{stat.value}}</div>
-                </div>
-                <div class="card-icon" [style.color]="stat.iconColor">
-                    <i class="pi {{stat.icon}}"></i>
-                </div>
-            </div>
-            <div class="card-footer">
-                <span class="positive-change">{{stat.change}} </span>
-                <span class="change-text">{{stat.changeText}}</span>
-            </div>
+  <div class="grid">
+    <div class="card" *ngFor="let stat of stats">
+      <div class="card-header">
+        <div class="card-text">
+          <span class="card-title">{{ stat.title }}</span>
+          <div class="card-value">{{ stat.value }}</div>
         </div>
+        <div class="card-icon" [style.color]="stat.iconColor">
+          <i class="pi {{ stat.icon }}"></i>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="positive-change">{{ stat.change }} </span>
+        <span class="change-text">{{ stat.changeText }}</span>
+      </div>
     </div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3 class="chart-title">Sales Distribution</h3>
+      <div class="chart-container">
+        <p-chart
+          type="pie"
+          [data]="data1"
+          [options]="options"
+          style="width: 100%; height: 100%"
+        >
+        </p-chart>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="chart-title">Revenue Breakdown</h3>
+      <div class="chart-container">
+        <p-chart
+          type="doughnut"
+          [data]="data1"
+          [options]="options"
+          style="width: 100%; height: 100%"
+        >
+        </p-chart>
+      </div>
+    </div>
+  </div>
 </div>
