@@ -20,7 +20,6 @@ import { TagModule } from 'primeng/tag';
 import { Subscription } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import { TooltipModule } from 'primeng/tooltip';
 import { Table } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -40,7 +39,6 @@ import { InputText } from 'primeng/inputtext';
     ButtonModule,
     DropdownModule,
     FormsModule,
-    TooltipModule,
     IconFieldModule,
     InputIconModule,
     InputText,

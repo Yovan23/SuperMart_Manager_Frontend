@@ -11,6 +11,7 @@ import { LogComponent } from './pages/log/log.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { StockComponent } from './pages/stock/stock.component';
 import { BillComponent } from './pages/bill/bill.component';
+import { TransactionComponent } from './pages/transaction/transaction.component';
 import { AuthGuardService } from './auth/auth-guard';
 
 export const routes: Routes = [
@@ -24,25 +25,14 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: DashboardComponent, title: 'Dashboard-SMM' },
       { path: 'users', component: UsersComponent, title: 'User-SMM' },
-      {
-        path: 'category',
-        component: CategoryComponent,
-        title: 'Category-SMM',
-      },
+      { path: 'category', component: CategoryComponent, title: 'Category-SMM',},
       { path: 'product', component: ProductComponent, title: 'Product-SMM' },
-      {
-        path: 'supplier',
-        component: SupplierComponent,
-        title: 'Supplier-SMM',
-      },
+      { path: 'supplier', component: SupplierComponent, title: 'Supplier-SMM',},
       { path: 'log', component: LogComponent, title: 'Log-SMM' },
-      {
-        path: 'userProfile',
-        component: UserProfileComponent,
-        title: 'UserProfile-SMM',
-      },
+      { path: 'userProfile', component: UserProfileComponent, title: 'UserProfile-SMM'},
       { path: 'stock', component: StockComponent, title: 'Stock-SMM' },
       { path: 'bill', component: BillComponent, title: 'Bill-SMM' },
+      { path: 'transaction', component: TransactionComponent, title: 'Transaction-SMM'},
     ],
   },
   { path: '**', redirectTo: 'login' },

@@ -64,7 +64,9 @@ export class LogComponent implements OnInit, OnDestroy {
     
         this.logSubscription = this.logService.getAllLogs().subscribe(
             (response) => {
-                this.logs = response.data.map((log: Log) => ({
+                this.logs = response.data
+                .reverse()
+                .map((log: Log) => ({
                     ...log,
                     name: log.userId?.name, 
                     EmployeeCode: log.userId?.EmployeeCode,

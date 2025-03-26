@@ -4,7 +4,11 @@ export interface Bill {
   message: string;
   _id: string;
   billNumber: string;
-  cashierId: string;
+  cashierId: {
+    id: string,
+    name: string,
+    role: string
+  };
   cashierName: string;
   customerDetails: {
     phone?: string;

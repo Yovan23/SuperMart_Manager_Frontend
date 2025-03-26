@@ -141,8 +141,9 @@
       <div class="grid">
           <div class="col-12 md:col-5">
               <label for="companyName">Phone no</label>
-              <input pInputText type="text" id="companyName" class="w-full" [(ngModel)]="customerPhone" #phone="ngModel"
-                  name="phone" pattern="^[0-9]{10}$" required (keydown.enter)="createBill()" />
+              <input pInputText type="tel" id="companyName" class="w-full" [(ngModel)]="customerPhone" #phone="ngModel"
+              name="phone" pattern="^[0-9]{10}$" required 
+              (keydown.enter)="phone.invalid ? null : createBill()" />          
               <div *ngIf="phone.invalid && phone.touched" class="text-red-600 text-sm">
                   <p *ngIf="phone.errors?.['required']">Phone number is required.</p>
                   <p *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit phone number.</p>
@@ -159,7 +160,9 @@
           </div>
   
           <div class="col-12 md:col-2 mt-3">
-              <p-button label="Create Bill" styleClass="p-button-primary" (click)="createBill()"></p-button>
+              <p-button label="Create Bill" styleClass="p-button-primary" (click)="createBill()"
+              [loading]="isCreatingBill"
+        [label]="isCreatingBill ? 'Loading...' : 'Create Bill'"></p-button>
           </div>
   
           <div class="col-12 md:col-5">
@@ -184,15 +187,16 @@
               </div>
               <div class="col-12 md:col-5">
                   <label for="quantity">Quantity</label>
-                  <input pInputText id="quantity" type="number" class="w-full" (keydown.enter)="addProductToBill()"
-                      [defaultValue]=1 />
+                  <input pInputText id="quantity" type="number" class="w-full" (keydown.enter)="addProductToBill()"/>
               </div>
               <div class="col-12 md:col-2 flex align-items-center mt-3">
-                  <p-button label="Add Product" styleClass="p-button-primary" (click)="addProductToBill()"></p-button>
+                  <p-button label="Add Product" styleClass="p-button-primary" (click)="addProductToBill()"
+                  [loading]="isAddingProduct"
+                  [label]="isAddingProduct ? 'Loading...' : 'Add Product'"></p-button>
               </div>
           </div>
           <div *ngIf="submittedBill?.items?.length">
-              <div class="p-3" style="background-color: skyblue; border-radius: 10px;">
+              <div class="p-3" style="background-color: rgb(189, 224, 238); border-radius: 10px;">
                   <table class="p-datatable w-full">
                       <thead>
                           <tr class="bg-blue-800">
@@ -227,8 +231,11 @@
                                       [(ngModel)]="item.subtotal" disabled>
                               </td>
                               <td>
-                                  <button pButton icon="pi pi-trash"
-                                      class="p-button-rounded p-button-danger p-button-sm"></button>
+                                <button pButton icon="pi pi-trash"
+                                class="p-button-rounded p-button-danger p-button-sm"
+                                (click)="onRemoveItem(submittedBill?._id ?? '', item.productId)">
+                            </button>
+                            
                               </td>
                           </tr>
                           <tr>
@@ -255,7 +262,9 @@
                       </p-select>
                   </div>
                   <div class="col-6 md:col-2 mt-3">
-                      <p-button label="Make Payment" styleClass="p-button-primary" (click)="processPayment()"></p-button>
+                      <p-button label="Make Payment" styleClass="p-button-primary" (click)="processPayment()"
+                      [loading]="isProcessingPayment"
+                      [label]="isProcessingPayment ? 'Loading...' : 'Make Payment'"></p-button>
                   </div>
                   <div class="col-6 md:col-2 mt-3">
                       <p-button label="Create Invoice" icon="pi pi-file" styleClass="p-button-primary" (click)="showInvoiceDialog()"></p-button>
@@ -317,13 +326,16 @@
               </table>
               <hr style="border: none; border-top: 1px dotted #000;">
               <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>TOTAL: Rs.{{(submittedBill?.subtotal ?? 0).toFixed(2) || "0.00"}}</strong>
+                  <strong>TOTAL: Rs.{{(submittedBill?.subtotal ?? 0.00).toFixed(2) || "0.00"}}</strong>
               </div>
+              <div style="text-align: right; margin-bottom: 5px;">
+                <strong>TOTAL TAX: Rs.{{(submittedBill?.tax ?? 0.00).toFixed(2)}}</strong>
+             </div>
               <div style="text-align: right; margin-bottom: 5px;">
                   <strong>DISCOUNT: RS.{{(submittedBill?.totalDiscount ?? 0.00).toFixed(2) || '0.00'}}</strong>
               </div>
                <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>PAID: Rs.{{(submittedBill?.totalAmount ?? 0).toFixed(2) || '0.00'}}</strong>
+                  <strong>PAID: Rs.{{(submittedBill?.totalAmount ?? 0.00).toFixed(2) || '0.00'}}</strong>
                </div>
                <hr style="border: none; border-top: 1px dotted #000;">
                <div style="text-align: center; margin-top: 5px;">

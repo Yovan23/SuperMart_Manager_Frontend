@@ -255,7 +255,10 @@ export class StockComponent  implements OnInit, OnDestroy {
   
     this.editDialogVisible = true;
   }
-  
+
+  formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString() 
+  }
 
     updateStock({ stock, _id }: { stock: Stock; _id: string; }): void {
       this.stockService.updateStock({ stock, _id }).subscribe({
