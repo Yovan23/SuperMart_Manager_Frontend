@@ -1,6 +1,7 @@
 /* navigation.component.scss */
 
 /* Existing styles (unchanged) */
+
 .layout-wrapper {
   display: flex;
   min-height: auto;
@@ -8,7 +9,8 @@
 
 .sidebar {
   width: 220px;
-  background-color: #ffffff;
+  background-color: #fff;
+
   position: fixed;
   height: 100vh;
   left: 0;
