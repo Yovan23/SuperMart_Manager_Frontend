@@ -145,28 +145,48 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       );
       return;
     }
-
+  
+    // Ensure _id exists
+    if (!this.userData?._id) {
+      this.snackbarService.showError('Error', 'User ID is missing');
+      return;
+    }
+  
+    // Prepare the updated data
     const updatedData = {
-      ...this.userData,
-      profilePicture: this.userData.profilePicture.startsWith('data:')
-        ? this.userData.profilePicture
-        : undefined,
+      user: {
+        ...this.userData,
+        profilePicture: this.userData.profilePicture.startsWith('data:')
+          ? this.userData.profilePicture // Base64 string for new image
+          : this.userData.profilePicture.startsWith(environment.imageUrl)
+          ? this.userData.profilePicture.replace(environment.imageUrl, '') // Remove base URL if present
+          : this.userData.profilePicture, // Keep as is if no change
+      },
+      _id: this.userData._id,
     };
-
-    // this.userService.updateUser(this.userData._id, updatedData).subscribe({
-    //   next: (response) => {
-    //     this.editMode = false;
-    //     this.originalUserData = { ...this.userData };
-    //     this.snackbarService.showSuccess(
-    //       'Profile Updated',
-    //       'Your profile has been updated successfully'
-    //     );
-    //   },
-    //   error: (err) => {
-    //     console.error('Failed to update profile', err);
-    //     this.snackbarService.showError('Error', 'Failed to update profile');
-    //   },
-    // });
+  
+    // Call the updateUser service
+    this.userService.updateUser(updatedData).subscribe({
+      next: (response) => {
+        this.editMode = false;
+        this.originalUserData = { ...this.userData };
+        // Update profile picture URL if returned from backend
+        if (response.profilePicture) {
+          this.userData.profilePicture = `${environment.imageUrl}${response.profilePicture}`;
+        }
+        this.snackbarService.showSuccess(
+          'Profile Updated',
+          'Your profile has been updated successfully'
+        );
+      },
+      error: (err) => {
+        console.error('Failed to update profile', err);
+        this.snackbarService.showError(
+          'Error',
+          err.error?.message || 'Failed to update profile'
+        );
+      },
+    });
   }
 
   openChangePasswordDialog() {

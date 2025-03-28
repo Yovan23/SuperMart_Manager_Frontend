@@ -32,6 +32,21 @@ export class DashboardService {
         })
     }
 
+    getFelxibleDataOfSale(params?: { period?: string}): Observable<ApiResponse> {
+        let httpParams = new HttpParams();
+        if (params) {
+            if (params.period) {
+                httpParams = httpParams.set('period', params.period);
+            }else {
+                httpParams = httpParams.set('period', 'month');
+            }
+        }
+        return this.http.get<ApiResponse>(`${this.apiUrl}/getFelxibleDataOfSale`, {
+            headers: getAuthHeaders(),
+            params: httpParams
+            })
+    }
+
     sevendaysTotalSale(): Observable<ApiResponse> {
         return this.http.get<ApiResponse>(`${this.apiUrl}/sevendaysTotalSale`, {
           headers: getAuthHeaders()
