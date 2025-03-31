@@ -323,7 +323,11 @@ export class DashboardComponent implements OnInit {
   options: any = {};
   doughnutOptions: any = {};
   recentTransaction: any = [];
-  selectedPeriod: string = 'month';
+  selectedPeriod: string = 'week';
+  selectedPeriodOfCategory: string = 'month'; 
+  showAll: boolean = false; // Track whether to show all categories
+  displayedCategories: any[] = [];
+  salesByCategory: any = [];
 
   constructor(
     private dashboardService: DashboardService,
@@ -334,7 +338,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.loadSevenDaysSale();
-    this.loadFlexibleDataOfSale(); // Load bar chart data
+    this.loadFlexibleDataOfSale(); 
+    this.loadSalesByCategory();
     this.initCharts();
   }
 
@@ -404,7 +409,12 @@ export class DashboardComponent implements OnInit {
 
   changePeriod(period: string): void {
     this.selectedPeriod = period;
-    this.loadFlexibleDataOfSale(); // Reload data with new period
+    this.loadFlexibleDataOfSale(); 
+  }
+
+  changePeriodOfCategory(periodOfCategory: string): void {
+    this.selectedPeriodOfCategory = periodOfCategory;
+    this.loadSalesByCategory(); 
   }
 
   updateStats(): void {
@@ -459,11 +469,10 @@ export class DashboardComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--text-color');
-
-      // Bar chart options (no initial data1 here)
+      const backgroundColor = documentStyle.getPropertyValue('--background-color');
       this.options = {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: true, 
         plugins: {
           legend: {
             position: 'top',
@@ -482,6 +491,9 @@ export class DashboardComponent implements OnInit {
             },
           },
           y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
             ticks: {
               color: textColor,
             },
@@ -489,8 +501,20 @@ export class DashboardComponent implements OnInit {
               color: 'rgba(0,0,0,0.1)',
             },
           },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            ticks: {
+              color: textColor,
+            },
+            grid: {
+              drawOnChartArea: false, // Prevents overlapping grid lines
+            },
+          },
         },
       };
+      
 
       // Half doughnut chart options
       this.doughnutOptions = {
@@ -515,33 +539,31 @@ export class DashboardComponent implements OnInit {
       this.cd.markForCheck();
     }
   }
-
-  // Update bar chart with API data
   updateBarChart(salesData: any[]) {
     const documentStyle = getComputedStyle(document.documentElement);
     this.data1 = {
-      labels: salesData.map((item: any) => item.period || item.label), // Adjust based on API response
+      labels: salesData.map((item: any) => item.period || item.label), // Extracting period/label for X-axis
       datasets: [
         {
-          label: 'Sales',
-          data: salesData.map((item: any) => item.totalSales || item.value), // Adjust based on API response
-          backgroundColor: [
-            documentStyle.getPropertyValue('--p-cyan-500'),
-            // documentStyle.getPropertyValue('--p-orange-500'),
-            // documentStyle.getPropertyValue('--p-gray-500'),
-            // documentStyle.getPropertyValue('--p-black-500'),
-          ],
-          hoverBackgroundColor: [
-            documentStyle.getPropertyValue('--p-cyan-400'),
-            // documentStyle.getPropertyValue('--p-orange-400'),
-            // documentStyle.getPropertyValue('--p-gray-400'),
-            // documentStyle.getPropertyValue('--p-black-400'),
-          ].slice(0, salesData.length),
+          label: 'Sales (Rs.)',
+          data: salesData.map((item: any) => item.totalSales || item.value), // Extract Sales data
+          backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
+          hoverBackgroundColor: documentStyle.getPropertyValue('--p-cyan-400'),
+          yAxisID: 'y', // Assigning to left Y-axis
+        },
+        {
+          label: 'Number of Orders',
+          data: salesData.map((item: any) => item.orderCount || item.value), // Extract Orders data
+          backgroundColor: documentStyle.getPropertyValue('--p-orange-500'),
+          hoverBackgroundColor: documentStyle.getPropertyValue('--p-orange-400'),
+          yAxisID: 'y1', // Assigning to right Y-axis
         },
       ],
     };
-    this.cd.markForCheck(); // Ensure UI updates
+  
+    this.cd.markForCheck(); // Ensure UI update
   }
+  
 
   // Update doughnut chart with API data
   updateDoughnutChart(dailyData: any[]) {
@@ -572,6 +594,57 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
-    this.cd.markForCheck(); // Ensure UI updates
+    this.cd.markForCheck(); 
+  }
+  loadSalesByCategory(): void {
+    const params: { periodOfCategory?: string } = { periodOfCategory: this.selectedPeriodOfCategory };
+  
+    this.dashboardService.getSalesByCategory(params).subscribe({
+      next: (response: ApiResponse) => {
+        if (response.success) {
+          this.updateSalesByCategory(response.data);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading sales by category:', error);
+      },
+    });
+  }
+  
+  updateSalesByCategory(data: any): void {
+    if (data && Array.isArray(data.categories)) {
+      this.salesByCategory = data.categories.map((item: { name: any; totalSales: any; percentage: any; }) => ({
+        category: item.name,
+        sales: item.totalSales,
+        percentage: item.percentage,
+        color: this.getRandomColor(),
+      }));
+      this.updateDisplayedCategories();
+      this.cd.markForCheck();
+    } else {
+      console.error('Invalid category data structure:', data);
+      this.salesByCategory = [];
+    }
+  }
+    
+
+  getRandomColor(): string {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  updateDisplayedCategories(): void {
+    this.displayedCategories = this.showAll
+      ? this.salesByCategory
+      : this.salesByCategory.slice(0, 2); 
+  }
+
+  showAllCategories(): void {
+    this.showAll = !this.showAll;
+    this.updateDisplayedCategories();
   }
 }

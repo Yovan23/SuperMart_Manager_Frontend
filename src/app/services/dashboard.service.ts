@@ -52,4 +52,27 @@ export class DashboardService {
           headers: getAuthHeaders()
         })
     }
+
+    getProductSaleDatewise(fromDate: string, toDate:string): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(
+            `${this.apiUrl}/getProductSaleDate`,
+            { fromDate, toDate },
+            { headers: getAuthHeaders() }
+          );
+    }
+
+    getSalesByCategory(params?: { periodOfCategory?: string}): Observable<ApiResponse> {
+        let httpParams = new HttpParams();
+        if (params) {
+            if (params.periodOfCategory) {
+                httpParams = httpParams.set('period', params.periodOfCategory);
+            }else {
+                httpParams = httpParams.set('period', 'month');
+            }
+        }
+        return this.http.get<ApiResponse>(`${this.apiUrl}/getFlexibleCategoryDataOfSale`, {
+          headers: getAuthHeaders(),
+          params: httpParams
+        })
+    }
 }    

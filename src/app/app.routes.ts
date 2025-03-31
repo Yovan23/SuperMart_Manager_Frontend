@@ -13,6 +13,7 @@ import { StockComponent } from './pages/stock/stock.component';
 import { BillComponent } from './pages/bill/bill.component';
 import { TransactionComponent } from './pages/transaction/transaction.component';
 import { AuthGuardService } from './auth/auth-guard';
+import { ReportsComponent } from './pages/reports/reports.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -33,6 +34,7 @@ export const routes: Routes = [
       { path: 'stock', component: StockComponent, title: 'Stock-SMM' },
       { path: 'bill', component: BillComponent, title: 'Bill-SMM' },
       { path: 'transaction', component: TransactionComponent, title: 'Transaction-SMM'},
+      { path: 'reports', component: ReportsComponent, title: 'Reports-SMM' },
     ],
   },
   { path: '**', redirectTo: 'login' },

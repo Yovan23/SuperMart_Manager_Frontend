@@ -1,0 +1,37 @@
+<div class="flex items-center gap-2">
+    <p class="flex items-center h-full whitespace-nowrap">Select Date Range:</p>
+    <p-datepicker [(ngModel)]="dateRange" selectionMode="range" dateFormat="dd.mm.yy" [showIcon]="true"
+        class="h-full flex"></p-datepicker>
+    <button type="button" (click)="getProductSaleDatewise()" pButton icon="pi pi-external-link" label="Show"
+        class="h-full flex"></button>
+    <button pButton label="Export to Excel" icon="pi pi-file-excel" (click)="exportToExcel()" class="h-full flex"></button>
+    
+        
+</div>
+
+<p-dialog header=" Data" [resizable]="false" [modal]="true" [maximizable]="true" appendTo="body"
+    [(visible)]="dialogVisible" [style]="{ width: '75vw' }" [contentStyle]="{ height: '300px' }">
+    <p-table [value]="data" [scrollable]="true" scrollHeight="flex" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Barcode</th>
+                <th>Product Name</th>
+                <th>Total Sale</th>
+                <th>Total Quantity</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-saledata>
+            <tr>
+                <td>{{ saledata.barcode }}</td>
+                <td>{{ saledata.productName }}</td>
+                <td>{{ saledata.totalAmount + saledata.totalTax }}</td>
+                <td>{{ saledata.totalQuantity }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <button pButton label="Export to Excel" icon="pi pi-file-excel" (click)="exportToExcel()"></button>
+        <button pButton label="Close" icon="pi pi-times" (click)="dialogVisible = false"></button>
+    </ng-template>
+    
+</p-dialog>

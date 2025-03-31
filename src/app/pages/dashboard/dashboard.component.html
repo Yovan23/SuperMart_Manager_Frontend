@@ -23,15 +23,15 @@
         <h3 class="chart-title">Sales Distribution</h3>
         <div class="filter-buttons">
           <p-button
-            label="Month"
-            [outlined]="selectedPeriod !== 'month'"
-            (click)="changePeriod('month')"
-            styleClass="p-button-sm p-button-secondary mr-2"
-          ></p-button>
-          <p-button
             label="Week"
             [outlined]="selectedPeriod !== 'week'"
             (click)="changePeriod('week')"
+            styleClass="p-button-sm p-button-secondary mr-2"
+          ></p-button>
+          <p-button
+            label="Month"
+            [outlined]="selectedPeriod !== 'month'"
+            (click)="changePeriod('month')"
             styleClass="p-button-sm p-button-secondary mr-2"
           ></p-button>
           <p-button
@@ -94,6 +94,50 @@
           </p-table>
         </div>
       </div>
+      <div class="category-distribution mt-5">
+        <h3 class="chart-title">By Category Sales In percentage</h3>
+        <div class="filter-buttons">
+          <p-button
+            label="Week"
+            [outlined]="selectedPeriodOfCategory !== 'week'"
+            (click)="changePeriodOfCategory('week')"
+            styleClass="p-button-sm p-button-secondary mr-2"
+          ></p-button>
+          <p-button
+            label="Month"
+            [outlined]="selectedPeriodOfCategory !== 'month'"
+            (click)="changePeriodOfCategory('month')"
+            styleClass="p-button-sm p-button-secondary mr-2"
+          ></p-button>
+          <p-button
+            label="Year"
+            [outlined]="selectedPeriodOfCategory !== 'year'"
+            (click)="changePeriodOfCategory('year')"
+            styleClass="p-button-sm p-button-secondary"
+          ></p-button>
+        </div>
+      
+        <div class="percentage-bar">
+          <div
+            *ngFor="let category of displayedCategories"
+            [style.width]="category.percentage + '%'"
+            [style.backgroundColor]="category.color"
+            class="bar-segment"
+          ></div>
+        </div>
+      
+        <div class="category-list">
+          <div *ngFor="let category of displayedCategories" class="category-item">
+            <span class="category-color" [style.backgroundColor]="category.color"></span>
+            <span class="category-name">{{ category.category }} ({{ category.percentage }}%)</span>
+            <span class="category-sales">{{ category.sales | currency: 'INR' }}</span>
+          </div>
+        </div>
+      
+        <button pButton [label]="showAll ? 'Show Less' : 'Show All'" class="p-button-text" (click)="showAllCategories()"></button>
+      </div>
+
+     
     </div>
   </div>
 </div>
