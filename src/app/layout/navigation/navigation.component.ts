@@ -34,7 +34,9 @@ export class NavigationComponent implements OnInit {
   userData: any = null;
   sidebarVisible: boolean = true;
   isMobile: boolean = false;
-
+  navigateToDashboard() {
+    this.router.navigate(['/dashboard']); 
+  }
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,

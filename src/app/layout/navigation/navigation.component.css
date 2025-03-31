@@ -1,12 +1,9 @@
-/* navigation.component.scss */
-
-/* Existing styles (unchanged) */
 
 .layout-wrapper {
   display: flex;
   min-height: auto;
 }
-
+  
 .sidebar {
   width: 220px;
   background-color: #fff;
@@ -143,12 +140,30 @@
   .menu-button {
     color: #666;
   }
-
   .app-title {
-    margin-left: 15px;
-    font-size: 18px;
-    font-weight: 500;
-    color: #333;
+    font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+    font-size: 1.25rem; 
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #2c3e50; 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .app-title:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .app-title:active {
+    transform: translateY(0);
   }
 }
 
@@ -226,7 +241,6 @@
   }
 }
 
-/* Fine-tune for smaller screens (e.g., Breakpoints.HandsetPortrait < 600px) */
 @media screen and (max-width: 600px) {
   .sidebar {
     width: 200px;
@@ -299,7 +313,7 @@
   box-shadow: 0 0 8px rgba(0,0,0,0.2);
   transition: all 0.2s ease;
 }
-/* Backdrop styles */
+
 .sidebar-backdrop {
   position: fixed;
   top: 0;
