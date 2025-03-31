@@ -1,42 +1,168 @@
+
+
 .custom-class {
-  background-color: rgb(255, 255, 255);
-  height: 100vh; /* Ensure full height */
+  background-color: #ffffff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Grid Layout */
+.grid-container {
+  display: flex;
+  width: 90%;
+  max-width: 1350px;
+  height: 90vh;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Section */
+.image-section {
+  flex: 1.5;
+  background-image: url("https://wallpapers.com/images/featured/supermarket-pictures-brhr0v0zqqxvtafp.jpg");
+  background-size: cover;
+  background-position: center;
+  animation: fadeIn 2s ease-in;
+}
+
+/* Login Section */
+.login-section {
+  flex: 1;
+  background-color: #00b4d8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Login Box */
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Input Fields */
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border 0.3s;
+}
+
+.input-field:hover,
+.input-field:focus {
+  border-color: #00b4d8;
+}
+
+/* Error Messages */
+.error-message {
+  color: #d32f2f;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.error-box {
+  background-color: rgba(211, 47, 47, 0.1);
+  color: #d32f2f;
+  padding: 0.75rem;
+  border-radius: 5px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Forgot Password */
+.forgot-password {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 
 .custom-link {
-  color: #ffffff;
+  color: #00b4d8;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s;
 }
 
 .custom-link:hover {
-  color: #1e40af;
+  color: #005f75;
 }
 
-::ng-deep body {
-  background-color: #f0ebf8;
-  margin: 0; /* Remove default margin */
-}
-
-.p-button.loading .p-button-spinner {
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #00b4d8;
   color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background 0.3s;
 }
 
-/* Ensure form takes full height on mobile */
-@media (max-width: 576px) {
-  .custom-class {
-    padding: 0; /* Remove padding on mobile */
+.submit-button:hover {
+  background-color: #0084a6;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .grid-container {
+    flex-direction: column;
+    height: auto;
   }
 
-  .grid {
-    height: 100vh; /* Full height on mobile */
-    border: none; /* Remove border on mobile */
-    border-radius: 0; /* Remove border radius on mobile */
+  .image-section {
+    display: none;
   }
 
-  .w-full {
-    max-width: 100%; /* Ensure form width is manageable */
+  .login-section {
+    flex: unset;
+    width: 100%;
+    padding: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    padding: 1.5rem;
   }
 
-  .text-5xl {
-    font-size: 2.5rem; /* Smaller title on mobile */
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .submit-button {
+    font-size: 0.9rem;
   }
 }

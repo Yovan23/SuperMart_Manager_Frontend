@@ -1,120 +1,62 @@
 <div class="p-2 custom-class">
-  <div
-    class="grid m-5 border-3 justify-content-between"
-    style="
-      height: 90vh;
-      border-radius: 3ch;
-      border-color: #f0ebf8;
-      overflow: hidden;
-    "
-  >
+  <div class="grid-container">
     <!-- Image section (hidden on mobile) -->
-    <div
-      class="col-8 md:col-8 hidden sm:block"
-      style="
-        background-image: url('https://wallpapers.com/images/featured/supermarket-pictures-brhr0v0zqqxvtafp.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100%;
-        animation: fadeIn 2s ease-in;
-      "
-    >
-      <!-- Empty div for background image -->
-    </div>
+    <div class="image-section"></div>
 
-    <!-- Login section (full width on mobile) -->
-    <div
-      class="col-12 sm:col-4 flex flex-row align-items-center justify-content-center"
-      style="background-color: #00b4d8"
-    >
-      <div class="w-full p-4 text-white">
+    <!-- Login section -->
+    <div class="login-section">
+      <div class="login-box">
         <div class="text-center mb-5">
-          <span class="text-5xl sm:text-4xl animate-pulse">Sign in to continue</span>
+          <span class="title">Sign in to continue</span>
         </div>
 
-        <form
-          [formGroup]="loginForm"
-          (ngSubmit)="onSubmit()"
-          class="animate__animated animate__fadeInUp"
-        >
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="animate__animated animate__fadeInUp">
           <!-- Email Input -->
-          <div class="mb-4">
-            <label for="email" class="block mb-2 font-semibold text-900">Email</label>
-            <span class="p-float-label">
-              <input
-                pInputText
-                id="email"
-                formControlName="email"
-                placeholder="Enter your email address"
-                class="w-full p-3 border-round-md transition-colors duration-300 hover:border-primary focus:border-primary"
-                [ngClass]="{
-                  'ng-invalid ng-dirty': submitted && loginForm.get('email')?.invalid
-                }"
-              />
-            </span>
-            <small
-              class="p-error block mt-1 animate__animated animate__shakeX"
-              *ngIf="submitted && loginForm.get('email')?.errors?.['required']"
-              style="color: #d32f2f"
-            >
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              pInputText
+              id="email"
+              formControlName="email"
+              placeholder="Enter your email address"
+              class="input-field"
+              [ngClass]="{ 'ng-invalid ng-dirty': submitted && loginForm.get('email')?.invalid }"
+            />
+            <small class="error-message" *ngIf="submitted && loginForm.get('email')?.errors?.['required']">
               Email is required
             </small>
-            <small
-              class="p-error block mt-1 animate__animated animate__shakeX"
-              *ngIf="submitted && loginForm.get('email')?.errors?.['email']"
-              style="color: #d32f2f"
-            >
+            <small class="error-message" *ngIf="submitted && loginForm.get('email')?.errors?.['email']">
               Email is invalid
             </small>
           </div>
 
           <!-- Password Input -->
-          <div class="mb-4 wider-container">
-            <label for="password" class="block mb-2 font-semibold text-900">Password</label>
-            <span class="p-float-label">
-              <p-password
-                fluid="true"
-                id="password"
-                placeholder="Enter your Password"
-                formControlName="password"
-                [toggleMask]="true"
-                inputStyleClass="w-full p-3"
-                [feedback]="false"
-              ></p-password>
-            </span>
-            <small
-              class="p-error block mt-1 animate__animated animate__shakeX"
-              *ngIf="submitted && loginForm.get('password')?.errors?.['required']"
-              style="color: #d32f2f"
-            >
+          <div class="form-group">
+            <label for="password">Password</label>
+            <p-password
+              fluid="true"
+              id="password"
+              placeholder="Enter your Password"
+              formControlName="password"
+              [toggleMask]="true"
+              inputStyleClass="input-field"
+              [feedback]="false"
+            ></p-password>
+            <small class="error-message" *ngIf="submitted && loginForm.get('password')?.errors?.['required']">
               Password is required
             </small>
-            <small
-              class="p-error block mt-1 animate__animated animate__shakeX"
-              *ngIf="submitted && loginForm.get('password')?.errors?.['minlength']"
-              style="color: #d32f2f"
-            >
+            <small class="error-message" *ngIf="submitted && loginForm.get('password')?.errors?.['minlength']">
               Password must be at least 6 characters
             </small>
           </div>
 
           <!-- Forgot Password Link -->
-          <div class="flex align-items-center justify-content-between mb-4">
-            <a
-              class="font-medium font-bold no-underline ml-2 text-right cursor-pointer custom-link transition-colors duration-300"
-              (click)="sendResetLink()"
-            >
-              Forgot password?
-            </a>
+          <div class="forgot-password">
+            <a class="custom-link" (click)="sendResetLink()">Forgot password?</a>
           </div>
 
           <!-- Error Message -->
-          <div
-            *ngIf="errorMessage"
-            class="p-error block mb-3 text-center animate__animated animate__bounceIn"
-            style="color: #d32f2f"
-          >
+          <div *ngIf="errorMessage" class="error-box">
             {{ errorMessage }}
           </div>
 
@@ -122,13 +64,7 @@
           <button
             pButton
             type="submit"
-            class="w-full p-3"
-            style="
-              color: #00b3ff;
-              background-color: #ffffff;
-              font-size: large;
-              font-weight: 500;
-            "
+            class="submit-button"
             [loading]="isLoading"
             [label]="isLoading ? 'Loading...' : 'Sign In'"
           ></button>
