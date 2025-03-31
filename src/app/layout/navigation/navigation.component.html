@@ -79,6 +79,13 @@
     <i class="pi pi-history"></i>
     <span *ngIf="sidebarVisible">Transaction</span>
   </a>
+
+  <a pRipple routerLink="/dashboard/reports" routerLinkActive="active" class="nav-item"
+    [pTooltip]="!sidebarVisible ? 'Reports' : undefined" tooltipPosition="right"
+    *ngIf="userData?.role === 'cashier' || userData?.role === 'admin'">
+    <i class="pi pi-file-edit"></i>
+    <span *ngIf="sidebarVisible">Reports</span>
+  </a>
   </div>
 
   <div class="layout-main">
