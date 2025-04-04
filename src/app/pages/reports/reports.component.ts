@@ -55,11 +55,12 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DashboardService } from '../../services/dashboard.service';
 import * as XLSX from 'xlsx';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePicker, DialogModule, TableModule, ButtonModule],
+  imports: [CommonModule, FormsModule, DatePicker, DialogModule, TableModule, ButtonModule, CardModule],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css'
 })

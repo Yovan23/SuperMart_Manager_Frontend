@@ -362,7 +362,6 @@
 
 .category-sales {
   font-size: 0.875rem;
-  font-weight: 600;
   color: #1f2937;
 }
 
@@ -374,7 +373,6 @@
   background-color: #f3f4f6;
   color: #6b7280;
   font-size: 0.875rem;
-  font-weight: 500;
   cursor: pointer;
   border: none;
   transition: background-color 0.2s ease-in-out;

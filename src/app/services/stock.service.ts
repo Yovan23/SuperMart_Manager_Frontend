@@ -29,8 +29,9 @@ export class StockService {
         });
     }
    
-    updateStock({ stock, _id }: { stock: Stock; _id: string; }): Observable<Stock> {
-        return this.http.post<Stock>(`${this.apiUrl}/updateStock/${_id}`, stock, {
+    updateStock(_id: string , qty: number , buying_price: number, expiryDate: Date ): Observable<any> {
+        const body = { qty, buying_price, expiryDate };
+        return this.http.post<Stock>(`${this.apiUrl}/updateStock/${_id}`, body, {
             headers: getAuthHeaders()
         });
     }

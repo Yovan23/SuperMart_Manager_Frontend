@@ -250,37 +250,39 @@ export class StockComponent  implements OnInit, OnDestroy {
   
     if (this.selectedStock.expiryDate) {
       const date = new Date(this.selectedStock.expiryDate);
-      this.selectedStock.expiryDate = new Date(date.toISOString().split('T')[0]); 
+      this.selectedStock.expiryDate = date;
+      console.log(this.selectedStock.expiryDate);
     }
+    
   
     this.editDialogVisible = true;
   }
-
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString() 
   }
-
-    updateStock({ stock, _id }: { stock: Stock; _id: string; }): void {
-      this.stockService.updateStock({ stock, _id }).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            this.loadStocks();
-            this.editDialogVisible = false;
-            this.snackbarService.showSuccess(
-              'Stock Updated',
-              'The stock has been updated successfully!'
-            );
-          }
-        },
-        error: (error) => {
-          console.error('Error updating stock:', error);
-          this.snackbarService.showError(
-            'Error',
-            'Failed to update stock. Please try again!'
+  updateStock(stock: Stock): void {
+    const { _id, qty, buying_price, expiryDate } = stock;
+    this.stockService.updateStock(_id, qty, buying_price,expiryDate ).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.loadStocks();
+          this.editDialogVisible = false;
+          this.snackbarService.showSuccess(
+            'Stock Updated',
+            'The stock has been updated successfully!'
           );
         }
-      });
-    }
+      },
+      error: (error) => {
+        console.error('Error updating stock:', error);
+        this.snackbarService.showError(
+          'Error',
+          'Failed to update stock. Please try again!'
+        );
+      }
+    });
+  }
+  
 
     applyFilter(event: Event, field: string) {
       const inputValue = (event.target as HTMLInputElement).value;

@@ -39,8 +39,7 @@
     </a>
 
     <a pRipple routerLink="/dashboard/users" routerLinkActive="active" class="nav-item"
-      [pTooltip]="!sidebarVisible ? 'Users' : undefined" tooltipPosition="right"
-      *ngIf="userData?.role === 'admin'">
+      [pTooltip]="!sidebarVisible ? 'Users' : undefined" tooltipPosition="right" *ngIf="userData?.role === 'admin'">
       <i class="pi pi-users"></i>
       <span *ngIf="sidebarVisible">Users</span>
     </a>
@@ -53,8 +52,7 @@
     </a>
 
     <a pRipple routerLink="/dashboard/supplier" routerLinkActive="active" class="nav-item"
-      [pTooltip]="!sidebarVisible ? 'Supplier' : undefined" tooltipPosition="right"
-      *ngIf=" userData?.role === 'admin'">
+      [pTooltip]="!sidebarVisible ? 'Supplier' : undefined" tooltipPosition="right" *ngIf=" userData?.role === 'admin'">
       <i class="pi pi-users"></i>
       <span *ngIf="sidebarVisible">Supplier</span>
     </a>
@@ -67,25 +65,24 @@
     </a>
 
     <a pRipple routerLink="/dashboard/bill" routerLinkActive="active" class="nav-item"
-      [pTooltip]="!sidebarVisible ? 'Bill' : undefined" tooltipPosition="right"
-      *ngIf="userData?.role === 'cashier'">
+      [pTooltip]="!sidebarVisible ? 'Bill' : undefined" tooltipPosition="right" *ngIf="userData?.role === 'cashier'">
       <i class="pi pi-receipt"></i>
       <span *ngIf="sidebarVisible">Bill</span>
     </a>
 
     <a pRipple routerLink="/dashboard/transaction" routerLinkActive="active" class="nav-item"
-    [pTooltip]="!sidebarVisible ? 'Transaction' : undefined" tooltipPosition="right"
-    *ngIf="userData?.role === 'cashier' || userData?.role === 'admin'">
-    <i class="pi pi-history"></i>
-    <span *ngIf="sidebarVisible">Transaction</span>
-  </a>
+      [pTooltip]="!sidebarVisible ? 'Transaction' : undefined" tooltipPosition="right"
+      *ngIf="userData?.role === 'cashier' || userData?.role === 'admin'">
+      <i class="pi pi-history"></i>
+      <span *ngIf="sidebarVisible">Transaction</span>
+    </a>
 
-  <a pRipple routerLink="/dashboard/reports" routerLinkActive="active" class="nav-item"
-    [pTooltip]="!sidebarVisible ? 'Reports' : undefined" tooltipPosition="right"
-    *ngIf="userData?.role === 'cashier' || userData?.role === 'admin'">
-    <i class="pi pi-file-edit"></i>
-    <span *ngIf="sidebarVisible">Reports</span>
-  </a>
+    <a pRipple routerLink="/dashboard/reports" routerLinkActive="active" class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Reports' : undefined" tooltipPosition="right"
+      *ngIf="userData?.role === 'cashier' || userData?.role === 'admin'">
+      <i class="pi pi-file-edit"></i>
+      <span *ngIf="sidebarVisible">Reports</span>
+    </a>
   </div>
 
   <div class="layout-main">
@@ -95,13 +92,109 @@
         <span class="app-title" (click)="navigateToDashboard()">SMARTMART MANAGAR</span>
       </div>
       <div class="toolbar-right">
+        <div class="notification-container">
+          <p-button #notificationButton (click)="toggleNotifications($event)" icon="pi pi-bell" [outlined]="true"
+            class="notification-button" />
+          <span class="notification-badge" *ngIf="notificationCount > 0">
+            {{ notificationCount }}
+          </span>
+
+          <p-popover #pop
+            [style]="{ width: '320px', 'border-radius': '10px', 'box-shadow': '0 4px 20px rgba(0, 0, 0, 0.15)' }"
+            (onShow)="loadNotifications()" (onHide)="showNotifications = false"
+            [showTransitionOptions]="'500ms ease-out'" [hideTransitionOptions]="'500ms ease-in'">
+              <div class="notification-content p-1">
+                <div class="flex justify-content-between align-items-center mb-3">
+                  <h3 class="m-0 text-lg font-medium">Notifications</h3>
+                </div>
+
+                <div *ngIf="loadingNotifications" class="text-center py-4">
+                  <i class="pi pi-spin pi-spinner text-4xl text-gray-500"></i>
+                  <p class="mt-2 text-gray-600">Loading notifications...</p>
+                </div>
+
+                <div *ngIf="!loadingNotifications" class="notification-tabs-container">
+                  <!-- <div class="notification-tabs flex mb-3">
+                    <button pButton class="p-button-text tab-button" [class.active-tab]="activeTab === 'lowstock'"
+                      label="Low Stock" (click)="activeTab = 'lowstock'"></button>
+                    <button pButton class="p-button-text tab-button" [class.active-tab]="activeTab === 'expire'"
+                      label="Expiring" (click)="activeTab = 'expire'"></button>
+                    <button pButton class="p-button-text tab-button" [class.active-tab]="activeTab === 'highsale'"
+                      label="Top Sales" (click)="activeTab = 'highsale'"></button>
+                  </div> -->
+
+                  <!-- Lowstock tab content -->
+                  <!-- <div *ngIf="activeTab === 'lowstock'" class="notification-list" [@fadeInOut]> -->
+                    <div *ngIf="notifications.length === 0" class="notification-empty">
+                      <div class="flex flex-column align-items-center py-4">
+                        <i class="pi pi-bell text-4xl text-gray-400 mb-2"></i>
+                        <p class="mb-0 text-gray-600">Not any new notification</p>
+                        <!-- <small class="text-gray-500">All inventory levels are good</small> -->
+                      </div>
+                    </div> 
+                    <div class="notification-scroll-area">
+                      <div *ngFor="let notification of notifications; let i = index"
+                           [@listAnimation]="{ value: ':enter', params: { delay: i * 1300 } }"
+                           class="notification-item">
+                        <div class="notification-icon">
+                          <i
+                            class="pi"
+                            [ngClass]="{
+                              'pi-exclamation-triangle text-amber-500': notification.messageType === 'lowstock',
+                              'pi-calendar-times text-red-500': notification.messageType === 'expire',
+                              'pi-chart-line text-green-500': notification.messageType === 'highsale'
+                            }"
+                          ></i>
+                        </div>
+                        <div class="notification-content-inner">
+                          <p
+                            class="notification-text font-medium"
+                            [ngClass]="{
+                              'text-green-700': notification.messageType === 'lowstock',
+                              'text-red-600': notification.messageType === 'expire',
+                              'text-green-600': notification.messageType === 'highsale'
+                            }"
+                          >
+                            {{ notification.message }}
+                          </p>
+                          <small class="notification-time">{{ notification.createdAt | date:'shortTime' }}</small>
+                        </div>
+                      </div>
+                    </div>
+                    
+
+                  <!-- </div> -->
+
+                  <!-- Expire tab content -->
+                  <!-- <div *ngIf="activeTab === 'expire'" class="notification-list" [@fadeInOut]>
+                    <div class="notification-empty">
+                      <div class="flex flex-column align-items-center py-4">
+                        <i class="pi pi-calendar-times text-4xl text-gray-400 mb-2"></i>
+                        <p class="mb-0 text-gray-600">No expiring items</p>
+                        <small class="text-gray-500">All items are within date</small>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <!-- <div *ngIf="activeTab === 'highsale'" class="notification-list" [@fadeInOut]>
+                    <div class="notification-empty">
+                      <div class="flex flex-column align-items-center py-4">
+                        <i class="pi pi-chart-line text-4xl text-gray-400 mb-2"></i>
+                        <p class="mb-0 text-gray-600">No top sales data</p>
+                        <small class="text-gray-500">Sales activity will appear here</small>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+          </p-popover>
+        </div>
 
         <p-toast />
-        <p-confirmdialog />
+        <p-confirmDialog />
         <p-button (click)="confirm1($event)" icon="pi pi-sign-out" [outlined]="true" />
       </div>
     </div>
-
     <div class="content">
       <router-outlet></router-outlet>
     </div>
