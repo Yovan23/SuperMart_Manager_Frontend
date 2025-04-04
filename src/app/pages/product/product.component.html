@@ -59,7 +59,7 @@
             #nameFilter
             (input)="dt.filter(nameFilter.value, 'name', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-12rem"
           />
         </th>
         <th class="p-2">
@@ -71,18 +71,22 @@
               dt.filter(descriptionFilter.value, 'description', 'contains')
             "
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-12"
           />
         </th>
         <th class="p-2">
-          <input
+          <select
             pInputText
-            type="text"
             #categoryFilter
-            (input)="dt.filter(categoryFilter.value, 'categoryId', 'contains')"
-            placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
-          />
+            (change)="onCategoryChange($event)"
+            class="p-column-filter w-full"
+          >
+            <option value="">All Categories</option>
+             <option *ngIf="loadingCategories" disabled>Loading categories...</option>
+            <option *ngFor="let category of categories" [value]="category._id">
+              {{ category.name }}
+            </option>
+          </select>
         </th>
         <th class="p-2">
           <input
@@ -91,7 +95,7 @@
             #quantityFilter
             (input)="dt.filter(quantityFilter.value, 'quantity', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -101,7 +105,7 @@
             #priceFilter
             (input)="dt.filter(priceFilter.value, 'price', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -111,7 +115,7 @@
             #barcodeFilter
             (input)="dt.filter(barcodeFilter.value, 'barcode', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -121,7 +125,7 @@
             #volumeFilter
             (input)="dt.filter(volumeFilter.value, 'volume', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -131,7 +135,7 @@
             #unitFilter
             (input)="dt.filter(unitFilter.value, 'unit', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">

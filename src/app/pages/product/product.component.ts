@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
 import {
@@ -17,11 +17,12 @@ import { DeleteDialogComponent } from '../../layout/component/delete-dialog/dele
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { InputText } from 'primeng/inputtext';
+import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { Subscription } from 'rxjs';
 import { BadgeModule } from 'primeng/badge';
-
+import { Table } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface Column {
   field: string;
@@ -33,6 +34,7 @@ interface ExportColumn {
   title: string;
   dataKey: string;
 }
+
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -40,21 +42,23 @@ interface ExportColumn {
     SnackbarComponent,
     EditDialogComponent,
     DeleteDialogComponent,
-    InputText,
+    InputTextModule,
     AddDialogComponent,
     TableModule,
     CommonModule,
     TagModule,
     ButtonModule,
     BadgeModule,
+    TooltipModule,
   ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css'],
 })
 export class ProductComponent implements OnInit, OnDestroy {
+  @ViewChild('dt') dt!: Table;
   products: Product[] = [];
   cols!: Column[];
-  selectedProducts!: Product[];
+  selectedProducts: Product[] = [];
   categories: any[] = [];
   exportColumns!: ExportColumn[];
   loading: boolean = true;
@@ -71,16 +75,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     message: '',
     duration: 3000,
   };
-  viewDialogVisible: boolean = false;
+
   stockSeverity(product: Product) {
     if (product.quantity === 0) return 'danger';
     else if (product.quantity > 0 && product.quantity <= 15) return 'warn';
     else return 'success';
   }
-  openViewDialog(product: any) {
-    this.selectedProduct = { ...product };
-    this.viewDialogVisible = true;
-  }
+
   productEditFields: Field[] = [
     {
       name: 'name',
@@ -216,6 +217,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadProducts();
     this.loadCategories();
+
     this.snackbarSubscriptions.push(
       this.snackbarService.visible$.subscribe(
         (visible) => (this.snackbarVisible = visible)
@@ -227,16 +229,17 @@ export class ProductComponent implements OnInit, OnDestroy {
         (config) => (this.snackbarConfig = config)
       )
     );
+
     this.cols = [
-      // { field: 'nam', header: 'Code', customExportHeader: 'Product Code' },
       { field: 'name', header: 'Name' },
       { field: 'description', header: 'Description' },
+      { field: 'categoryId', header: 'Category' },
       { field: 'quantity', header: 'Quantity' },
       { field: 'price', header: 'Price' },
-      { field: 'tax', header: "Tax(%)"},
       { field: 'barcode', header: 'Barcode' },
       { field: 'volume', header: 'Volume' },
       { field: 'unit', header: 'Unit' },
+      { field: 'isVisible', header: 'Visibility' },
     ];
 
     this.exportColumns = this.cols.map((col) => ({
@@ -249,6 +252,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.snackbarSubscriptions.forEach((sub) => sub.unsubscribe());
     this.snackbarService.hideSnackbar();
   }
+
   loadCategories(): void {
     this.categoryService.getAllCategory().subscribe({
       next: (response: ApiResponse) => {
@@ -278,11 +282,27 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
+  onCategoryChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+
+    if (this.dt) {
+      if (selectedValue === '') {
+        this.dt.filter(null, 'categoryId', 'equals');
+      } else {
+        this.dt.filter(selectedValue, 'categoryId', 'equals');
+      }
+    }
+  }
+
   loadProducts(): void {
     this.loading = true;
     this.productService.getAllProduct().subscribe({
       next: (response: ApiResponse) => {
-        this.products = response.data;
+        this.products = response.data.map((product: any) => ({
+          ...product,
+          categoryId: product.categoryId?._id || product.categoryId,
+        }));
         this.loading = false;
       },
       error: (error) => {
@@ -310,7 +330,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error creating product:', error);
-        console.log(error);
         this.snackbarService.showError(
           'Error',
           'Failed to create product. Please try again!'
@@ -322,10 +341,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   openEditDialog(product: Product): void {
     this.selectedProduct = { ...product };
     if (this.selectedProduct && this.selectedProduct.categoryId) {
-      const categoryId = this.selectedProduct.categoryId as unknown as {
-        _id: string;
-      };
-      if (typeof categoryId === 'object') {
+      const categoryId = this.selectedProduct.categoryId as any;
+      if (typeof categoryId === 'object' && categoryId._id) {
         this.selectedProduct.categoryId = categoryId._id;
       }
     }
@@ -386,17 +403,15 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   getCategoryName(categoryId: any): string {
     if (!categoryId) return 'Unknown';
-
     const categoryIdStr =
-      typeof categoryId === 'object' ? categoryId._id : categoryId; // Extract ID if it's an object
+      typeof categoryId === 'object' ? categoryId._id : categoryId;
     const category = this.categories.find(
       (cat) => String(cat._id) === String(categoryIdStr)
     );
-
     return category ? category.name : 'Unknown';
   }
 
-  getSeverity(stock: number): 'success' | 'danger' {
-    return stock > 0 ? 'success' : 'danger';
+  getSeverity(isVisible: boolean): 'success' | 'danger' {
+    return isVisible ? 'success' : 'danger';
   }
 }
