@@ -53,7 +53,7 @@
               dt.filter(productNameFilter.value, 'ProductName', 'contains')
             "
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -63,7 +63,7 @@
             #qtyFilter
             (input)="dt.filter(qtyFilter.value, 'qty', 'contains')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full "
           />
         </th>
         <th class="p-2">
@@ -75,7 +75,7 @@
               dt.filter(buyingPriceFilter.value, 'buying_price', 'contains')
             "
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full "
           />
         </th>
         <th class="p-2">
@@ -86,7 +86,7 @@
             (input)="
               dt.filter(expiryDateFilter.value, 'expiryDate', 'contains')
             "
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full "
           />
         </th>
         <th class="p-2">
@@ -96,7 +96,7 @@
             #supplierFilter
             (input)="applyFilter($event, 'supplierId.name')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -106,9 +106,10 @@
             #addedByFilter
             (input)="applyFilter($event, 'addedBy.EmployeeCode')"
             placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
+            class="p-column-filter w-full"
           />
         </th>
+        <th class="p-2"></th>
         <th class="p-2"></th>
       </tr>
     </ng-template>
