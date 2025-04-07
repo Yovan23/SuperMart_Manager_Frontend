@@ -1,14 +1,6 @@
 <div class="p-d-flex p-jc-between p-ai-center p-mb-1">
-  <h2 class="p-mr-auto">Supplier Management</h2>
-  <p-button
-    pButton
-    icon="pi pi-plus"
-    class="p-button-text p-mr-2"
-    (click)="openAddDialog()"
-    label="Add Supplier"
-  />
+  <h2 p-mr-auto>Supplier Management</h2>
 </div>
-
 <div class="card">
   <p-table
     #dt
@@ -19,16 +11,19 @@
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
     [paginator]="true"
-    [globalFilterFields]="[
-      'name',
-      'phoneNumber',
-      'address',
-    ]"
+    [globalFilterFields]="['name', 'phoneNumber', 'address']"
     styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component"
   >
     <ng-template #caption>
       <div class="flex">
-        <p-iconfield iconPosition="left" class="ml-auto">
+        <p-button
+          pButton
+          icon="pi pi-plus"
+          class="p-button-text p-mr-2"
+          (click)="openAddDialog()"
+          label="Add Supplier"
+        />
+        <p-iconfield iconPosition="left" class="ml-auto m-2">
           <p-inputicon>
             <i class="pi pi-search"></i>
           </p-inputicon>

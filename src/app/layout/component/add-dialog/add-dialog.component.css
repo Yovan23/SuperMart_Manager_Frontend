@@ -10,4 +10,14 @@
     display: block; 
     margin-top: 0.25rem; 
 }
-
+::ng-deep .no-border-radius .p-dialog {
+    border-radius: 0 !important;
+  }
+  
+  ::ng-deep .no-border-radius .p-dialog-content {
+    border-radius: 0 !important;
+  }
+  
+  ::ng-deep .no-border-radius .p-dialog-header {
+    border-radius: 0 !important;
+  }

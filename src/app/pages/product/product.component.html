@@ -1,8 +1,6 @@
 <div class="p-d-2 p-jc-between p-ai-center p-mb-1">
   <h2 class="p-mr-auto">Product Management</h2>
 </div>
-<br />
-
 <div class="card">
   <p-table
     #dt
@@ -21,14 +19,12 @@
     [(selection)]="selectedProducts"
     [exportHeader]="'customExportHeader'"
   >
-    <ng-template #caption>
-      <div class="text-end p-2 flex gap-5 justify-content-end">
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-between align-items-center p-2">
         <p-button
           icon="pi pi-plus"
           label="Add Product"
-          class="p-button-text p-mr-2"
-          pTooltip="Add Product"
-          tooltipPosition="top"
+          class="p-button-text"
           (click)="openAddDialog()"
         />
         <p-button
@@ -82,7 +78,9 @@
             class="p-column-filter w-full"
           >
             <option value="">All Categories</option>
-             <option *ngIf="loadingCategories" disabled>Loading categories...</option>
+            <option *ngIf="loadingCategories" disabled>
+              Loading categories...
+            </option>
             <option *ngFor="let category of categories" [value]="category._id">
               {{ category.name }}
             </option>

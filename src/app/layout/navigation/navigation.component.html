@@ -114,22 +114,11 @@
                 </div>
 
                 <div *ngIf="!loadingNotifications" class="notification-tabs-container">
-                  <!-- <div class="notification-tabs flex mb-3">
-                    <button pButton class="p-button-text tab-button" [class.active-tab]="activeTab === 'lowstock'"
-                      label="Low Stock" (click)="activeTab = 'lowstock'"></button>
-                    <button pButton class="p-button-text tab-button" [class.active-tab]="activeTab === 'expire'"
-                      label="Expiring" (click)="activeTab = 'expire'"></button>
-                    <button pButton class="p-button-text tab-button" [class.active-tab]="activeTab === 'highsale'"
-                      label="Top Sales" (click)="activeTab = 'highsale'"></button>
-                  </div> -->
-
-                  <!-- Lowstock tab content -->
-                  <!-- <div *ngIf="activeTab === 'lowstock'" class="notification-list" [@fadeInOut]> -->
+                
                     <div *ngIf="notifications.length === 0" class="notification-empty">
                       <div class="flex flex-column align-items-center py-4">
                         <i class="pi pi-bell text-4xl text-gray-400 mb-2"></i>
                         <p class="mb-0 text-gray-600">Not any new notification</p>
-                        <!-- <small class="text-gray-500">All inventory levels are good</small> -->
                       </div>
                     </div> 
                     <div class="notification-scroll-area">
@@ -161,30 +150,6 @@
                         </div>
                       </div>
                     </div>
-                    
-
-                  <!-- </div> -->
-
-                  <!-- Expire tab content -->
-                  <!-- <div *ngIf="activeTab === 'expire'" class="notification-list" [@fadeInOut]>
-                    <div class="notification-empty">
-                      <div class="flex flex-column align-items-center py-4">
-                        <i class="pi pi-calendar-times text-4xl text-gray-400 mb-2"></i>
-                        <p class="mb-0 text-gray-600">No expiring items</p>
-                        <small class="text-gray-500">All items are within date</small>
-                      </div>
-                    </div>
-                  </div> -->
-
-                  <!-- <div *ngIf="activeTab === 'highsale'" class="notification-list" [@fadeInOut]>
-                    <div class="notification-empty">
-                      <div class="flex flex-column align-items-center py-4">
-                        <i class="pi pi-chart-line text-4xl text-gray-400 mb-2"></i>
-                        <p class="mb-0 text-gray-600">No top sales data</p>
-                        <small class="text-gray-500">Sales activity will appear here</small>
-                      </div>
-                    </div>
-                  </div> -->
                 </div>
               </div>
           </p-popover>
