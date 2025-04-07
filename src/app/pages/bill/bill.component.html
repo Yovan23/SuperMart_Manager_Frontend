@@ -137,223 +137,441 @@
     </div>   
     <p-toast /> -->
 
-    <div class="container">
-      <div class="grid">
-          <div class="col-12 md:col-5">
-              <label for="companyName">Phone no</label>
-              <input pInputText type="tel" id="companyName" class="w-full" [(ngModel)]="customerPhone" #phone="ngModel"
-              name="phone" pattern="^[0-9]{10}$" required 
-              (keydown.enter)="phone.invalid ? null : createBill()" />          
-              <div *ngIf="phone.invalid && phone.touched" class="text-red-600 text-sm">
-                  <p *ngIf="phone.errors?.['required']">Phone number is required.</p>
-                  <p *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit phone number.</p>
-              </div>
-          </div>
-  
-          <div class="col-12 md:col-5">
-              <label for="invoiceId">Email</label>
-              <input pInputText type="text" id="invoiceId" class="w-full" [(ngModel)]="customerEmail" #email="ngModel"
-                  name="email" email (keydown.enter)="createBill()" />
-              <div *ngIf="email.invalid && email.touched" class="text-red-600 text-sm">
-                  <p *ngIf="email.errors?.['email']">Enter a valid email address.</p>
-              </div>
-          </div>
-  
-          <div class="col-12 md:col-2 mt-3">
-              <p-button label="Create Bill" styleClass="p-button-primary" (click)="createBill()"
-              [loading]="isCreatingBill"
-        [label]="isCreatingBill ? 'Loading...' : 'Create Bill'"></p-button>
-          </div>
-  
-          <div class="col-12 md:col-5">
-              <label for="billNumber">Bill Number</label>
-              <input pInputText type="text" id="billNumber" class="w-full" [value]="submittedBill?.billNumber || ''"
-                  disabled>
-          </div>
-  
-          <div class="col-12 md:col-5">
-              <label for="cashierId">cashier Name</label>
-              <input pInputText type="text" id="cashierId" class="w-full" [value]="submittedBill?.cashierName || ''"
-                  disabled>
-          </div>
+<div class="container">
+  <div class="grid">
+    <div class="col-12 md:col-5">
+      <span class="block">Phone</span>
+      <p-inputmask
+        mask="9999999999"
+        type="tel"
+        id="companyName"
+        placeholder="9999999999"
+        class="w-full mask-input"
+        [(ngModel)]="customerPhone"
+        #phone="ngModel"
+        name="phone"
+        pattern="^[0-9]{10}$"
+        required
+        (keydown.enter)="phone.invalid ? null : createBill()"
+      />
+      <div *ngIf="phone.invalid && phone.touched" class="text-red-600 text-sm">
+        <p *ngIf="phone.errors?.['required']">Phone number is required.</p>
+        <p *ngIf="phone.errors?.['pattern']">
+          Enter a valid 10-digit phone number.
+        </p>
       </div>
-  
-      <div class="p-fluid">
-          <div class="grid">
-              <div class="col-12 md:col-5">
-                  <label for="barcode">Barcode</label>
-                  <input pInputText id="barcode" type="text" #itemInput class="w-full"
-                      (keydown.enter)="addProductToBill()" />
-              </div>
-              <div class="col-12 md:col-5">
-                  <label for="quantity">Quantity</label>
-                  <input pInputText id="quantity" type="number" class="w-full" (keydown.enter)="addProductToBill()"/>
-              </div>
-              <div class="col-12 md:col-2 flex align-items-center mt-3">
-                  <p-button label="Add Product" styleClass="p-button-primary" (click)="addProductToBill()"
-                  [loading]="isAddingProduct"
-                  [label]="isAddingProduct ? 'Loading...' : 'Add Product'"></p-button>
-              </div>
-          </div>
-          <div *ngIf="submittedBill?.items?.length">
-              <div class="p-3" style="background-color: rgb(189, 224, 238); border-radius: 10px;">
-                  <table class="p-datatable w-full">
-                      <thead>
-                          <tr class="bg-blue-800">
-                              <th>Product Name</th>
-                              <th>QTY</th>
-                              <th>Unit Price</th>
-                              <th>Tax</th>
-                              <th>Subtotal</th>
-                              <th>Action</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr *ngFor="let item of submittedBill?.items; let i = index" class="bg-blue-100">
-                              <td>
-                                  <input pInputText type="text" class="w-full p-inputtext-sm"
-                                      [(ngModel)]="item.productName" disabled>
-                              </td>
-                              <td>
-                                  <input pInputText type="text" class="w-full p-inputtext-sm" [(ngModel)]="item.quantity"
-                                      disabled>
-                              </td>
-                              <td>
-                                  <input pInputText type="text" class="w-full p-inputtext-sm"
-                                      [(ngModel)]="item.unitPrice" disabled>
-                              </td>
-                              <td>
-                                  <input pInputText type="number" class="w-full p-inputtext-sm" [(ngModel)]="item.tax"
-                                      disabled>
-                              </td>
-                              <td>
-                                  <input pInputText type="text" class="w-full p-inputtext-sm font-bold"
-                                      [(ngModel)]="item.subtotal" disabled>
-                              </td>
-                              <td>
-                                <button pButton icon="pi pi-trash"
-                                class="p-button-rounded p-button-danger p-button-sm"
-                                (click)="onRemoveItem(submittedBill?._id ?? '', item.productId)">
-                            </button>
-                            
-                              </td>
-                          </tr>
-                          <tr>
-                              <td colspan="4" class="text-right ">Total</td>
-                              <td>
-                                  <input pInputText type="text" class="w-full p-inputtext-sm font-bold"
-                                      [value]="submittedBill?.subtotal" disabled>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-  
-              </div>
-              <div class="grid mt-3">
-                <div class="col-12 md:col-5">
-                    <label for="totalDiscount" class="mr-4">Discount(%)</label>
-                    <input pInputText type="text" id="totalDiscount" class="w-full" [placeholder]=0 (keydown.enter)="applyDiscount()"/>
-                    <small>*Spress Enter to apply discount</small>
-                </div>
-                  <div class="col-12 md:col-5">
-                      <label for="paymentMethod" class="mr-4">Payment Method</label>
-                      <p-select fluid="true" id="paymentMethod" [options]="paymentMethods" [(ngModel)]="selectedPaymentMethod"
-                          optionLabel="label" placeholder="Select Payment Method">
-                      </p-select>
-                  </div>
-                  <div class="col-6 md:col-2 mt-3">
-                      <p-button label="Make Payment" styleClass="p-button-primary" (click)="processPayment()"
-                      [loading]="isProcessingPayment"
-                      [label]="isProcessingPayment ? 'Loading...' : 'Make Payment'"></p-button>
-                  </div>
-                  <div class="col-6 md:col-2 mt-3">
-                      <p-button label="Create Invoice" icon="pi pi-file" styleClass="p-button-primary" (click)="showInvoiceDialog()"></p-button>
-                  </div>
-              </div>
-  
-          </div>
-      </div>
-      <p-toast />
-  
-      <p-dialog header="Invoice" [(visible)]="invoiceDialogVisible" [modal]="true" [style]="{width: '320px'}"
-          [draggable]="false" [resizable]="false">
-          <div id="invoice-content" style="font-family: 'Courier New', monospace; font-size: 12px;">
-              <div style="text-align: center; margin-bottom: 5px;">
-                  <strong>SuperMart Manager</strong><br>
-                  Near Swaminarayan Temple,    v.v. Nagar<br>
-                  Tel: 010101010<br>
-                  Email: gmail.com<br>
-              </div>
-  
-              <div style="text-align: center; margin-bottom: 10px;">
-                  <strong>SALES INVOICE</strong>
-              </div>
-  
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>CASHIER:</span><span>{{submittedBill?.cashierName || 'N/A'}}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>INVOICE NO:</span><span>{{submittedBill?.billNumber || 'N/A'}}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>CUSTOMER Phone:</span><span>{{submittedBill?.customerDetails?.phone || 'N/A'}}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>DATE:</span><span>{{submittedBill?.createdAt | date:'mediumDate'}}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                  <span>TIME:</span><span>{{submittedBill?.updatedAt | date:'hh:mm:ss a'}}</span>
-              </div>
-  
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-                  <thead>
-                      <tr>
-                          <th style="text-align: left; padding-bottom: 5px; border-bottom: 1px dotted #000;">ITEM</th>
-                          <th style="text-align: left; padding-bottom: 5px; border-bottom: 1px dotted #000;">QTY</th>
-                          <th style="text-align: right; padding-bottom: 5px; border-bottom: 1px dotted #000;">AMOUNT</th>
-                          <th style="text-align: right; padding-bottom: 5px; border-bottom: 1px dotted #000;">Total</th>
+    </div>
 
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of submittedBill?.items">
-                          <td style="padding: 2px 0;">{{item.productName}}</td>
-                          <td style="padding: 2px 0;">{{item.quantity}}</td>
-                          <td style="text-align: right; padding: 2px 0;">{{item.unitPrice}}</td>
-                          <td style="text-align: right; padding: 2px 0;">{{item.subtotal}}</td>
-                      </tr>
-                  </tbody>
-              </table>
-              <hr style="border: none; border-top: 1px dotted #000;">
-              <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>TOTAL: Rs.{{(submittedBill?.subtotal ?? 0.00).toFixed(2) || "0.00"}}</strong>
-              </div>
-              <div style="text-align: right; margin-bottom: 5px;">
-                <strong>TOTAL TAX: Rs.{{(submittedBill?.tax ?? 0.00).toFixed(2)}}</strong>
-             </div>
-              <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>DISCOUNT: RS.{{(submittedBill?.totalDiscount ?? 0.00).toFixed(2) || '0.00'}}</strong>
-              </div>
-               <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>PAID: Rs.{{(submittedBill?.totalAmount ?? 0.00).toFixed(2) || '0.00'}}</strong>
-               </div>
-               <hr style="border: none; border-top: 1px dotted #000;">
-               <div style="text-align: center; margin-top: 5px;">
-                    <strong>YOU SAVE {{(submittedBill?.totalDiscount)}}</strong>
-               </div>
-              <div style="text-align: center; margin-bottom: 10px;">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs_1ej4k8SoUMiphbvoonwlzqgEpdpM4CohA&s"
-                      alt="QR Code" style="width: 80px; height: 80px;">
-              </div>
-              <div style="text-align: center; margin-top: 5px;">
-                <strong>Thank you for shopping with us</strong>
-              </div>
-              <div style="text-align: center;">
-                  Copyright © {{currentYear}} SuperMart Manager
-              </div>
-          </div>
-          <ng-template pTemplate="footer">
-              <p-button icon="pi pi-print" label="Print" (click)="printInvoice()" styleClass="p-button-secondary"></p-button>
-          </ng-template>
-      </p-dialog>
+    <div class="col-12 md:col-5">
+      <label for="invoiceId">Email</label>
+      <input
+        pInputText
+        type="text"
+        id="invoiceId"
+        class="w-full"
+        placeholder="abc@gmail.com"
+        [(ngModel)]="customerEmail"
+        #email="ngModel"
+        name="email"
+        email
+        (keydown.enter)="createBill()"
+      />
+      <div *ngIf="email.invalid && email.touched" class="text-red-600 text-sm">
+        <p *ngIf="email.errors?.['email']">Enter a valid email address.</p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-2 mt-3">
+      <p-button
+        label="Create Bill"
+        styleClass="p-button-primary"
+        (click)="createBill()"
+        [loading]="isCreatingBill"
+        [label]="isCreatingBill ? 'Loading...' : 'Create Bill'"
+      ></p-button>
+    </div>
+
+    <div class="col-12 md:col-5">
+      <label for="billNumber">Bill Number</label>
+      <input
+        pInputText
+        type="text"
+        id="billNumber"
+        class="w-full"
+        [value]="submittedBill?.billNumber || ''"
+        disabled
+      />
+    </div>
+
+    <div class="col-12 md:col-5">
+      <label for="cashierId">cashier Name</label>
+      <input
+        pInputText
+        type="text"
+        id="cashierId"
+        class="w-full"
+        [value]="submittedBill?.cashierName || ''"
+        disabled
+      />
+    </div>
   </div>
+
+  <div class="p-fluid">
+    <div class="grid">
+      <div class="col-12 md:col-5">
+        <label for="barcode">Barcode</label>
+        <input
+          pInputText
+          id="barcode"
+          type="text"
+          #itemInput
+          placeholder="eg : 7418"
+          class="w-full"
+          (keydown.enter)="addProductToBill()"
+        />
+      </div>
+      <div class="col-12 md:col-5">
+        <label for="quantity">Quantity</label>
+        <input
+          pInputText
+          id="quantity"
+          type="number"
+          class="w-full"
+          placeholder="eg : 5"
+          (keydown.enter)="addProductToBill()"
+        />
+      </div>
+      <div class="col-12 md:col-2 flex align-items-center mt-3">
+        <p-button
+          label="Add Product"
+          styleClass="p-button-primary"
+          (click)="addProductToBill()"
+          [loading]="isAddingProduct"
+          [label]="isAddingProduct ? 'Loading...' : 'Add Product'"
+        ></p-button>
+      </div>
+    </div>
+    <div *ngIf="submittedBill?.items?.length">
+      <div
+        class="p-3"
+        style="background-color: rgb(189, 224, 238); border-radius: 10px"
+      >
+        <table class="p-datatable w-full">
+          <thead>
+            <tr class="bg-blue-800">
+              <th>Product Name</th>
+              <th>QTY</th>
+              <th>Unit Price</th>
+              <th>Tax</th>
+              <th>Subtotal</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of submittedBill?.items; let i = index"
+              class="bg-blue-100"
+            >
+              <td>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-full p-inputtext-sm"
+                  [(ngModel)]="item.productName"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-full p-inputtext-sm"
+                  [(ngModel)]="item.quantity"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-full p-inputtext-sm"
+                  [(ngModel)]="item.unitPrice"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="number"
+                  class="w-full p-inputtext-sm"
+                  [(ngModel)]="item.tax"
+                  disabled
+                />
+              </td>
+              <td>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-full p-inputtext-sm font-bold"
+                  [(ngModel)]="item.subtotal"
+                  disabled
+                />
+              </td>
+              <td>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger p-button-sm"
+                  (click)="
+                    onRemoveItem(submittedBill?._id ?? '', item.productId)
+                  "
+                ></button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="text-right">Total</td>
+              <td>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-full p-inputtext-sm font-bold"
+                  [value]="submittedBill?.subtotal"
+                  disabled
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid mt-3">
+        <div class="col-12 md:col-5">
+          <label for="totalDiscount" class="mr-4">Discount(%)</label>
+          <input
+            pInputText
+            type="text"
+            id="totalDiscount"
+            class="w-full"
+            [placeholder]="0"
+            (keydown.enter)="applyDiscount()"
+          />
+          <small>*Spress Enter to apply discount</small>
+        </div>
+        <div class="col-12 md:col-5">
+          <label for="paymentMethod" class="mr-4">Payment Method</label>
+          <p-select
+            fluid="true"
+            id="paymentMethod"
+            [options]="paymentMethods"
+            [(ngModel)]="selectedPaymentMethod"
+            optionLabel="label"
+            placeholder="Select Payment Method"
+          >
+          </p-select>
+        </div>
+        <div class="col-6 md:col-2 mt-3">
+          <p-button
+            label="Make Payment"
+            styleClass="p-button-primary"
+            (click)="processPayment()"
+            [loading]="isProcessingPayment"
+            [label]="isProcessingPayment ? 'Loading...' : 'Make Payment'"
+          ></p-button>
+        </div>
+        <div class="col-6 md:col-2 mt-3">
+          <p-button
+            label="Create Invoice"
+            icon="pi pi-file"
+            styleClass="p-button-primary"
+            (click)="showInvoiceDialog()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-toast />
+
+  <p-dialog
+    header="Invoice"
+    [(visible)]="invoiceDialogVisible"
+    [modal]="true"
+    [style]="{ width: '320px' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <div
+      id="invoice-content"
+      style="font-family: 'Courier New', monospace; font-size: 12px"
+    >
+      <div style="text-align: center; margin-bottom: 5px">
+        <strong>SuperMart Manager</strong><br />
+        Near Swaminarayan Temple, v.v. Nagar<br />
+        Tel: 010101010<br />
+        Email: gmail.com<br />
+      </div>
+
+      <div style="text-align: center; margin-bottom: 10px">
+        <strong>SALES INVOICE</strong>
+      </div>
+
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 3px;
+        "
+      >
+        <span>CASHIER:</span
+        ><span>{{ submittedBill?.cashierName || "N/A" }}</span>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 3px;
+        "
+      >
+        <span>INVOICE NO:</span
+        ><span>{{ submittedBill?.billNumber || "N/A" }}</span>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 3px;
+        "
+      >
+        <span>CUSTOMER Phone:</span
+        ><span>{{ submittedBill?.customerDetails?.phone || "N/A" }}</span>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 3px;
+        "
+      >
+        <span>DATE:</span
+        ><span>{{ submittedBill?.createdAt | date : "mediumDate" }}</span>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+        "
+      >
+        <span>TIME:</span
+        ><span>{{ submittedBill?.updatedAt | date : "hh:mm:ss a" }}</span>
+      </div>
+
+      <table
+        style="width: 100%; border-collapse: collapse; margin-bottom: 10px"
+      >
+        <thead>
+          <tr>
+            <th
+              style="
+                text-align: left;
+                padding-bottom: 5px;
+                border-bottom: 1px dotted #000;
+              "
+            >
+              ITEM
+            </th>
+            <th
+              style="
+                text-align: left;
+                padding-bottom: 5px;
+                border-bottom: 1px dotted #000;
+              "
+            >
+              QTY
+            </th>
+            <th
+              style="
+                text-align: right;
+                padding-bottom: 5px;
+                border-bottom: 1px dotted #000;
+              "
+            >
+              AMOUNT
+            </th>
+            <th
+              style="
+                text-align: right;
+                padding-bottom: 5px;
+                border-bottom: 1px dotted #000;
+              "
+            >
+              Total
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of submittedBill?.items">
+            <td style="padding: 2px 0">{{ item.productName }}</td>
+            <td style="padding: 2px 0">{{ item.quantity }}</td>
+            <td style="text-align: right; padding: 2px 0">
+              {{ item.unitPrice }}
+            </td>
+            <td style="text-align: right; padding: 2px 0">
+              {{ item.subtotal }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr style="border: none; border-top: 1px dotted #000" />
+      <div style="text-align: right; margin-bottom: 5px">
+        <strong
+          >TOTAL: Rs.{{
+            (submittedBill?.subtotal ?? 0.0).toFixed(2) || "0.00"
+          }}</strong
+        >
+      </div>
+      <div style="text-align: right; margin-bottom: 5px">
+        <strong
+          >TOTAL TAX: Rs.{{ (submittedBill?.tax ?? 0.0).toFixed(2) }}</strong
+        >
+      </div>
+      <div style="text-align: right; margin-bottom: 5px">
+        <strong
+          >DISCOUNT: RS.{{
+            (submittedBill?.totalDiscount ?? 0.0).toFixed(2) || "0.00"
+          }}</strong
+        >
+      </div>
+      <div style="text-align: right; margin-bottom: 5px">
+        <strong
+          >PAID: Rs.{{
+            (submittedBill?.totalAmount ?? 0.0).toFixed(2) || "0.00"
+          }}</strong
+        >
+      </div>
+      <hr style="border: none; border-top: 1px dotted #000" />
+      <div style="text-align: center; margin-top: 5px">
+        <strong>YOU SAVE {{ submittedBill?.totalDiscount }}</strong>
+      </div>
+      <div style="text-align: center; margin-bottom: 10px">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs_1ej4k8SoUMiphbvoonwlzqgEpdpM4CohA&s"
+          alt="QR Code"
+          style="width: 80px; height: 80px"
+        />
+      </div>
+      <div style="text-align: center; margin-top: 5px">
+        <strong>Thank you for shopping with us</strong>
+      </div>
+      <div style="text-align: center">
+        Copyright © {{ currentYear }} SuperMart Manager
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button
+        icon="pi pi-print"
+        label="Print"
+        (click)="printInvoice()"
+        styleClass="p-button-secondary"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+</div>

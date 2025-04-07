@@ -306,12 +306,39 @@ import { ChangeDetectorRef, inject, PLATFORM_ID } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import {
+  trigger,
+  transition,
+  style,
+  animate,
+  stagger,
+  query,
+} from '@angular/animations';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, ChartModule, TableModule, ButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
+  animations: [
+    trigger('cardAnimation', [
+      transition('* => *', [
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, transform: 'translateY(20px)' }),
+            stagger('100ms', [
+              animate(
+                '300ms ease-out',
+                style({ opacity: 1, transform: 'translateY(0)' })
+              ),
+            ]),
+          ],
+          { optional: true }
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DashboardComponent implements OnInit {
   loading = false;
@@ -324,7 +351,7 @@ export class DashboardComponent implements OnInit {
   doughnutOptions: any = {};
   recentTransaction: any = [];
   selectedPeriod: string = 'week';
-  selectedPeriodOfCategory: string = 'month'; 
+  selectedPeriodOfCategory: string = 'month';
   showAll: boolean = false; // Track whether to show all categories
   displayedCategories: any[] = [];
   salesByCategory: any = [];
@@ -338,14 +365,15 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.loadSevenDaysSale();
-    this.loadFlexibleDataOfSale(); 
+    this.loadFlexibleDataOfSale();
     this.loadSalesByCategory();
     this.initCharts();
   }
 
   loadData(): void {
     this.loading = true;
-    const params: { startDate?: string; endDate?: string; status?: string } = {};
+    const params: { startDate?: string; endDate?: string; status?: string } =
+      {};
 
     if (this.startDate) {
       const start = new Date(this.startDate);
@@ -409,14 +437,25 @@ export class DashboardComponent implements OnInit {
 
   changePeriod(period: string): void {
     this.selectedPeriod = period;
-    this.loadFlexibleDataOfSale(); 
+    this.loadFlexibleDataOfSale();
   }
 
   changePeriodOfCategory(periodOfCategory: string): void {
     this.selectedPeriodOfCategory = periodOfCategory;
-    this.loadSalesByCategory(); 
+    this.loadSalesByCategory();
   }
-
+  animateValue(obj: HTMLElement, start: number, end: number, duration: number) {
+    let startTimestamp: number;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      obj.textContent = Math.floor(progress * (end - start) + start).toString();
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
   updateStats(): void {
     this.stats[0].value = this.data.sales?.netSales || 0;
     this.stats[0].change = this.data.sales?.completedOrders || 0;
@@ -426,6 +465,17 @@ export class DashboardComponent implements OnInit {
     this.stats[1].change = this.data.inventory?.totalItemsInStock || 0;
     this.stats[3].value = this.data.totalEmployees || 0;
     this.stats[3].change = this.data.activeEmployees || 0;
+
+    setTimeout(() => {
+      this.stats.forEach((stat, index) => {
+        const element = document.querySelectorAll('.card-value')[
+          index
+        ] as HTMLElement;
+        if (element) {
+          this.animateValue(element, 0, stat.value, 1000);
+        }
+      });
+    }, 300);
   }
 
   stats = [
@@ -469,10 +519,11 @@ export class DashboardComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--text-color');
-      const backgroundColor = documentStyle.getPropertyValue('--background-color');
+      const backgroundColor =
+        documentStyle.getPropertyValue('--background-color');
       this.options = {
         responsive: true,
-        maintainAspectRatio: true, 
+        maintainAspectRatio: true,
         plugins: {
           legend: {
             position: 'top',
@@ -514,7 +565,6 @@ export class DashboardComponent implements OnInit {
           },
         },
       };
-      
 
       // Half doughnut chart options
       this.doughnutOptions = {
@@ -555,17 +605,16 @@ export class DashboardComponent implements OnInit {
           label: 'Number of Orders',
           data: salesData.map((item: any) => item.orderCount || item.value), // Extract Orders data
           backgroundColor: documentStyle.getPropertyValue('--p-orange-500'),
-          hoverBackgroundColor: documentStyle.getPropertyValue('--p-orange-400'),
+          hoverBackgroundColor:
+            documentStyle.getPropertyValue('--p-orange-400'),
           yAxisID: 'y1', // Assigning to right Y-axis
         },
       ],
     };
-  
+
     this.cd.markForCheck(); // Ensure UI update
   }
-  
 
-  // Update doughnut chart with API data
   updateDoughnutChart(dailyData: any[]) {
     const documentStyle = getComputedStyle(document.documentElement);
     this.data2 = {
@@ -594,11 +643,13 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
-    this.cd.markForCheck(); 
+    this.cd.markForCheck();
   }
   loadSalesByCategory(): void {
-    const params: { periodOfCategory?: string } = { periodOfCategory: this.selectedPeriodOfCategory };
-  
+    const params: { periodOfCategory?: string } = {
+      periodOfCategory: this.selectedPeriodOfCategory,
+    };
+
     this.dashboardService.getSalesByCategory(params).subscribe({
       next: (response: ApiResponse) => {
         if (response.success) {
@@ -610,15 +661,17 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
-  
+
   updateSalesByCategory(data: any): void {
     if (data && Array.isArray(data.categories)) {
-      this.salesByCategory = data.categories.map((item: { name: any; totalSales: any; percentage: any; }) => ({
-        category: item.name,
-        sales: item.totalSales,
-        percentage: item.percentage,
-        color: this.getRandomColor(),
-      }));
+      this.salesByCategory = data.categories.map(
+        (item: { name: any; totalSales: any; percentage: any }) => ({
+          category: item.name,
+          sales: item.totalSales,
+          percentage: item.percentage,
+          color: this.getRandomColor(),
+        })
+      );
       this.updateDisplayedCategories();
       this.cd.markForCheck();
     } else {
@@ -626,7 +679,6 @@ export class DashboardComponent implements OnInit {
       this.salesByCategory = [];
     }
   }
-    
 
   getRandomColor(): string {
     const letters = '0123456789ABCDEF';
@@ -640,7 +692,7 @@ export class DashboardComponent implements OnInit {
   updateDisplayedCategories(): void {
     this.displayedCategories = this.showAll
       ? this.salesByCategory
-      : this.salesByCategory.slice(0, 2); 
+      : this.salesByCategory.slice(0, 2);
   }
 
   showAllCategories(): void {

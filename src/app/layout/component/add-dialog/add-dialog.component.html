@@ -1,186 +1,236 @@
- <p-dialog
- [header]="dialogTitle"
- [(visible)]="visible"
- [modal]="true"
- [closable]="true"
- [style]="{ width: '500px' }"
- [contentStyle]="{ padding: '1.5rem' }"
- (onHide)="closeDialog()"
- class="shadow-4 border-round"
+<p-dialog
+  [header]="dialogTitle"
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '500px' }"
+  [contentStyle]="{ padding: '1.5rem' }"
+  (onHide)="closeDialog()"
+  class="no-border-radius"
 >
- <form [formGroup]="dynamicForm" class="p-fluid">
-     <div class="grid">
-         <div *ngFor="let field of fields; let i = index" class="col-12">
-             <div class="flex align-items-center">
-                 <div class="col-4">
-                     <label
-                         [for]="field.name + i"
-                         class="block text-900 font-medium"
-                     >
-                         {{ field.label }}:
-                     </label>
-                 </div>
-                 <div class="col-8">
-                     <ng-container [ngSwitch]="field.type">
+  <form [formGroup]="dynamicForm" class="p-fluid">
+    <div class="grid">
+      <div *ngFor="let field of fields; let i = index" class="col-12">
+        <div class="flex align-items-center">
+          <div class="col-4">
+            <label [for]="field.name + i" class="block text-900 font-medium">
+              {{ field.label }}:
+            </label>
+          </div>
+          <div class="col-8">
+            <ng-container [ngSwitch]="field.type">
+              <ng-container *ngSwitchCase="'text'">
+                <input
+                  pInputText
+                  type="text"
+                  [id]="field.name + i"
+                  [formControlName]="field.name"
+                  class="w-full p-inputtext p-component"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                />
+              </ng-container>
+              <ng-container *ngSwitchCase="'number'">
+                <input
+                  pInputText
+                  type="number"
+                  [id]="field.name + i"
+                  [formControlName]="field.name"
+                  class="w-full p-inputtext p-component"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                />
+              </ng-container>
+              <ng-container *ngSwitchCase="'email'">
+                <input
+                  pInputText
+                  type="email"
+                  [id]="field.name + i"
+                  [formControlName]="field.name"
+                  class="w-full p-inputtext p-component"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                />
+              </ng-container>
+              <ng-container *ngSwitchCase="'password'">
+                <input
+                  pInputText
+                  type="password"
+                  [id]="field.name + i"
+                  [formControlName]="field.name"
+                  class="w-full p-inputtext p-component"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                />
+              </ng-container>
+              <ng-container *ngSwitchCase="'tel'">
+                <input
+                  pInputText
+                  type="tel"
+                  [id]="field.name + i"
+                  [formControlName]="field.name"
+                  class="w-full p-inputtext p-component"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                />
+              </ng-container>
+              <ng-container *ngSwitchCase="'file'">
+                <div class="flex flex-column gap-2">
+                  <div class="flex align-items-center gap-2">
+                    <input
+                      type="file"
+                      [id]="field.name + i"
+                      (change)="onFileSelected($event, field.name)"
+                      accept="image/*"
+                      class="hidden"
+                      #fileInput
+                    />
+                    <button
+                      pButton
+                      type="button"
+                      label="Choose File"
+                      icon="pi pi-upload"
+                      class="p-button-outlined"
+                      (click)="fileInput.click()"
+                    ></button>
+                    <span
+                      *ngIf="selectedFile[field.name]"
+                      class="text-sm text-gray-600"
+                    >
+                      {{ selectedFile[field.name].name }}
+                    </span>
+                  </div>
+                  <span *ngIf="fileError" class="text-red-500 text-sm">{{
+                    fileError
+                  }}</span>
+                </div>
+              </ng-container>
 
-                          <ng-container *ngSwitchCase="'text'">
-                             <input
-                                 pInputText
-                                 type="text"
-                                 [id]="field.name + i"
-                                 [formControlName]="field.name"
-                                 class="w-full p-inputtext p-component"
-                                 [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                             />
-                         </ng-container>
-                         <ng-container *ngSwitchCase="'number'">
-                            <input
-                                pInputText
-                                type="number"
-                                [id]="field.name + i"
-                                [formControlName]="field.name"
-                                class="w-full p-inputtext p-component"
-                                [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                            />
-                        </ng-container>
-                         <ng-container *ngSwitchCase="'email'">
-                             <input
-                                 pInputText
-                                 type="email"
-                                 [id]="field.name + i"
-                                 [formControlName]="field.name"
-                                 class="w-full p-inputtext p-component"
-                                 [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                             />
-                         </ng-container>
-                         <ng-container *ngSwitchCase="'password'">
-                             <input
-                                 pInputText
-                                 type="password"
-                                 [id]="field.name + i"
-                                 [formControlName]="field.name"
-                                 class="w-full p-inputtext p-component"
-                                 [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                             />
-                         </ng-container>
-                         <ng-container *ngSwitchCase="'tel'">
-                             <input
-                                 pInputText
-                                 type="tel"
-                                 [id]="field.name + i"
-                                 [formControlName]="field.name"
-                                 class="w-full p-inputtext p-component"
-                                 [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                             />
-                         </ng-container>
-                         <ng-container *ngSwitchCase="'file'">
-                             <div class="flex flex-column gap-2">
-                                 <div class="flex align-items-center gap-2">
-                                     <input
-                                         type="file"
-                                         [id]="field.name + i"
-                                         (change)="onFileSelected($event, field.name)"
-                                         accept="image/*"
-                                         class="hidden"
-                                         #fileInput
-                                     />
-                                     <button
-                                         pButton
-                                         type="button"
-                                         label="Choose File"
-                                         icon="pi pi-upload"
-                                         class="p-button-outlined"
-                                         (click)="fileInput.click()"
-                                     ></button>
-                                     <span *ngIf="selectedFile[field.name]" class="text-sm text-gray-600">
-                                         {{ selectedFile[field.name].name }}
-                                     </span>
-                                 </div>
-                                 <span *ngIf="fileError" class="text-red-500 text-sm">{{ fileError }}</span>
-                             </div>
-                         </ng-container>
+              <ng-container *ngSwitchCase="'select'">
+                <p-select
+                  [options]="field.options"
+                  [inputId]="field.name + i"
+                  [formControlName]="field.name"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select an option"
+                  [style]="{ width: '100%' }"
+                  [appendTo]="'body'"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                ></p-select>
+              </ng-container>
+              <ng-container *ngSwitchCase="'autocomplete'">
+                <div class="w-full">
+                  <p-autoComplete
+                    fluid="true"
+                    [id]="field.name + i"
+                    [formControlName]="field.name"
+                    [suggestions]="field.suggestions || []"
+                    (completeMethod)="filterSuggestions($event, field)"
+                    (onSelect)="onSuggestionSelected($event, field)"
+                    optionLabel="label"
+                    optionValue="value"
+                    [ngClass]="{
+                      'p-invalid':
+                        getFormControl(field.name)?.invalid &&
+                        (getFormControl(field.name)?.dirty ||
+                          getFormControl(field.name)?.touched)
+                    }"
+                  ></p-autoComplete>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'date'">
+                <p-datePicker
+                  [inputId]="field.name + i"
+                  [formControlName]="field.name"
+                  [showIcon]="true"
+                  [minDate]="field.minDate"
+                  [maxDate]="field.maxDate"
+                  [style]="{ width: '100%' }"
+                  [appendTo]="'body'"
+                  [ngClass]="{
+                    'p-invalid':
+                      getFormControl(field.name)?.invalid &&
+                      (getFormControl(field.name)?.dirty ||
+                        getFormControl(field.name)?.touched)
+                  }"
+                ></p-datePicker>
+              </ng-container>
+            </ng-container>
+            <small
+              *ngIf="
+                getFormControl(field.name)?.invalid &&
+                (getFormControl(field.name)?.dirty ||
+                  getFormControl(field.name)?.touched)
+              "
+              class="p-error block mt-1"
+            >
+              <span *ngIf="getFormControl(field.name)?.hasError('required')"
+                >This field is required.</span
+              >
+              <!-- <span *ngIf="field.type === 'email' && getFormControl(field.name)?.hasError('email')">Invalid email format.</span> -->
+              <span *ngIf="getFormControl(field.name)?.hasError('pattern')"
+                >Invalid format.</span
+              >
+              <!-- <span *ngIf="getFormControl(field.name)?.hasError('futureDate')">Date of Birth cannot be in the future.</span> -->
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 
-                         <ng-container *ngSwitchCase="'select'">
-                             <p-select
-                                 [options]="field.options"
-                                 [inputId]="field.name + i"
-                                 [formControlName]="field.name"
-                                 optionLabel="label"
-                                 optionValue="value"
-                                 placeholder="Select an option"
-                                 [style]="{'width':'100%'}"
-                                 [appendTo]="'body'"
-                                 [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                             ></p-select>
-                         </ng-container>
-                         <ng-container *ngSwitchCase="'autocomplete'">
-                            <div class="w-full">
-                                <p-autoComplete
-                                    fluid="true"
-                                    [id]="field.name + i"
-                                    [formControlName]="field.name"
-                                    [suggestions]="field.suggestions || []"
-                                    (completeMethod)="filterSuggestions($event, field)"
-                                    (onSelect)="onSuggestionSelected($event, field)"
-                                    optionLabel="label"
-                                    optionValue="value"
-                                    [ngClass]="{
-                                        'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)
-                                    }"
-                                ></p-autoComplete>
-                            </div>
-                        </ng-container>                        
-                         <ng-container *ngSwitchCase="'date'">
-                             <p-datePicker
-                                 [inputId]="field.name + i"
-                                 [formControlName]="field.name"
-                                 [showIcon]="true"
-                                 [minDate]="field.minDate"
-                                 [maxDate]="field.maxDate"
-                                 [style]="{'width':'100%'}"
-                                 [appendTo]="'body'"
-                                 [ngClass]="{'p-invalid': getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)}"
-                             ></p-datePicker>
-                         </ng-container>
-                     </ng-container>
-                     <small *ngIf="getFormControl(field.name)?.invalid && (getFormControl(field.name)?.dirty || getFormControl(field.name)?.touched)" class="p-error block mt-1">
-                         <span *ngIf="getFormControl(field.name)?.hasError('required')">This field is required.</span>
-                         <!-- <span *ngIf="field.type === 'email' && getFormControl(field.name)?.hasError('email')">Invalid email format.</span> -->
-                         <span *ngIf="getFormControl(field.name)?.hasError('pattern')">Invalid format.</span>
-                         <!-- <span *ngIf="getFormControl(field.name)?.hasError('futureDate')">Date of Birth cannot be in the future.</span> -->
-                     </small>
-                 </div>
-             </div>
-         </div>
-     </div>
- </form>
-
- <ng-template pTemplate="footer">
-     <div class="flex justify-content-end gap-2">
-         <button
-             pButton
-             icon="pi pi-times"
-             label="Cancel"
-             (click)="closeDialog()"
-             class="p-button-outlined p-button-secondary text-gray-700"
-             [style]="{
-                 'min-width': '85px',
-                 'height': '36px',
-                 'font-size': '14px'
-             }"
-         ></button>
-         <button
-             pButton
-             icon="pi pi-plus"
-             label="Add"
-             (click)="addData()"
-             class="p-button-success"
-             [style]="{
-                 'min-width': '85px',
-                 'height': '36px',
-                 'font-size': '14px'
-             }"
-         ></button>
-     </div>
- </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <button
+        pButton
+        icon="pi pi-times"
+        label="Cancel"
+        (click)="closeDialog()"
+        class="p-button-outlined p-button-secondary text-gray-700"
+        [style]="{
+          'min-width': '85px',
+          height: '36px',
+          'font-size': '14px'
+        }"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-plus"
+        label="Add"
+        (click)="addData()"
+        class="p-button-success"
+        [style]="{
+          'min-width': '85px',
+          height: '36px',
+          'font-size': '14px'
+        }"
+      ></button>
+    </div>
+  </ng-template>
 </p-dialog>

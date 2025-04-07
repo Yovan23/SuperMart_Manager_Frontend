@@ -1,12 +1,5 @@
 <div class="p-d-flex p-jc-between p-ai-center p-mb-1">
   <h2 class="p-mr-auto">User Management</h2>
-  <p-button
-    pButton
-    icon="pi pi-plus"
-    class="p-button-text p-mr-2 p-button-sm p-mb-3"
-    (click)="openAddDialog()"
-    label="Add User"
-  />
 </div>
 
 <div class="card" style="border: 2; border-color: black; border-radius: 1ch">
@@ -33,13 +26,21 @@
   >
     <ng-template #caption>
       <div class="flex">
-        <p-iconfield iconPosition="left" class="ml-auto">
+        <p-button
+          pButton
+          icon="pi pi-plus"
+          class="p-button-text p-mr-2"
+          (click)="openAddDialog()"
+          label="Add User"
+        />
+        <p-iconfield iconPosition="left" class="ml-auto m-2">
           <p-inputicon>
             <i class="pi pi-search"></i>
           </p-inputicon>
           <input
             pInputText
             type="text"
+            class="w-full"
             (input)="dt.filterGlobal($any($event.target).value, 'contains')"
             placeholder="Search keyword"
           />

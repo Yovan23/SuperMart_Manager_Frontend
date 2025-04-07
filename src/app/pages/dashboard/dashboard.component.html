@@ -1,6 +1,6 @@
 <div class="dashboard-container">
   <div class="grid">
-    <div class="card" *ngFor="let stat of stats">
+    <div class="card" *ngFor="let stat of stats" @cardAnimation>
       <div class="card-header">
         <div class="card-text">
           <span class="card-title">{{ stat.title }}</span>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="content-row">
     <div class="charts-column">
       <div class="chart-card">
@@ -41,12 +41,12 @@
             styleClass="p-button-sm p-button-secondary"
           ></p-button>
         </div>
-        <div class="chart-container ">
+        <div class="chart-container">
           <p-chart
             type="bar"
             [data]="data1"
             [options]="options"
-            style="width: 100%; height: 100%; margin-top: 3px; padding-top: 5px;"
+            style="width: 100%; height: 100%; margin-top: 3px; padding-top: 5px"
           >
           </p-chart>
         </div>
@@ -86,8 +86,8 @@
             <ng-template pTemplate="body" let-transaction>
               <tr>
                 <td>{{ transaction.billNumber }}</td>
-                <td>{{ transaction.createdAt | date: 'shortDate' }}</td>
-                <td>{{ transaction.totalAmount | currency: 'INR' }}</td>
+                <td>{{ transaction.createdAt | date : "shortDate" }}</td>
+                <td>{{ transaction.totalAmount | currency : "INR" }}</td>
                 <td>{{ transaction.cashierId.name }}</td>
               </tr>
             </ng-template>
@@ -116,7 +116,7 @@
             styleClass="p-button-sm p-button-secondary"
           ></p-button>
         </div>
-      
+
         <div class="percentage-bar">
           <div
             *ngFor="let category of displayedCategories"
@@ -125,19 +125,32 @@
             class="bar-segment"
           ></div>
         </div>
-      
+
         <div class="category-list">
-          <div *ngFor="let category of displayedCategories" class="category-item">
-            <span class="category-color" [style.backgroundColor]="category.color"></span>
-            <span class="category-name">{{ category.category }} ({{ category.percentage }}%)</span>
-            <span class="category-sales">{{ category.sales | currency: 'INR' }}</span>
+          <div
+            *ngFor="let category of displayedCategories"
+            class="category-item"
+          >
+            <span
+              class="category-color"
+              [style.backgroundColor]="category.color"
+            ></span>
+            <span class="category-name"
+              >{{ category.category }} ({{ category.percentage }}%)</span
+            >
+            <span class="category-sales">{{
+              category.sales | currency : "INR"
+            }}</span>
           </div>
         </div>
-      
-        <button pButton [label]="showAll ? 'Show Less' : 'Show All'" class="p-button-text" (click)="showAllCategories()"></button>
-      </div>
 
-     
+        <button
+          pButton
+          [label]="showAll ? 'Show Less' : 'Show All'"
+          class="p-button-text"
+          (click)="showAllCategories()"
+        ></button>
+      </div>
     </div>
   </div>
 </div>

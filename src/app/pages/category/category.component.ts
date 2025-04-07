@@ -48,7 +48,8 @@ import { InputText } from 'primeng/inputtext';
 })
 export class CategoryComponent implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
-
+  first = 0;
+  rows = 10;
   category: Category[] = [];
   loading: boolean = true;
   selectedCategory: Category | null = null;
@@ -68,6 +69,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
     { label: 'Visible', value: true },
     { label: 'Hidden', value: false },
   ];
+  pageChange(event: any) {
+    this.first = event.first;
+    this.rows = event.rows;
+  }
   applyGlobalFilter(event: Event, dt: Table): void {
     const filterValue = (event.target as HTMLInputElement).value
       ?.trim()
@@ -84,7 +89,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     } else {
       dt.filterGlobal(filterValue, 'contains');
     }
-
   }
   categoryEditFields: Field[] = [
     {

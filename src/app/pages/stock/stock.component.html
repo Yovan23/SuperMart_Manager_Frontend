@@ -1,14 +1,5 @@
 <div class="p-d-flex p-jc-between p-ai-center p-mb-1">
   <h2 class="p-mr-auto">Stock Management</h2>
-  <p-button
-    pButton
-    icon="pi pi-plus"
-    class="p-button-text p-mr-2"
-    pTooltip="Add Stock"
-    tooltipPosition="top"
-    (click)="openAddDialog()"
-    label="Add Stock"
-  />
 </div>
 
 <div class="card">
@@ -32,6 +23,17 @@
     ]"
     styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component"
   >
+    <ng-template pTemplate="caption">
+      <p-button
+        pButton
+        icon="pi pi-plus"
+        class="p-button-text p-mr-2"
+        pTooltip="Add Stock"
+        tooltipPosition="top"
+        (click)="openAddDialog()"
+        label="Add Stock"
+      />
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th class="p-2">Product Name</th>
@@ -52,7 +54,7 @@
             (input)="
               dt.filter(productNameFilter.value, 'ProductName', 'contains')
             "
-            placeholder="Search"
+            placeholder="Search by Product Name"
             class="p-column-filter w-full"
           />
         </th>
@@ -62,8 +64,8 @@
             type="text"
             #qtyFilter
             (input)="dt.filter(qtyFilter.value, 'qty', 'contains')"
-            placeholder="Search"
-            class="p-column-filter w-full "
+            placeholder="Search by Qty"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -74,8 +76,8 @@
             (input)="
               dt.filter(buyingPriceFilter.value, 'buying_price', 'contains')
             "
-            placeholder="Search"
-            class="p-column-filter w-full "
+            placeholder="Search by Buying price"
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
@@ -86,7 +88,7 @@
             (input)="
               dt.filter(expiryDateFilter.value, 'expiryDate', 'contains')
             "
-            class="p-column-filter w-full "
+            class="p-column-filter w-full"
           />
         </th>
         <th class="p-2">
