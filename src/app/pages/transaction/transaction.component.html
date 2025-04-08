@@ -6,7 +6,7 @@
   <p-table
     #dt
     [value]="bills"
-    [columns]="cols"
+    [columns]="visibleCols"
     [rows]="10"
     [paginator]="true"
     selectionMode="multiple"
@@ -15,6 +15,8 @@
     [loading]="loading"
     [globalFilterFields]="['billNumber', 'cashierId.name', 'status']"
     styleClass="p-datatable-gridlines"
+    (sortFunction)="customSort($event)"
+    [customSort]="true"
   >
     <ng-template #caption>
       <div class="flex justify-content-between">
@@ -23,7 +25,7 @@
           label="Clear"
           class="p-button-outlined"
           icon="pi pi-filter-slash"
-          (click)="dt.clear()"
+          (click)="dt.clear(); clearFilters()"
         ></button>
         <div class="flex align-items-center ml-2">
           <p-datePicker
@@ -63,85 +65,39 @@
         ></button>
       </div>
     </ng-template>
-    <!-- <ng-template #caption>
-      <div class="flex">
-      </div>
-      <div class="flex justify-content-between align-items-center">
-        <button
-          pButton
-          label="Clear"
-          class="p-button-outlined"
-          icon="pi pi-filter-slash"
-          (click)="dt.clear(); clearFilters()"
-        ></button>
-        <div class="flex align-items-center ml-2">
-          <p-calendar
-            [(ngModel)]="startDate"
-            placeholder="Start Date"
-            dateFormat="mm/dd/yy"
-            [showIcon]="true"
-            (onSelect)="applyDateFilter(dt)"
-            class="mr-2"
-          ></p-calendar>
-          <p-calendar
-            [(ngModel)]="endDate"
-            placeholder="End Date"
-            dateFormat="mm/dd/yy"
-            [showIcon]="true"
-            (onSelect)="applyDateFilter(dt)"
-            class="mr-2"
-          ></p-calendar>
-        </div>
-        <p-iconfield iconPosition="left" class="ml-auto">
-          <p-inputicon>
-            <i class="pi pi-search"></i>
-          </p-inputicon>
-          <input
-            pInputText
-            type="text"
-            (input)="applyGlobalFilter($event, dt)"
-            placeholder="Search keyword"
-          />
-        </p-iconfield>
-        <button
-          pButton
-          label="Export"
-          icon="pi pi-upload"
-          class="p-button-info ml-2"
-          (click)="dt.exportCSV()"
-        ></button>
-      </div>
-    </ng-template> -->
+
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="billNumber">
-          Bill <p-sortIcon field="billNumber"></p-sortIcon>
-        </th>
-        <th pSortableColumn="cashierName">
-          Cashier <p-sortIcon field="cashierName"></p-sortIcon>
-        </th>
-        <th pSortableColumn="customerDetails.phone">
-          Customer <p-sortIcon field="customerDetails.phone"></p-sortIcon>
-        </th>
-        <th pSortableColumn="totalAmount">
-          Amount <p-sortIcon field="totalAmount"></p-sortIcon>
-        </th>
-        <th pSortableColumn="status">
-          Status <p-sortIcon field="status"></p-sortIcon>
-        </th>
-        <th pSortableColumn="createdAt">
-          Date <p-sortIcon field="createdAt"></p-sortIcon>
+        <th *ngFor="let col of visibleCols" [pSortableColumn]="col.field">
+          {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-bill let-rowIndex="rowIndex">
       <tr (click)="openViewDialog(bill)" style="cursor: pointer">
-        <td>{{ bill.billNumber }}</td>
-        <td>{{ bill.cashierId?.name }}</td>
-        <td>{{ bill.customerDetails?.phone || "Walk-in customer" }}</td>
-        <td>{{ formatCurrency(bill.totalAmount) }}</td>
-        <td>{{ bill.status || "Not available" }}</td>
-        <td>{{ formatDate(bill.createdAt) }}</td>
+        <td *ngFor="let col of visibleCols">
+          <ng-container [ngSwitch]="col.field">
+            <ng-container *ngSwitchCase="'billNumber'">
+              {{ bill.billNumber }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'cashierName'">
+              {{ bill.cashierId?.name }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'customerDetails.phone'">
+              {{ bill.customerDetails?.phone || "Walk-in customer" }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'totalAmount'">
+              {{ formatCurrency(bill.totalAmount) }}
+            </ng-container>
+    <ng-container *ngSwitchCase="'status'">
+              {{  bill.status || "Not available" }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'createdAt'">
+              {{ formatDate(bill.createdAt) }}
+            </ng-container>
+          </ng-container>
+        </td>
       </tr>
     </ng-template>
 
