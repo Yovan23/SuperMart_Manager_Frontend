@@ -17,9 +17,6 @@
     styleClass="p-datatable-gridlines"
   >
     <ng-template #caption>
-      <div class="flex">
-       
-      </div>
       <div class="flex justify-content-between">
         <button
           pButton
@@ -53,15 +50,15 @@
           <input
             pInputText
             type="text"
-            (input)="applyGlobalFilter($event, dt)"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
             placeholder="Search keyword"
           />
         </p-iconfield>
         <button
           pButton
           label="Export"
-          icon="pi pi-upload"
-          class="p-button-info ml-2"
+          icon="pi pi-external-link"
+          class="p-button ml-2"
           (click)="dt.exportCSV()"
         ></button>
       </div>
@@ -138,16 +135,16 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-bill let-rowIndex="rowIndex">
-      <tr (click)="openViewDialog(bill)" style="cursor: pointer;">
+      <tr (click)="openViewDialog(bill)" style="cursor: pointer">
         <td>{{ bill.billNumber }}</td>
         <td>{{ bill.cashierId?.name }}</td>
-        <td>{{ bill.customerDetails?.phone || 'Walk-in customer' }}</td>
-        <td>{{ formatCurrency(bill.totalAmount) }}</td>        
-        <td>{{bill.status || 'Not available' }}</td>
+        <td>{{ bill.customerDetails?.phone || "Walk-in customer" }}</td>
+        <td>{{ formatCurrency(bill.totalAmount) }}</td>
+        <td>{{ bill.status || "Not available" }}</td>
         <td>{{ formatDate(bill.createdAt) }}</td>
       </tr>
     </ng-template>
-    
+
     <ng-template pTemplate="summary">
       <div class="flex align-items-center justify-content-between">
         In total there are {{ bills ? bills.length : 0 }} transactions.
@@ -156,91 +153,163 @@
   </p-table>
 </div>
 
-<p-dialog header="Invoice" [(visible)]="viewDialogVisible" [modal]="true" [style]="{width: '320px'}"
-          [draggable]="false" [resizable]="false">
-          <div id="invoice-content" style="font-family: 'Courier New', monospace; font-size: 12px;">
-              <div style="text-align: center; margin-bottom: 5px;">
-                  <strong>SuperMart Manager</strong><br>
-                  Near Swaminarayan Temple,    v.v. Nagar<br>
-                  Tel: 010101010<br>
-                  Email: gmail.com<br>
-              </div>
-  
-              <div style="text-align: center; margin-bottom: 10px;">
-                  <strong>SALES INVOICE</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                <span>INVOICE NO:</span><span>{{selectedBill?.billNumber || 'N/A'}}</span>
-             </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>CASHIER:</span><span>{{selectedBill?.cashierId?.name }}</span>
-              </div>
-              
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>CUSTOMER Phone:</span><span>{{selectedBill?.customerDetails?.phone || 'N/A'}}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                  <span>DATE:</span><span>{{selectedBill?.createdAt | date:'mediumDate'}}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                  <span>TIME:</span><span>{{selectedBill?.updatedAt | date:'hh:mm:ss a'}}</span>
-              </div>
-  
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-                  <thead>
-                      <tr>
-                          <th style="text-align: left; padding-bottom: 5px; border-bottom: 1px dotted #000;">ITEM</th>
-                          <th style="text-align: left; padding-bottom: 5px; border-bottom: 1px dotted #000;">QTY</th>
-                          <th style="text-align: right; padding-bottom: 5px; border-bottom: 1px dotted #000;">AMOUNT</th>
-                          <th style="text-align: right; padding-bottom: 5px; border-bottom: 1px dotted #000;">Total</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of selectedBill?.items">
-                          <td style="padding: 2px 0;">{{item.productName}}</td>
-                          <td style="padding: 2px 0;">{{item.quantity}}</td>
-                          <td style="text-align: right; padding: 2px 0;">{{item.unitPrice}}</td>
-                          <td style="text-align: right; padding: 2px 0;">{{item.subtotal}}</td>
-                      </tr>
-                  </tbody>
-              </table>
-              <hr style="border: none; border-top: 1px dotted #000;">
-              <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>TOTAL: Rs.{{(selectedBill?.subtotal ?? 0.00).toFixed(2) || "0.00"}}</strong>
-              </div>
-              <div style="text-align: right; margin-bottom: 5px;">
-                <strong>TOTAL TAX: Rs.{{(selectedBill?.tax ?? 0.00).toFixed(2)}}</strong>
-             </div>
-              <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>DISCOUNT: RS.{{(selectedBill?.totalDiscount ?? 0.00).toFixed(2) || '0.00'}}</strong>
-              </div>
-               <div style="text-align: right; margin-bottom: 5px;">
-                  <strong>PAID: Rs.{{(selectedBill?.totalAmount ?? 0.00).toFixed(2) || '0.00'}}</strong>
-               </div>
-               <hr style="border: none; border-top: 1px dotted #000;">
-               <div style="text-align: center; margin-top: 5px;">
-                    <strong>YOU SAVE {{(selectedBill?.totalDiscount)}}</strong>
-               </div>
-              <div style="text-align: center; margin-bottom: 10px;">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs_1ej4k8SoUMiphbvoonwlzqgEpdpM4CohA&s"
-                      alt="QR Code" style="width: 80px; height: 80px;">
-              </div>
-              <div style="text-align: center; margin-top: 5px;">
-                <strong>Thank you for shopping with us</strong>
-              </div>
-              <div style="text-align: center;">
-                  <!-- Copyright © {{currentYear}} SuperMart Manager -->
-              </div>
-          </div>
-      </p-dialog>
+<p-dialog
+  header="Invoice"
+  [(visible)]="viewDialogVisible"
+  [modal]="true"
+  [style]="{ width: '320px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div
+    id="invoice-content"
+    style="font-family: 'Courier New', monospace; font-size: 12px"
+  >
+    <div style="text-align: center; margin-bottom: 5px">
+      <strong>SuperMart Manager</strong><br />
+      Near Swaminarayan Temple, v.v. Nagar<br />
+      Tel: 010101010<br />
+      Email: gmail.com<br />
+    </div>
 
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipple
-      label="Close"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="viewDialogVisible = false"
-    ></button>
-  </ng-template>
+    <div style="text-align: center; margin-bottom: 10px">
+      <strong>SALES INVOICE</strong>
+    </div>
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 3px"
+    >
+      <span>INVOICE NO:</span
+      ><span>{{ selectedBill?.billNumber || "N/A" }}</span>
+    </div>
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 3px"
+    >
+      <span>CASHIER:</span><span>{{ selectedBill?.cashierId?.name }}</span>
+    </div>
+
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 3px"
+    >
+      <span>CUSTOMER Phone:</span
+      ><span>{{ selectedBill?.customerDetails?.phone || "N/A" }}</span>
+    </div>
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 3px"
+    >
+      <span>DATE:</span
+      ><span>{{ selectedBill?.createdAt | date : "mediumDate" }}</span>
+    </div>
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 10px"
+    >
+      <span>TIME:</span
+      ><span>{{ selectedBill?.updatedAt | date : "hh:mm:ss a" }}</span>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px">
+      <thead>
+        <tr>
+          <th
+            style="
+              text-align: left;
+              padding-bottom: 5px;
+              border-bottom: 1px dotted #000;
+            "
+          >
+            ITEM
+          </th>
+          <th
+            style="
+              text-align: left;
+              padding-bottom: 5px;
+              border-bottom: 1px dotted #000;
+            "
+          >
+            QTY
+          </th>
+          <th
+            style="
+              text-align: right;
+              padding-bottom: 5px;
+              border-bottom: 1px dotted #000;
+            "
+          >
+            AMOUNT
+          </th>
+          <th
+            style="
+              text-align: right;
+              padding-bottom: 5px;
+              border-bottom: 1px dotted #000;
+            "
+          >
+            Total
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of selectedBill?.items">
+          <td style="padding: 2px 0">{{ item.productName }}</td>
+          <td style="padding: 2px 0">{{ item.quantity }}</td>
+          <td style="text-align: right; padding: 2px 0">
+            {{ item.unitPrice }}
+          </td>
+          <td style="text-align: right; padding: 2px 0">{{ item.subtotal }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr style="border: none; border-top: 1px dotted #000" />
+    <div style="text-align: right; margin-bottom: 5px">
+      <strong
+        >TOTAL: Rs.{{
+          (selectedBill?.subtotal ?? 0.0).toFixed(2) || "0.00"
+        }}</strong
+      >
+    </div>
+    <div style="text-align: right; margin-bottom: 5px">
+      <strong>TOTAL TAX: Rs.{{ (selectedBill?.tax ?? 0.0).toFixed(2) }}</strong>
+    </div>
+    <div style="text-align: right; margin-bottom: 5px">
+      <strong
+        >DISCOUNT: RS.{{
+          (selectedBill?.totalDiscount ?? 0.0).toFixed(2) || "0.00"
+        }}</strong
+      >
+    </div>
+    <div style="text-align: right; margin-bottom: 5px">
+      <strong
+        >PAID: Rs.{{
+          (selectedBill?.totalAmount ?? 0.0).toFixed(2) || "0.00"
+        }}</strong
+      >
+    </div>
+    <hr style="border: none; border-top: 1px dotted #000" />
+    <div style="text-align: center; margin-top: 5px">
+      <strong>YOU SAVE {{ selectedBill?.totalDiscount }}</strong>
+    </div>
+    <div style="text-align: center; margin-bottom: 10px">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs_1ej4k8SoUMiphbvoonwlzqgEpdpM4CohA&s"
+        alt="QR Code"
+        style="width: 80px; height: 80px"
+      />
+    </div>
+    <div style="text-align: center; margin-top: 5px">
+      <strong>Thank you for shopping with us</strong>
+    </div>
+    <div style="text-align: center">
+      <!-- Copyright © {{currentYear}} SuperMart Manager -->
+    </div>
+  </div>
+</p-dialog>
+
+<ng-template pTemplate="footer">
+  <button
+    pButton
+    pRipple
+    label="Close"
+    icon="pi pi-times"
+    class="p-button-text"
+    (click)="viewDialogVisible = false"
+  ></button>
+</ng-template>

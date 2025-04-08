@@ -475,7 +475,7 @@ export class DashboardComponent implements OnInit {
           this.animateValue(element, 0, stat.value, 1000);
         }
       });
-    }, 300);
+    });
   }
 
   stats = [
@@ -597,17 +597,17 @@ export class DashboardComponent implements OnInit {
         {
           label: 'Sales (Rs.)',
           data: salesData.map((item: any) => item.totalSales || item.value), // Extract Sales data
-          backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
-          hoverBackgroundColor: documentStyle.getPropertyValue('--p-cyan-400'),
+          backgroundColor: documentStyle.getPropertyValue('--p-blue-400'),
+          hoverBackgroundColor: documentStyle.getPropertyValue('--p-blue-400'),
           yAxisID: 'y', // Assigning to left Y-axis
         },
         {
           label: 'Number of Orders',
-          data: salesData.map((item: any) => item.orderCount || item.value), // Extract Orders data
-          backgroundColor: documentStyle.getPropertyValue('--p-orange-500'),
+          data: salesData.map((item: any) => item.orderCount || item.value),
+          backgroundColor: documentStyle.getPropertyValue('--p-orange-600'),
           hoverBackgroundColor:
             documentStyle.getPropertyValue('--p-orange-400'),
-          yAxisID: 'y1', // Assigning to right Y-axis
+          yAxisID: 'y1',
         },
       ],
     };

@@ -2,6 +2,7 @@
 .layout-wrapper {
   display: flex;
   min-height: 100vh; 
+  font-family: Montserrat,Helvetica , Arial, sans-serif 
 }
 
 

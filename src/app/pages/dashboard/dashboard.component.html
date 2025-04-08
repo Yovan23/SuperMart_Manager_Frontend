@@ -119,7 +119,7 @@
 
         <div class="percentage-bar">
           <div
-            *ngFor="let category of displayedCategories"
+            *ngFor="let category of salesByCategory"
             [style.width]="category.percentage + '%'"
             [style.backgroundColor]="category.color"
             class="bar-segment"

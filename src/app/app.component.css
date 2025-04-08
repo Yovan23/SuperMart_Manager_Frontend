@@ -3,7 +3,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Montserrat,Helvetica , Arial, sans-serif;
 }
+
 
 /* Ensure html and body take full height */
 html, body {

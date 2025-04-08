@@ -27,6 +27,17 @@
           class="p-button-text"
           (click)="openAddDialog()"
         />
+        <p-iconfield iconPosition="left" class="ml-auto m-2">
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Search keyword"
+          />
+        </p-iconfield>
         <p-button
           icon="pi pi-external-link"
           label="Export"
