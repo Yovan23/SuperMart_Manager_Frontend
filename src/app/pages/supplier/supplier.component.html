@@ -13,110 +13,109 @@
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
     [paginator]="true"
+    [size]="'small'"
     [globalFilterFields]="['name', 'phoneNumber', 'address']"
-    styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    styleClass="p-datatable-gridlines p-datatable-sm"
+    (onRowExpand)="onRowExpand($event)"
+    (onRowCollapse)="onRowCollapse($event)"
   >
     <ng-template #caption>
       <div class="flex">
         <p-button
-          pButton
           icon="pi pi-plus"
-          class="p-button-text p-mr-2"
+          class="p-button-text"
           (click)="openAddDialog()"
           label="Add Supplier"
         />
-        <p-iconfield iconPosition="left" class="ml-auto m-2">
-          <p-inputicon>
-            <i class="pi pi-search"></i>
-          </p-inputicon>
-          <input
-            pInputText
-            type="text"
-            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-            placeholder="Search keyword"
-          />
-        </p-iconfield>
+          <p-iconfield iconPosition="left" class="ml-auto"> 
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Search keyword"
+            />
+          </p-iconfield>
       </div>
     </ng-template>
-    <ng-template pTemplate="header">
+
+    <ng-template #header>
       <tr>
-        <th class="p-2"></th>
-        <th class="p-2">Name</th>
-        <th class="p-2">Phone Number</th>
-        <th class="p-2">Address</th>
-        <th class="p-2">Actions</th>
+        <th style="width: 5rem"></th>
+        <th pSortableColumn="name">Supplier Name <p-sortIcon field="name" /></th>
+        <th pSortableColumn="phoneNumber">Phone Number <p-sortIcon field="phoneNumber" /></th>
+        <th pSortableColumn="address">Address <p-sortIcon field="address" /></th>
+        <th>Actions</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-supplier>
+    <ng-template #body let-supplier let-expanded="expanded">
       <tr>
         <td>
-          <button
+          <p-button
             type="button"
-            pButton
-            [icon]="
-              isExpanded(supplier)
-                ? 'pi pi-chevron-down'
-                : 'pi pi-chevron-right'
-            "
-            (click)="toggleRow(supplier)"
-            class="p-button-text p-button-rounded"
-          ></button>
+            pRipple
+            [pRowToggler]="supplier"
+            [text]="true"
+            [rounded]="true"
+            [plain]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
         </td>
-        <td class="p-2">{{ supplier.name }}</td>
-        <td class="p-2">{{ supplier.phoneNumber }}</td>
-        <td class="p-2">{{ supplier.address }}</td>
-        <td class="p-2">
+        <td>{{ supplier.name }}</td>
+        <td>{{ supplier.phoneNumber }}</td>
+        <td>{{ supplier.address }}</td>
+        <td>
           <div class="flex gap-1">
             <button
               pButton
               icon="pi pi-pencil"
               class="p-button-text p-0"
-              pTooltip="Edit Supplier"
-              tooltipPosition="top"
               (click)="openEditDialog(supplier)"
             ></button>
             <button
               pButton
               icon="pi pi-trash"
               class="p-button-text p-0"
-              pTooltip="Delete Supplier"
-              tooltipPosition="top"
               (click)="openDeleteDialog(supplier)"
             ></button>
           </div>
         </td>
       </tr>
-      <tr *ngIf="isExpanded(supplier)">
-        <td colspan="5">
-          <div class="p-m-1">
-            <p *ngIf="!supplier.product || supplier.product.length === 0">
-              No products available.
-            </p>
+    </ng-template>
 
+    <ng-template #expandedrow let-supplier>
+      <tr>
+        <td></td>
+        <td colspan="4">
+          <p>Stock of {{ supplier.name }}</p>
+          <div class="p-mr-4">
             <p-table
-              *ngIf="supplier.product && supplier.product.length > 0"
-              [value]="supplier.product"
+              [value]="supplier.product || []"
               dataKey="_id"
               styleClass="p-datatable-sm"
             >
-              <ng-template pTemplate="header">
+              <ng-template #header>
                 <tr>
                   <th>Sr No</th>
-                  <th>Name</th>
-                  <th>Price</th>
+                  <th pSortableColumn="name">Product Name <p-sortIcon field="name" /></th>
+                  <th pSortableColumn="price">Price <p-sortIcon field="price" /></th>
+                  <th style="width: 4rem"></th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+              <ng-template #body let-product let-rowIndex="rowIndex">
                 <tr>
                   <td>{{ rowIndex + 1 }}</td>
                   <td>{{ product.name }}</td>
-                  <td>{{ product.price }}</td>
+                  <td>{{ product.price | currency: 'INR' }}</td>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="emptymessage">
+              <ng-template #emptymessage>
                 <tr>
-                  <td colspan="4">No products available.</td>
+                  <td colspan="4">No products available for this supplier.</td>
                 </tr>
               </ng-template>
             </p-table>
@@ -127,7 +126,7 @@
 
     <ng-template #emptymessage>
       <tr>
-        <td colspan="5" class="p-text-center">No Supplier found.</td>
+        <td colspan="5" class="p-text-center">No Suppliers found.</td>
       </tr>
     </ng-template>
   </p-table>
@@ -135,7 +134,7 @@
 
 <app-edit-dialog
   [visible]="editDialogVisible"
-  [dialogTitle]="'Edit Product'"
+  [dialogTitle]="'Edit Supplier'"
   [fields]="SupplierEditFields"
   [formData]="selectedSupplier"
   (visibleChange)="editDialogVisible = $event"
@@ -153,15 +152,7 @@
 >
 </app-add-dialog>
 
-<app-add-dialog
-  [visible]="addProductDialogVisible"
-  [dialogTitle]="'Add Product'"
-  [fields]="productAddFields"
-  [useFormData]="false"
-  (visibleChange)="addProductDialogVisible = $event"
-  (save)="createProduct($event)"
->
-</app-add-dialog>
+
 
 <app-delete-dialog
   [(visible)]="deleteDialogVisible"

@@ -40,7 +40,7 @@ export class NavigationComponent implements OnInit {
   isHandset$: Observable<boolean>;
   isTablet$: Observable<boolean>;
   userData: any = null;
-  sidebarVisible: boolean = true;
+  sidebarVisible: boolean = false;
   isMobile: boolean = false;
 
   // Notification Data
@@ -78,10 +78,10 @@ new: any;
       if (isHandset) {
         this.isMobile = true;
         if (
-          this.sidebarVisible === true &&
+          this.sidebarVisible === false &&
           !localStorage.getItem('sidebarVisible')
         ) {
-          this.sidebarVisible = false;
+          this.sidebarVisible = true;
         }
       }
     });
@@ -90,14 +90,14 @@ new: any;
       if (isTablet && !this.isMobile) {
         this.isMobile = true;
         if (
-          this.sidebarVisible === true &&
+          this.sidebarVisible === false &&
           !localStorage.getItem('sidebarVisible')
         ) {
-          this.sidebarVisible = false;
+          this.sidebarVisible = true;
         }
       } else if (!isTablet && !this.isMobile) {
         this.isMobile = false;
-        this.sidebarVisible = true;
+        this.sidebarVisible = false;
       }
     });
   }
@@ -107,7 +107,7 @@ new: any;
     this.loadNotifications();
     const savedSidebarState = localStorage.getItem('sidebarVisible');
     if (savedSidebarState) {
-      this.sidebarVisible = savedSidebarState === 'true';
+      this.sidebarVisible = savedSidebarState === 'flase';
     }
   }
 
