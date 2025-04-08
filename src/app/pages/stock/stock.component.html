@@ -24,15 +24,29 @@
     styleClass="p-datatable-gridlines p-datatable-sm custom-column-filter p-component"
   >
     <ng-template pTemplate="caption">
-      <p-button
-        pButton
-        icon="pi pi-plus"
-        class="p-button-text p-mr-2"
-        pTooltip="Add Stock"
-        tooltipPosition="top"
-        (click)="openAddDialog()"
-        label="Add Stock"
-      />
+      <div class="flex">
+        <p-button
+          pButton
+          icon="pi pi-plus"
+          class="p-button-text p-mr-2"
+          pTooltip="Add Stock"
+          tooltipPosition="top"
+          (click)="openAddDialog()"
+          label="Add Stock"
+        />
+        <p-iconfield iconPosition="left" class="ml-auto m-2">
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+          <input
+            pInputText
+            type="text"
+            class="w-full"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Search keyword"
+          />
+        </p-iconfield>
+      </div>
     </ng-template>
     <ng-template pTemplate="header">
       <tr>

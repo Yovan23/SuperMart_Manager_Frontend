@@ -5,7 +5,6 @@
   flex-direction: column;
   gap: 1.5rem;
 }
-
 /* Stats grid */
 .grid {
   display: grid;

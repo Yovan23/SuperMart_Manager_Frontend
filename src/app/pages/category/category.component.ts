@@ -24,7 +24,8 @@ import { Table } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
-
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -42,9 +43,11 @@ import { InputText } from 'primeng/inputtext';
     IconFieldModule,
     InputIconModule,
     InputText,
+    ToastModule,
   ],
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css'],
+  providers: [MessageService],
 })
 export class CategoryComponent implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
@@ -134,7 +137,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   constructor(
     private categoryService: CategoryService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -180,18 +184,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
         if (response.success) {
           this.loadcategory();
           this.addDialogVisible = false;
-          this.snackbarService.showSuccess(
-            'Category Created',
-            'The category has been added successfully!'
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Category Added successfully',
+          });
         }
       },
-      error: (error) => {
-        console.error('Error creating category:', error);
-        this.snackbarService.showError(
-          'Error',
-          'Failed to create category. Please try again!'
-        );
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to create category. Please try again!',
+        });
       },
     });
   }
@@ -213,17 +218,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
         next: () => {
           this.loadcategory();
           this.editDialogVisible = false;
-          this.snackbarService.showSuccess(
-            'Category Updated',
-            'Category details updated successfully!'
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Category Updated successfully',
+          });
         },
         error: (error) => {
           console.error('Error updating category:', error);
-          this.snackbarService.showError(
-            'Error',
-            'Failed to update category. Please try again!'
-          );
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update category. Please try again!',
+          });
         },
       });
   }
@@ -241,17 +248,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
         this.loadcategory();
         this.categoryToDelete = null;
         this.deleteDialogVisible = false;
-        this.snackbarService.showSuccess(
-          'Category Deleted',
-          'The category has been removed successfully!'
-        );
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Category Deleted successfully',
+        });
       },
       error: (error) => {
         console.error('Error deleting category:', error);
-        this.snackbarService.showError(
-          'Error',
-          'Failed to delete category. Please try again!'
-        );
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to Delete category. Please try again!',
+        });
       },
     });
   }

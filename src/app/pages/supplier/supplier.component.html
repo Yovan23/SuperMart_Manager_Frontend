@@ -7,6 +7,8 @@
     [value]="suppliers"
     dataKey="_id"
     [rows]="10"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [size]="'small'"
     [expandedRowKeys]="expandedRows"
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
@@ -43,42 +45,6 @@
         <th class="p-2">Phone Number</th>
         <th class="p-2">Address</th>
         <th class="p-2">Actions</th>
-      </tr>
-      <tr>
-        <!-- <th class="p-2"></th> -->
-        <!-- <th class="p-2">
-          <input
-            pInputText
-            type="text"
-            #nameFilter
-            (input)="dt.filter(nameFilter.value, 'name', 'contains')"
-            placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
-          />
-        </th>
-        <th class="p-2">
-          <input
-            pInputText
-            type="text"
-            #phoneNumberFilter
-            (input)="
-              dt.filter(phoneNumberFilter.value, 'phoneNumber', 'contains')
-            "
-            placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
-          />
-        </th>
-        <th class="p-2">
-          <input
-            pInputText
-            type="text"
-            #addressFilter
-            (input)="dt.filter(addressFilter.value, 'address', 'contains')"
-            placeholder="Search"
-            class="p-column-filter w-full p-1 text-sm"
-          />
-        </th> -->
-        <!-- <th class="p-2"></th> -->
       </tr>
     </ng-template>
 

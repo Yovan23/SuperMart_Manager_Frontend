@@ -23,6 +23,8 @@ import { Subscription } from 'rxjs';
 import { BadgeModule } from 'primeng/badge';
 import { Table } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 interface Column {
   field: string;
@@ -50,6 +52,8 @@ interface ExportColumn {
     ButtonModule,
     BadgeModule,
     TooltipModule,
+    IconFieldModule,
+    InputIconModule,
   ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css'],
