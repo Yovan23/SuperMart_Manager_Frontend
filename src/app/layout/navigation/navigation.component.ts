@@ -148,7 +148,7 @@ loadNotifications() {
     this.authService.validateToken().subscribe({
       next: (response) => {
         this.userData = response.data;
-        this.userData.profilePicture = `${environment.imageUrl}${this.userData.profilePicture}`;
+        this.userData.profilePicture = this.userData.profilePicture;
       },
       error: () => {
         this.logout();
