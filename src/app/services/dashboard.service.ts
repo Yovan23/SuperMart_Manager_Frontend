@@ -61,6 +61,22 @@ export class DashboardService {
           );
     }
 
+    cashierSummary(params?: { fromDate?: string; toDate?: string}): Observable<ApiResponse> {
+        let httpParams = new HttpParams();
+        if (params) {
+            if (params.fromDate) {
+                httpParams = httpParams.set('fromDate', params.fromDate);
+            }
+            if (params.toDate) {
+                httpParams = httpParams.set('toDate', params.toDate);
+            }
+        }
+        return this.http.get<ApiResponse>(`${this.apiUrl}/cashierSummary`, {
+            headers: getAuthHeaders(),
+            params: httpParams
+          })
+    }
+
     getSalesByCategory(params?: { periodOfCategory?: string}): Observable<ApiResponse> {
         let httpParams = new HttpParams();
         if (params) {
