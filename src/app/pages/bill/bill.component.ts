@@ -279,6 +279,7 @@ export class BillComponent implements OnInit {
       // },
       handler: (response: any) => {
         // Send payment confirmation to the backend
+        console.log(response, " sdrfgergtsergte");
         if (!this.submittedBill) {
           this.messageService.add({
             severity: 'error',

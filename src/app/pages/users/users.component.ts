@@ -179,7 +179,7 @@ export class UsersComponent implements OnInit, OnDestroy {
                 this.users = response.data;
                 this.users = this.users.map(user => ({
                     ...user,
-                    profilePicture: `${environment.imageUrl}${user.profilePicture}`
+                    profilePicture: user.profilePicture
                 }));
                 this.loading = false;
             },
