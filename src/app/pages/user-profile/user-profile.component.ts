@@ -94,7 +94,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           this.userData = { ...response.data };
           this.originalUserData = { ...response.data };
           this.userData.profilePicture = response.data.profilePicture
-            ? `${environment.imageUrl}${response.data.profilePicture}`
+            ? response.data.profilePicture
             : 'assets/default-profile.png';
           this.userData.dateOfBirth = new Date(this.userData.dateOfBirth);
         }
