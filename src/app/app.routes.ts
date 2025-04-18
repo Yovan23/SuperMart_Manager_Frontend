@@ -14,10 +14,11 @@ import { BillComponent } from './pages/bill/bill.component';
 import { TransactionComponent } from './pages/transaction/transaction.component';
 import { AuthGuardService } from './auth/auth-guard';
 import { ReportsComponent } from './pages/reports/reports.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component'; 
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent ,canActivate:[AuthGuardService]},
+  { path: 'login', component: LoginComponent, canActivate: [AuthGuardService] },
   {
     path: 'dashboard',
     component: NavigationComponent,
@@ -26,37 +27,16 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: DashboardComponent, title: 'Dashboard-SMM' },
       { path: 'users', component: UsersComponent, title: 'User-SMM' },
-      { path: 'category', component: CategoryComponent, title: 'Category-SMM',},
+      { path: 'category', component: CategoryComponent, title: 'Category-SMM' },
       { path: 'product', component: ProductComponent, title: 'Product-SMM' },
-      { path: 'supplier', component: SupplierComponent, title: 'Supplier-SMM',},
+      { path: 'supplier', component: SupplierComponent, title: 'Supplier-SMM' },
       { path: 'log', component: LogComponent, title: 'Log-SMM' },
-      { path: 'userProfile', component: UserProfileComponent, title: 'UserProfile-SMM'},
+      { path: 'userProfile', component: UserProfileComponent, title: 'UserProfile-SMM' },
       { path: 'stock', component: StockComponent, title: 'Stock-SMM' },
       { path: 'bill', component: BillComponent, title: 'Bill-SMM' },
-      { path: 'transaction', component: TransactionComponent, title: 'Transaction-SMM'},
+      { path: 'transaction', component: TransactionComponent, title: 'Transaction-SMM' },
       { path: 'reports', component: ReportsComponent, title: 'Reports-SMM' },
     ],
   },
-  { path: '**', redirectTo: 'login' },
+  { path: '**', component: NotFoundComponent }, 
 ];
-
-// import { Routes } from '@angular/router';
-// import { LoginComponent } from './login/login.component';
-// import { DashboardComponent } from './dashboard/dashboard.component';
-// import { NavigationComponent } from './navigation/navigation.component';
-// import { authGuard } from './Service/auth.guard';
-
-// export const routes: Routes = [
-//   { path: '', redirectTo: 'login', pathMatch: 'full' },
-//   { path: 'login', component: LoginComponent },
-//   {
-//     path: 'dashboard',
-//     component: NavigationComponent,
-//     canActivate: [authGuard],
-//     children: [
-//       { path: '', redirectTo: 'main', pathMatch: 'full' },
-//       { path: 'main', component: DashboardComponent },
-//     ],
-//   },
-//   { path: '**', redirectTo: 'login' }
-// ];
