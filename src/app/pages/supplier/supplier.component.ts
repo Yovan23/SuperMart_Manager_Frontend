@@ -1,11 +1,16 @@
-// supplier.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SupplierService } from '../../services/supplier.service';
-import { SnackbarService, SnackbarConfig } from '../../services/snackbar.service';
+import {
+  SnackbarService,
+  SnackbarConfig,
+} from '../../services/snackbar.service';
 import { Supplier } from '../../models/supplier.model';
 import { ApiResponse } from '../../models/apiResponse.model';
 import { SnackbarComponent } from '../../layout/component/snackbar/snackbar.component';
-import { AddDialogComponent, Field } from '../../layout/component/add-dialog/add-dialog.component';
+import {
+  AddDialogComponent,
+  Field,
+} from '../../layout/component/add-dialog/add-dialog.component';
 import { EditDialogComponent } from '../../layout/component/edit-dialog/edit-dialog.component';
 import { DeleteDialogComponent } from '../../layout/component/delete-dialog/delete-dialog.component';
 import { TableModule } from 'primeng/table';
@@ -63,14 +68,38 @@ export class SupplierComponent implements OnInit, OnDestroy {
   };
 
   SupplierEditFields: Field[] = [
-    { name: 'name', label: 'Name', type: 'text', required: true, pattern: '^(?!\\s*$)[a-zA-Z\\s]+$' },
-    { name: 'phoneNumber', label: 'Mobile Number', type: 'tel', required: true, pattern: '^[0-9]{10}$' },
+    {
+      name: 'name',
+      label: 'Name',
+      type: 'text',
+      required: true,
+      pattern: '^(?!\\s*$)[a-zA-Z\\s]+$',
+    },
+    {
+      name: 'phoneNumber',
+      label: 'Mobile Number',
+      type: 'tel',
+      required: true,
+      pattern: '^[0-9]{10}$',
+    },
     { name: 'address', label: 'Address', type: 'text', required: true },
   ];
 
   SupplierAddFields: Field[] = [
-    { name: 'name', label: 'Name', type: 'text', required: true, pattern: '^(?!\\s*$)[a-zA-Z\\s]+$' },
-    { name: 'phoneNumber', label: 'Mobile Number', type: 'tel', required: true, pattern: '^[0-9]{10}$' },
+    {
+      name: 'name',
+      label: 'Name',
+      type: 'text',
+      required: true,
+      pattern: '^(?!\\s*$)[a-zA-Z\\s]+$',
+    },
+    {
+      name: 'phoneNumber',
+      label: 'Mobile Number',
+      type: 'tel',
+      required: true,
+      pattern: '^[0-9]{10}$',
+    },
     { name: 'address', label: 'Address', type: 'text', required: true },
   ];
 
@@ -118,17 +147,23 @@ export class SupplierComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error loading suppliers:', error);
         this.loading = false;
-        this.snackbarService.showError('Error', 'Failed to load suppliers. Please try again!');
+        this.snackbarService.showError(
+          'Error',
+          'Failed to load suppliers. Please try again!'
+        );
       },
     });
   }
 
   expandAll() {
-    this.expandedRows = this.suppliers.reduce((acc: { [key: string]: boolean }, s) => {
-      this.fetchUniqueProducts(s);
-      acc[s._id] = true;
-      return acc;
-    }, {});
+    this.expandedRows = this.suppliers.reduce(
+      (acc: { [key: string]: boolean }, s) => {
+        this.fetchUniqueProducts(s);
+        acc[s._id] = true;
+        return acc;
+      },
+      {}
+    );
   }
 
   collapseAll() {
@@ -142,7 +177,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
       severity: 'info',
       summary: 'Supplier Expanded',
       detail: supplier.name,
-      life: 3000
+      life: 1500,
     });
   }
 
@@ -152,7 +187,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
       severity: 'success',
       summary: 'Supplier Collapsed',
       detail: supplier.name,
-      life: 3000
+      life: 1500,
     });
   }
 
@@ -175,7 +210,10 @@ export class SupplierComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error fetching products:', error);
           supplier.product = [];
-          this.snackbarService.showError('Error', 'Failed to fetch products for this supplier.');
+          this.snackbarService.showError(
+            'Error',
+            'Failed to fetch products for this supplier.'
+          );
         },
       });
     }
@@ -187,12 +225,21 @@ export class SupplierComponent implements OnInit, OnDestroy {
         if (response.success) {
           this.loadSuppliers();
           this.addDialogVisible = false;
-          this.snackbarService.showSuccess('Supplier Created', 'The Supplier has been added successfully!');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Supplier Created',
+            detail: 'Supplier added succesfully',
+            life: 1500,
+          });
         }
       },
       error: (error) => {
-        console.error('Error creating Supplier:', error);
-        this.snackbarService.showError('Error', 'Failed to create Supplier. Please try again!');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to create Supplier. Please try again!',
+          life: 1500,
+        });
       },
     });
   }
@@ -217,11 +264,21 @@ export class SupplierComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadSuppliers();
         this.editDialogVisible = false;
-        this.snackbarService.showSuccess('Supplier Updated', 'The Supplier has been updated successfully!');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Supplier update',
+          detail: 'Supplier updated succesfully',
+          life: 1500,
+        });
       },
       error: (error) => {
         console.error('Error updating supplier:', error);
-        this.snackbarService.showError('Update Failed', 'There was an error updating the supplier.');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'error',
+          detail: 'Error while updating supplier ',
+          life: 1500,
+        });
       },
     });
   }
@@ -239,7 +296,12 @@ export class SupplierComponent implements OnInit, OnDestroy {
         this.loadSuppliers();
         this.SupplierToDelete = null;
         this.deleteDialogVisible = false;
-        this.snackbarService.showSuccess('Supplier Deleted', 'The Supplier has been removed successfully!');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Supplier Deleted',
+          detail: 'The Supplier has been deleted successfully!',
+          life: 1500,
+        });
       },
     });
   }
@@ -250,7 +312,10 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   createProduct(product: any): void {
-    if (!this.selectedSupplierForProduct || !this.selectedSupplierForProduct._id) {
+    if (
+      !this.selectedSupplierForProduct ||
+      !this.selectedSupplierForProduct._id
+    ) {
       console.error('No supplier selected to add product to.');
       this.snackbarService.showError('Error', 'No supplier selected.');
       return;
@@ -259,18 +324,27 @@ export class SupplierComponent implements OnInit, OnDestroy {
     const supplierId = this.selectedSupplierForProduct._id;
     const productData = { ...product };
 
-    this.SupplierService.addProductToSupplier(supplierId, productData).subscribe({
+    this.SupplierService.addProductToSupplier(
+      supplierId,
+      productData
+    ).subscribe({
       next: (response: any) => {
         if (response.success) {
           this.loadSuppliers();
           this.addProductDialogVisible = false;
           this.selectedSupplierForProduct = null;
-          this.snackbarService.showSuccess('Product Added', 'The product has been added successfully!');
+          this.snackbarService.showSuccess(
+            'Product Added',
+            'The product has been added successfully!'
+          );
         }
       },
       error: (error) => {
         console.error('Error adding product:', error);
-        this.snackbarService.showError('Error', 'Failed to add product. Please try again!');
+        this.snackbarService.showError(
+          'Error',
+          'Failed to add product. Please try again!'
+        );
       },
     });
   }

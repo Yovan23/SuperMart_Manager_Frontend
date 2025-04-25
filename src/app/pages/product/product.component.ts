@@ -25,7 +25,8 @@ import { Table } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 interface Column {
   field: string;
   header: string;
@@ -54,9 +55,11 @@ interface ExportColumn {
     TooltipModule,
     IconFieldModule,
     InputIconModule,
+    ToastModule
   ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css'],
+  providers: [MessageService],
 })
 export class ProductComponent implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
@@ -215,7 +218,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -326,18 +330,19 @@ export class ProductComponent implements OnInit, OnDestroy {
         if (response.success) {
           this.loadProducts();
           this.addDialogVisible = false;
-          this.snackbarService.showSuccess(
-            'Product Created',
-            'The product has been added successfully!'
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Product added successfully',
+          });
         }
       },
       error: (error) => {
-        console.error('Error creating product:', error);
-        this.snackbarService.showError(
-          'Error',
-          'Failed to create product. Please try again!'
-        );
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to create Product. Please try again!',
+        });
       },
     });
   }
@@ -362,17 +367,19 @@ export class ProductComponent implements OnInit, OnDestroy {
         next: () => {
           this.loadProducts();
           this.editDialogVisible = false;
-          this.snackbarService.showSuccess(
-            'Product Updated',
-            'Product details updated successfully!'
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Product updated successfully',
+          });
         },
         error: (error) => {
           console.error('Error updating product:', error);
-          this.snackbarService.showError(
-            'Error',
-            'Failed to update product. Please try again!'
-          );
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update Product. Please try again!',
+          });
         },
       });
   }
@@ -390,17 +397,19 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.loadProducts();
         this.productToDelete = null;
         this.deleteDialogVisible = false;
-        this.snackbarService.showSuccess(
-          'Product Deleted',
-          'The product has been removed successfully!'
-        );
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Product Deleted successfully',
+        });
       },
       error: (error) => {
         console.error('Error deleting product:', error);
-        this.snackbarService.showError(
-          'Error',
-          'Failed to delete product. Please try again!'
-        );
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete Product. Please try again!',
+        });
       },
     });
   }

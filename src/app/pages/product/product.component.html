@@ -151,7 +151,11 @@
           <select
             pInputText
             #visibilityFilter
-            (change)="dt.filter(visibilityFilter.value, 'isVisible', 'equals')"
+            (change)="
+              visibilityFilter.value === 'All'
+                ? dt.reset()
+                : dt.filter(visibilityFilter.value, 'isVisible', 'equals')
+            "
             class="p-column-filter"
           >
             <option [value]="">All</option>
@@ -246,7 +250,7 @@
   (confirm)="confirmDelete()"
 >
 </app-delete-dialog>
-
+<p-toast />
 <app-snackbar
   [(visible)]="snackbarVisible"
   [type]="snackbarConfig.type"

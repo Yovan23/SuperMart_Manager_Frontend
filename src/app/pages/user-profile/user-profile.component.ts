@@ -139,52 +139,51 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   saveProfile(form: NgForm) {
     if (!form.valid) {
-      this.snackbarService.showError(
-        'Invalid Form',
-        'Please fill all required fields correctly'
-      );
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Invalid from field , Please fill all field',
+      });
       return;
     }
   
-    // Ensure _id exists
     if (!this.userData?._id) {
       this.snackbarService.showError('Error', 'User ID is missing');
       return;
     }
   
-    // Prepare the updated data
     const updatedData = {
       user: {
         ...this.userData,
         profilePicture: this.userData.profilePicture.startsWith('data:')
-          ? this.userData.profilePicture // Base64 string for new image
+          ? this.userData.profilePicture 
           : this.userData.profilePicture.startsWith(environment.imageUrl)
-          ? this.userData.profilePicture.replace(environment.imageUrl, '') // Remove base URL if present
-          : this.userData.profilePicture, // Keep as is if no change
+          ? this.userData.profilePicture.replace(environment.imageUrl, '') 
+          : this.userData.profilePicture,
       },
       _id: this.userData._id,
     };
   
-    // Call the updateUser service
     this.userService.updateUser(updatedData).subscribe({
       next: (response) => {
         this.editMode = false;
         this.originalUserData = { ...this.userData };
-        // Update profile picture URL if returned from backend
         if (response.profilePicture) {
           this.userData.profilePicture = `${environment.imageUrl}${response.profilePicture}`;
         }
-        this.snackbarService.showSuccess(
-          'Profile Updated',
-          'Your profile has been updated successfully'
-        );
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Profile updated successfully',
+        });
       },
       error: (err) => {
         console.error('Failed to update profile', err);
-        this.snackbarService.showError(
-          'Error',
-          err.error?.message || 'Failed to update profile'
-        );
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update profile',
+        });
       },
     });
   }
@@ -206,18 +205,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   processPasswordChange() {
     if (this.newPassword.length < 6) {
-      this.snackbarService.showError(
-        'Weak Password',
-        'Password must be at least 6 characters long.'
-      );
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Password must be at least 6 characters long.',
+      });
       return;
     }
-
     if (this.newPassword !== this.confirmPassword) {
-      this.snackbarService.showError(
-        'Password Mismatch',
-        'New password and confirm password do not match.'
-      );
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'New password and confirm password do not match.',
+      });
       return;
     }
 
@@ -242,20 +242,22 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         next: () => {
           this.showChangePasswordDialog = false;
           this.resetPasswordFields();
-          this.snackbarService.showSuccess(
-            'Password Changed',
-            'Your password has been updated successfully!'
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Your password has been updated successfully!',
+          });
         },
         error: (error) => {
           console.error('Error changing password:', error);
           if (error.error?.message === 'Please enter valid old password') {
             this.isOldPasswordIncorrect = true;
           } else {
-            this.snackbarService.showError(
-              'Error',
-              error.error?.message || 'Something went wrong. Please try again.'
-            );
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Something went wrong. Please try again.',
+            });
           }
         },
       });
