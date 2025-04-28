@@ -38,7 +38,6 @@ export class ReportsComponent implements OnInit {
   salesHasSearched: boolean = false;
   salesLoading: boolean = false;
 
-  // Cashier Report Variables
   cashierDateRange: Date[] = [];
   cashierDialogVisible: boolean = false;
   cashierData: any[] = [];
@@ -55,16 +54,13 @@ export class ReportsComponent implements OnInit {
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     
-    // Initialize Sales Report
     this.salesDateRange = [firstDayOfMonth, today];
     this.getProductSaleDatewise();
     
-    // Initialize Cashier Report
     this.cashierDateRange = [firstDayOfMonth, today];
     this.getCashierSummaryDatewise();
   }
 
-  // Sales Report Methods
   showSalesDataDialog(): void {
     if (this.salesData && this.salesData.length > 0) {
       this.salesDialogVisible = true;
@@ -144,10 +140,10 @@ export class ReportsComponent implements OnInit {
 
     const worksheet = XLSX.utils.json_to_sheet(exportedData);
     const wscols = [
-      { wch: 15 }, // Barcode
-      { wch: 30 }, // Product Name
-      { wch: 15 }, // Total Sale
-      { wch: 15 }  // Total Quantity
+      { wch: 15 }, 
+      { wch: 30 }, 
+      { wch: 15 }, 
+      { wch: 15 }  
     ];
     worksheet['!cols'] = wscols;
 
@@ -164,7 +160,6 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  // Cashier Report Methods
   showCashierDataDialog(): void {
     if (this.cashierData && this.cashierData.length > 0) {
       this.cashierDialogVisible = true;
@@ -247,13 +242,13 @@ export class ReportsComponent implements OnInit {
 
     const worksheet = XLSX.utils.json_to_sheet(exportedData);
     const wscols = [
-      { wch: 15 }, // Cashier ID
-      { wch: 25 }, // Cashier Name
-      { wch: 15 }, // Total Sale
+      { wch: 15 },
+      { wch: 25 }, 
       { wch: 15 }, 
-      { wch: 20 }, // Cashier Name
-      { wch: 20 }, // Total Sale
-      { wch: 20 }, // Total Transactions
+      { wch: 15 }, 
+      { wch: 20 }, 
+      { wch: 20 }, 
+      { wch: 20 }, 
     ];
     worksheet['!cols'] = wscols;
 

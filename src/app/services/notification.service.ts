@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Notification } from '../models/notification.model';
 import { environment } from '../../environments/environment';
 import { getAuthHeaders } from '../auth/auth-header';
 import { ApiResponse } from '../models/apiResponse.model';

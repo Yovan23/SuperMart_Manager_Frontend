@@ -449,13 +449,35 @@ export class DashboardComponent implements OnInit {
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      obj.textContent = Math.floor(progress * (end - start) + start).toString();
+      const value = Math.floor(progress * (end - start) + start);
+      obj.textContent = value.toString(); // Only update the numeric value
       if (progress < 1) {
         window.requestAnimationFrame(step);
       }
     };
     window.requestAnimationFrame(step);
   }
+  // updateStats(): void {
+  //   this.stats[0].value = this.data.sales?.netSales || 0;
+  //   this.stats[0].change = this.data.sales?.completedOrders || 0;
+  //   this.stats[2].value = this.data.cost?.grossProfit || 0;
+  //   this.stats[2].change = this.data.cost?.profitMargin || 0;
+  //   this.stats[1].value = this.data.inventory?.totalInventoryValue || 0;
+  //   this.stats[1].change = this.data.inventory?.totalItemsInStock || 0;
+  //   this.stats[3].value = this.data.totalEmployees || 0;
+  //   this.stats[3].change = this.data.activeEmployees || 0;
+
+  //   setTimeout(() => {
+  //     this.stats.forEach((stat, index) => {
+  //       const element = document.querySelectorAll('.card-value')[
+  //         index
+  //       ] as HTMLElement;
+  //       if (element) {
+  //         this.animateValue(element, 0, stat.value, 1000);
+  //       }
+  //     });
+  //   });
+  // }
   updateStats(): void {
     this.stats[0].value = this.data.sales?.netSales || 0;
     this.stats[0].change = this.data.sales?.completedOrders || 0;
@@ -465,10 +487,10 @@ export class DashboardComponent implements OnInit {
     this.stats[1].change = this.data.inventory?.totalItemsInStock || 0;
     this.stats[3].value = this.data.totalEmployees || 0;
     this.stats[3].change = this.data.activeEmployees || 0;
-
+  
     setTimeout(() => {
       this.stats.forEach((stat, index) => {
-        const element = document.querySelectorAll('.card-value')[
+        const element = document.querySelectorAll('.animated-value')[
           index
         ] as HTMLElement;
         if (element) {
@@ -504,7 +526,7 @@ export class DashboardComponent implements OnInit {
       iconColor: '#f59e0b',
     },
     {
-      title: 'Total Employee',
+      title: 'Total Employees',
       value: 0,
       icon: 'pi-users',
       change: 0,

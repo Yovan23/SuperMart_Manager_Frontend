@@ -1,7 +1,7 @@
 :host {
     position: fixed;
     top: 50px;
-    right: 10px ;/* Move it to the right corner */
+    right: 10px ;
     z-index: 99999;
     min-width: 250px;
     max-width: 350px;

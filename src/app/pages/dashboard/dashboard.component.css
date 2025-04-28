@@ -1,18 +1,15 @@
-/* Base container styles */
 .dashboard-container {
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-/* Stats grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
 }
 
-/* Card styles */
 .card {
   background: white;
   border-radius: 10px;
@@ -73,12 +70,10 @@
   color: #6b7280;
 }
 
-/* Specific icon colors */
 .pi-dollar { color: #f59e0b; }
 .pi-users { color: #06b6d4; }
 .pi-comment { color: #8b5cf6; }
 
-/* Main content row */
 .content-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -86,20 +81,18 @@
   width: 100%;
 }
 
-/* Charts column */
 .charts-column {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Transactions column */
+
 .transactions-column {
   display: flex;
   flex-direction: column;
 }
 
-/* Chart and table card styles */
 .chart-card,
 .table-card {
   background: white;
@@ -110,7 +103,7 @@
 }
 
 .table-card {
-  height: auto; /* Ensures table fills its column */
+  height: auto;
 }
 
 .chart-title,
@@ -135,11 +128,6 @@
   
 }
 
-/* Responsive adjustments */
-
-/* Large screens (above 1200px) - keep as is */
-
-/* Medium screens (900px - 1200px) */
 @media (max-width: 1200px) {
   .grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -160,10 +148,9 @@
   }
 }
 
-/* Tablet screens (600px - 900px) */
 @media (max-width: 900px) {
   .content-row {
-    grid-template-columns: 1fr; /* Stack charts and table */
+    grid-template-columns: 1fr; 
   }
 
   .grid {
@@ -197,10 +184,9 @@
   }
 }
 
-/* Small screens (480px - 600px) */
 @media (max-width: 600px) {
   .grid {
-    grid-template-columns: 1fr 1fr; /* Two columns for stats */
+    grid-template-columns: 1fr 1fr;
   }
 
   .chart-container {
@@ -219,10 +205,9 @@
   }
 }
 
-/* Mobile screens (below 480px) */
 @media (max-width: 480px) {
   .grid {
-    grid-template-columns: 1fr; /* Single column for stats */
+    grid-template-columns: 1fr; 
   }
 
   .chart-card,
@@ -266,7 +251,6 @@
   }
 }
 
-/* Very small screens (below 360px) */
 @media (max-width: 360px) {
   .dashboard-container {
     padding: 0.5rem;
@@ -288,7 +272,7 @@
 }
 
 .bar-chart-container {
-  height: 500px; /* Increased height for bar chart */
+  height: 500px; 
 }
 
 .filter-buttons {
@@ -309,7 +293,6 @@
   cursor: pointer;
 }
 
-/* Category Distribution Container */
 .category-distribution {
   background: white;
   border-radius: 10px;
@@ -321,7 +304,6 @@
   gap: 1rem;
 }
 
-/* Percentage Bar */
 .percentage-bar {
   display: flex;
   height: 10px;
@@ -335,7 +317,6 @@
   transition: width 0.3s ease-in-out;
 }
 
-/* Category List */
 .category-list {
   display: flex;
   flex-direction: column;
@@ -369,7 +350,6 @@
   color: #1f2937;
 }
 
-/* Show More/Less Button */
 .category-distribution button {
   align-self: center;
   padding: 0.5rem 1rem;
@@ -385,3 +365,4 @@
 .category-distribution button:hover {
   background-color: #e5e7eb;
 }
+

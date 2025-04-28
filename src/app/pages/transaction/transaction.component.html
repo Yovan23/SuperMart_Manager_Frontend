@@ -142,11 +142,16 @@
     >
       <span>CASHIER:</span><span>{{ selectedBill?.cashierId?.name }}</span>
     </div>
-
+      <div
+      style="display: flex; justify-content: space-between; margin-bottom: 3px"
+    >
+      <span>PAYMENT METHOD:</span
+      ><span>{{ selectedBill?.paymentDetails?.method || "CASH" }}</span>
+    </div>
     <div
       style="display: flex; justify-content: space-between; margin-bottom: 3px"
     >
-      <span>CUSTOMER Phone:</span
+      <span>CUSTOMER PHONE:</span
       ><span>{{ selectedBill?.customerDetails?.phone || "N/A" }}</span>
     </div>
     <div
@@ -254,7 +259,7 @@
       <strong>Thank you for shopping with us</strong>
     </div>
     <div style="text-align: center">
-      <!-- Copyright © {{currentYear}} SuperMart Manager -->
+      Copyright © {{currentYear}} SuperMart Manager
     </div>
   </div>
 </p-dialog>

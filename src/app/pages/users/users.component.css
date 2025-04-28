@@ -1,7 +1,4 @@
-/* :host ::ng-deep .p-column-filter {
-    width: 100%;
-    min-width: 0;
-} */
+
 ::ng-deep .p-inputtext{
     width: 130px;
 }

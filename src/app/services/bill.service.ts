@@ -15,13 +15,7 @@ export class BillService {
     authService: any;
 
     constructor(private http: HttpClient) {}
-
-    // getAllBill(): Observable<ApiResponse> {
-    //     return this.http.get<ApiResponse>(`${this.apiUrl}/getAllBill`, {
-    //         headers: getAuthHeaders()
-    //     })
-    // }
-
+    
     getAllBill(params?: { startDate?: string; endDate?: string; status?: string }): Observable<ApiResponse> {
         let httpParams = new HttpParams();
         if (params) {

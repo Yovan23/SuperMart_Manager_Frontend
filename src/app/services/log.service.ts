@@ -28,11 +28,5 @@ export class LogService {
       { headers: getAuthHeaders() }
     );
   }
-  // getLogsByDateRange(fromDate: string, toDate: string): Observable<ApiResponse> {
-  //   return this.http.get<ApiResponse>(
-  //     `${this.apiUrl}/getLogsByDateRange?fromDate=${fromDate}&toDate=${toDate}`,
-  //     { headers: getAuthHeaders() }
-  //   );
-  // }
   
 }
