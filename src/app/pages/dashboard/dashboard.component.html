@@ -1,10 +1,13 @@
 <div class="dashboard-container">
   <div class="grid">
-    <div class="card" *ngFor="let stat of stats" @cardAnimation>
+    <div class="card" *ngFor="let stat of stats; let i = index" @cardAnimation>
       <div class="card-header">
         <div class="card-text">
           <span class="card-title">{{ stat.title }}</span>
-          <div class="card-value">{{ stat.value }}</div>
+          <div class="card-value">
+            <span *ngIf="i < 3" class="currency-symbol">₹ </span>
+            <span class="animated-value">{{ stat.value }}</span>
+          </div>
         </div>
         <div class="card-icon" [style.color]="stat.iconColor">
           <i class="pi {{ stat.icon }}"></i>
@@ -15,7 +18,7 @@
         <span class="change-text">{{ stat.changeText }}</span>
       </div>
     </div>
-  </div>
+</div>
 
   <div class="content-row">
     <div class="charts-column">
@@ -95,7 +98,7 @@
         </div>
       </div>
       <div class="category-distribution mt-5">
-        <h3 class="chart-title">By Category Sales In percentage</h3>
+        <h3 class="chart-title">Category Sales Breakdown</h3>
         <div class="filter-buttons">
           <p-button
             label="Week"

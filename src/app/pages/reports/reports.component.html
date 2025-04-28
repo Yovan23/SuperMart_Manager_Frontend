@@ -2,7 +2,6 @@
   <h2 class="p-mr-auto">Stock Management</h2>
 </div>
 <div class="grid ">
-  <!-- Sales Report Card -->
   <p-card class="col-12 sm:col-12 lg:col-6">
     <ng-template pTemplate="header">
       <div class="bg-blue-50 p-3">
@@ -28,7 +27,6 @@
     </div>
   </p-card>
 
-  <!-- Cashier Report Card -->
   <p-card class="col-12 sm:col-12 lg:col-6">
     <ng-template pTemplate="header">
       <div class="bg-blue-50 p-3">
@@ -56,7 +54,6 @@
 </div>
 
 
-<!-- Sales Report Dialog -->
 <p-dialog header="Sales Report" [resizable]="false" [modal]="true" [maximizable]="true" appendTo="body"
   [(visible)]="salesDialogVisible" [style]="{ width: '75vw' }" [contentStyle]="{ height: '70vh' }">
   <p-table [value]="salesData" [scrollable]="true" scrollHeight="55vh" [paginator]="true" [rows]="10"
@@ -92,7 +89,6 @@
   </p-table>
 </p-dialog>
 
-<!-- Cashier Report Dialog -->
 <p-dialog header="Cashier Report" [resizable]="false" [modal]="true" [maximizable]="true" appendTo="body"
   [(visible)]="cashierDialogVisible" [style]="{ width: '75vw' }" [contentStyle]="{ height: '70vh' }">
   <p-table [value]="cashierData" [scrollable]="true" scrollHeight="55vh" [paginator]="true" [rows]="10"

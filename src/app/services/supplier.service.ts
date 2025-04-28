@@ -5,7 +5,6 @@ import { Supplier } from '../models/supplier.model';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/apiResponse.model';
 import { getAuthHeaders } from '../auth/auth-header';
-import { Product } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root',

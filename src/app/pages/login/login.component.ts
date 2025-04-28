@@ -92,7 +92,7 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           this.resetSent = true;
-          this.errorMessage = '';
+          this.errorMessage = 'Ckeck your email for the reset link';
         },
         error: (error) => {
           console.error('Reset link error:', error);

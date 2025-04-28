@@ -1,9 +1,7 @@
 <div class="p-2 custom-class">
   <div class="grid-container">
-    <!-- Image section (hidden on mobile) -->
     <div class="image-section"></div>
 
-    <!-- Login section -->
     <div class="login-section">
       <div class="login-box">
         <div class="text-center mb-5">
@@ -11,7 +9,6 @@
         </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="animate__animated animate__fadeInUp">
-          <!-- Email Input -->
           <div class="form-group">
             <label for="email">Email</label>
             <input
@@ -30,7 +27,6 @@
             </small>
           </div>
 
-          <!-- Password Input -->
           <div class="form-group">
             <label for="password">Password</label>
             <p-password
@@ -50,17 +46,14 @@
             </small>
           </div>
 
-          <!-- Forgot Password Link -->
           <div class="forgot-password">
             <a class="custom-link" (click)="sendResetLink()">Forgot password?</a>
           </div>
 
-          <!-- Error Message -->
           <div *ngIf="errorMessage" class="error-box">
             {{ errorMessage }}
           </div>
 
-          <!-- Submit Button -->
           <button
             pButton
             type="submit"

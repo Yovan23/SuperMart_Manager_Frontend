@@ -13,12 +13,12 @@
 
 .four_zero_four_bg {
   background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
-  height: 450px; /* Increased height for larger gif */
+  height: 450px; 
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain; /* Changed from cover to contain */
-  max-width: 800px; /* Increased max-width */
-  margin: 0 auto; /* Center the container */
+  background-size: contain; 
+  max-width: 800px; 
+  margin: 0 auto; 
 }
 
 .four_zero_four_bg h1 {
@@ -36,12 +36,12 @@
   margin: 5px 0;
   display: inline-block;
   text-decoration: none;
-  border-radius: 5px; /* Added for better appearance */
-  transition: background 0.3s; /* Smooth transition for hover effect */
+  border-radius: 5px; 
+  transition: background 0.3s; 
 }
 
 .link_404:hover {
-  background: #2d8a27; /* Darker shade on hover */
+  background: #2d8a27; 
   cursor: pointer;
 }
 
@@ -51,7 +51,7 @@
 
 @media (max-width: 768px) {
   .four_zero_four_bg {
-    height: 400px; /* Adjusted height for medium screens */
+    height: 400px; 
   }
   
   .contant_box_404 {
@@ -61,7 +61,7 @@
 
 @media (max-width: 480px) {
   .four_zero_four_bg {
-    height: 300px; /* Adjusted height for small screens */
+    height: 300px; 
   }
   
   .contant_box_404 h3 {

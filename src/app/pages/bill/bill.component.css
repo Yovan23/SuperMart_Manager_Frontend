@@ -1,3 +1,8 @@
 ::ng-deep .w-full .p-inputmask{
     width: 100%;
 }
+
+::ng-deep .p-fluid .custom-autocomplete .p-autocomplete,
+::ng-deep .p-fluid .custom-autocomplete .p-autocomplete-input {
+  width: 100% !important;
+}
