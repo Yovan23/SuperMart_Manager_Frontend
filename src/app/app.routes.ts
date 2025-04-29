@@ -15,6 +15,7 @@ import { TransactionComponent } from './pages/transaction/transaction.component'
 import { AuthGuardService } from './auth/auth-guard';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component'; 
+import { DashboardCashierComponent } from './pages/dashboard-cashier/dashboard-cashier.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,6 +27,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: DashboardComponent, title: 'Dashboard-SMM' },
+      { path: 'cashier', component: DashboardCashierComponent, title: 'Dashboard-Cashier-SMM' },
       { path: 'users', component: UsersComponent, title: 'User-SMM' },
       { path: 'category', component: CategoryComponent, title: 'Category-SMM' },
       { path: 'product', component: ProductComponent, title: 'Product-SMM' },

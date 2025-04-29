@@ -61,7 +61,7 @@
           label="Export"
           icon="pi pi-external-link"
           class="p-button ml-2"
-          (click)="dt.exportCSV()"
+          (click)="exportCSV()"
         ></button>
       </div>
     </ng-template>
@@ -90,7 +90,7 @@
             <ng-container *ngSwitchCase="'totalAmount'">
               {{ formatCurrency(bill.totalAmount) }}
             </ng-container>
-    <ng-container *ngSwitchCase="'status'">
+            <ng-container *ngSwitchCase="'status'">
               {{  bill.status || "Not available" }}
             </ng-container>
             <ng-container *ngSwitchCase="'createdAt'">
