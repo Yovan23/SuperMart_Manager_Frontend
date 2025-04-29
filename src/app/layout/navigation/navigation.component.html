@@ -1,5 +1,4 @@
 <div class="layout-wrapper" [class.layout-sidebar-collapsed]="!sidebarVisible">
-  <!-- Backdrop for mobile sidebar -->
   <div class="sidebar-backdrop" *ngIf="sidebarVisible && isMobile" (click)="closeSidebar()"></div>
 
   <div class="sidebar" [class.collapsed]="!sidebarVisible" [class.show]="sidebarVisible && isMobile">
@@ -18,7 +17,15 @@
       </div>
     </div>
     <a pRipple routerLink="/dashboard/home" routerLinkActive="active" class="nav-item"
-      [pTooltip]="!sidebarVisible ? 'Dashboard' : undefined" tooltipPosition="right">
+      [pTooltip]="!sidebarVisible ? 'Dashboard' : undefined" tooltipPosition="right"
+      *ngIf="userData?.role === 'admin' || userData?.role === 'inventoryManager'">
+      <i class="pi pi-th-large"></i>
+      <span *ngIf="sidebarVisible">Dashboard</span>
+    </a>
+
+    <a pRipple routerLink="/dashboard/cashier" routerLinkActive="active" class="nav-item"
+      [pTooltip]="!sidebarVisible ? 'Dashboard' : undefined" tooltipPosition="right"
+      *ngIf="userData?.role === 'cashier'">
       <i class="pi pi-th-large"></i>
       <span *ngIf="sidebarVisible">Dashboard</span>
     </a>
@@ -51,14 +58,15 @@
     </a>
 
     <a pRipple routerLink="/dashboard/supplier" routerLinkActive="active" class="nav-item"
-      [pTooltip]="!sidebarVisible ? 'Supplier' : undefined" tooltipPosition="right" *ngIf=" userData?.role === 'admin'">
+      [pTooltip]="!sidebarVisible ? 'Supplier' : undefined" tooltipPosition="right" 
+      *ngIf=" userData?.role === 'admin'  || userData?.role === 'inventoryManager'">
       <i class="pi pi-users"></i>
       <span *ngIf="sidebarVisible">Supplier</span>
     </a>
 
     <a pRipple routerLink="/dashboard/log" routerLinkActive="active" class="nav-item"
       [pTooltip]="!sidebarVisible ? 'Log' : undefined" tooltipPosition="right"
-      *ngIf="userData?.role === 'admin' || userData?.role === 'inventoryManager'">
+      *ngIf="userData?.role === 'admin' ">
       <i class="pi pi-objects-column"></i>
       <span *ngIf="sidebarVisible">Log</span>
     </a>

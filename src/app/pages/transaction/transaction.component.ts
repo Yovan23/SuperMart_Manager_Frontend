@@ -204,11 +204,61 @@ export class TransactionComponent implements OnInit, OnDestroy {
         value = value ? value[f] : null;
       }
       return value;
+    } else if (field === 'cashierName') {
+      return data.cashierId?.name || null;
     }
     return data[field];
   }
 
-  // Rest of the methods remain unchanged
+prepareDataForExport(): any[] {
+  return this.bills.map(bill => {
+    const exportBill: any = {};
+    
+    this.visibleCols.forEach(col => {
+      const field = col.field;
+      
+      if (field === 'cashierName') {
+        exportBill[field] = bill.cashierId?.name || 'N/A';
+      } 
+      else if (field === 'customerDetails.phone') {
+        exportBill[field] = bill.customerDetails?.phone || 'Walk-in customer';
+      }
+      else if (field === 'totalAmount') {
+        exportBill[field] = this.formatCurrency(bill.totalAmount).replace('₹', '').trim();
+      }
+      else if (field === 'createdAt') {
+        exportBill[field] = this.formatDate(bill.createdAt);
+      }
+      else {
+        exportBill[field] = bill[field as keyof Bill];
+      }
+    });
+    
+    return exportBill;
+  });
+}
+
+exportCSV(): void {
+  const preparedData = this.prepareDataForExport();
+  import('xlsx').then(xlsx => {
+    const worksheet = xlsx.utils.json_to_sheet(preparedData);
+    const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, 'transactions');
+  });
+}
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    import('file-saver').then(FileSaver => {
+      let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      let EXCEL_EXTENSION = '.xlsx';
+      const data: Blob = new Blob([buffer], {
+        type: EXCEL_TYPE
+      });
+      FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    });
+  }
+
   openViewDialog(bill: Bill): void {
     this.selectedBill = { ...bill };
     this.viewDialogVisible = true;
@@ -220,7 +270,7 @@ export class TransactionComponent implements OnInit, OnDestroy {
   }
 
   formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR'
     }).format(amount);

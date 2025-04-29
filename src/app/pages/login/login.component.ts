@@ -63,19 +63,36 @@ export class LoginComponent {
     const loginData = this.loginForm.value;
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        this.isLoading = false;
-        if (loginData.rememberMe) {
-          localStorage.setItem('token', response.accessToken);
-        } else {
-          sessionStorage.setItem('token', response.accessToken);
-        }
+        // Token is stored in AuthService's setSession
+        // Fetch user role using validateToken
+        this.authService.validateToken().subscribe({
+          next: (userResponse) => {
+            this.isLoading = false;
+            const userRole = userResponse.data?.role || 'unknown';
 
-        this.router.navigate(['/dashboard/home']);
-        console.log('Login successful!', response);
+            // Navigate based on role
+            if (userRole === 'cashier') {
+              this.router.navigate(['/dashboard/cashier']);
+            } else if (userRole === 'admin') {
+              this.router.navigate(['/dashboard/home']);
+            } else {
+              this.errorMessage = 'Unknown user role';
+              this.authService.logout(); // Clear tokens
+              return;
+            }
+            console.log('Login successful!', response, userResponse);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.errorMessage = err.error?.message || 'Failed to fetch user role';
+            this.authService.logout(); // Clear tokens
+            console.error('Validate token error:', err);
+          },
+        });
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error.message || 'Invalid email or password';
+        this.errorMessage = err.error?.message || 'Invalid email or password';
         console.log('Login error:', err);
       },
     });
@@ -87,19 +104,16 @@ export class LoginComponent {
       return;
     }
 
-    this.userService
-      .sendResetPasswordEmail(this.loginForm.value.email)
-      .subscribe({
-        next: (response) => {
-          this.resetSent = true;
-          this.errorMessage = 'Ckeck your email for the reset link';
-        },
-        error: (error) => {
-          console.error('Reset link error:', error);
-          this.errorMessage =
-            error.error.message || 'Failed to send reset link';
-        },
-      });
+    this.userService.sendResetPasswordEmail(this.loginForm.value.email).subscribe({
+      next: (response) => {
+        this.resetSent = true;
+        this.errorMessage = 'Check your email for the reset link';
+      },
+      error: (error) => {
+        console.error('Reset link error:', error);
+        this.errorMessage = error.error?.message || 'Failed to send reset link';
+      },
+    });
   }
 
   get f() {

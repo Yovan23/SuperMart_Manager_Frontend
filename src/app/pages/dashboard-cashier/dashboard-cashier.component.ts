@@ -1,10 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../services/dashboard.service';
 import { MessageService } from 'primeng/api';
 import { ApiResponse } from '../../models/apiResponse.model';
-import { ChangeDetectorRef, inject, PLATFORM_ID } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -16,12 +15,13 @@ import {
   stagger,
   query,
 } from '@angular/animations';
+
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-cashier',
   standalone: true,
   imports: [CommonModule, ChartModule, TableModule, ButtonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  templateUrl: './dashboard-cashier.component.html',
+  styleUrls: ['./dashboard-cashier.component.css'],
   animations: [
     trigger('cardAnimation', [
       transition('* => *', [
@@ -42,21 +42,48 @@ import {
     ]),
   ],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardCashierComponent implements OnInit {
   loading = false;
   data: any = {};
-  startDate: any;
-  endDate: any;
-  data1: any = {}; // Initially empty, will be populated by API
-  data2: any = {};
+  data1: any = {};
   options: any = {};
+  data2: any = {};
   doughnutOptions: any = {};
-  recentTransaction: any = [];
+  recentTransactions: any[] = [];
   selectedPeriod: string = 'week';
-  selectedPeriodOfCategory: string = 'month';
-  showAll: boolean = false; // Track whether to show all categories
+  selectedPeriodOfCategory: string = 'week';
+  showAll: boolean = false;
   displayedCategories: any[] = [];
-  salesByCategory: any = [];
+  salesByCategory: any[] = [];
+
+  stats = [
+    {
+      title: 'Today Sales',
+      value: 0,
+      icon: 'pi-indian-rupee',
+      change: 0,
+      changeText: 'transactions',
+      iconColor: '#3b82f6',
+    },
+    {
+      title: 'Payment via Cash',
+      value: 0,
+      icon: 'pi-wallet',
+      change: 0,
+      changeText: 'transactions',
+      iconColor: '#06b6d4',
+    },
+    {
+      title: 'Payment via UPI',
+      value: 0,
+      icon: 'pi-ticket',
+      change: 0,
+      changeText: 'transactions',
+      iconColor: '#f59e0b',
+    },
+  ];
+
+  platformId = inject(PLATFORM_ID);
 
   constructor(
     private dashboardService: DashboardService,
@@ -66,48 +93,34 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.loadSevenDaysSale();
     this.loadFlexibleDataOfSale();
     this.loadSalesByCategory();
     this.initCharts();
+    this.loadSevenDaysSale();
   }
 
   loadData(): void {
     this.loading = true;
-    const params: { startDate?: string; endDate?: string; status?: string } =
-      {};
+    const params: { fromDate?: string; toDate?: string } = {};
 
-    if (this.startDate) {
-      const start = new Date(this.startDate);
-      start.setHours(0, 0, 0, 0);
-      params.startDate = start.toISOString().split('T')[0];
-    }
-    if (this.endDate) {
-      const end = new Date(this.endDate);
-      end.setHours(23, 59, 59, 999);
-      params.endDate = end.toISOString().split('T')[0];
-    }
-
-    this.dashboardService.summaryForAdmin(params).subscribe({
+    this.dashboardService.cashierSummaryDetail().subscribe({
       next: (response: ApiResponse) => {
         this.data = response.data;
         if (response.data && 'recentTransactions' in response.data) {
-          this.recentTransaction = response.data.recentTransactions;
+          this.recentTransactions = response.data.recentTransactions as any[];
         } else {
-          console.error('Invalid response data format:', response.data);
-          this.recentTransaction = [];
+          this.recentTransactions = [];
         }
         this.updateStats();
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading bills:', error);
+        console.error('Error loading cashier summary:', error);
         this.loading = false;
       },
     });
   }
 
-  // Fetch flexible sales data for bar chart
   loadFlexibleDataOfSale(): void {
     const params: { period?: string } = { period: this.selectedPeriod };
 
@@ -123,16 +136,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Fetch 7-day sales data for doughnut chart
-  loadSevenDaysSale(): void {
-    this.dashboardService.sevendaysTotalSale().subscribe({
-      next: (response: any) => {
+  loadSalesByCategory(): void {
+    const params: { periodOfCategory?: string } = {
+      periodOfCategory: this.selectedPeriodOfCategory,
+    };
+
+    this.dashboardService.getSalesByCategory(params).subscribe({
+      next: (response: ApiResponse) => {
         if (response.success) {
-          this.updateDoughnutChart(response.data.dailyData);
+          this.updateSalesByCategory(response.data);
         }
       },
       error: (error) => {
-        console.error('Error loading 7-day sales:', error);
+        console.error('Error loading sales by category:', error);
       },
     });
   }
@@ -146,30 +162,15 @@ export class DashboardComponent implements OnInit {
     this.selectedPeriodOfCategory = periodOfCategory;
     this.loadSalesByCategory();
   }
-  animateValue(obj: HTMLElement, start: number, end: number, duration: number) {
-    let startTimestamp: number;
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const value = Math.floor(progress * (end - start) + start);
-      obj.textContent = value.toString(); // Only update the numeric value
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    };
-    window.requestAnimationFrame(step);
-  }
- 
+
   updateStats(): void {
-    this.stats[0].value = this.data.sales?.netSales || 0;
-    this.stats[0].change = this.data.sales?.completedOrders || 0;
-    this.stats[2].value = this.data.cost?.grossProfit || 0;
-    this.stats[2].change = this.data.cost?.profitMargin || 0;
-    this.stats[1].value = this.data.inventory?.totalInventoryValue || 0;
-    this.stats[1].change = this.data.inventory?.totalItemsInStock || 0;
-    this.stats[3].value = this.data.totalEmployees || 0;
-    this.stats[3].change = this.data.activeEmployees || 0;
-  
+    this.stats[0].value = this.data.todaysSalesAmount || 0;
+    this.stats[0].change = this.data.numberOfBillsCreated || 0;
+    this.stats[1].value = this.data.paymentViaCash.amount || 0;
+    this.stats[1].change = this.data.paymentViaCash.count || 0;
+    this.stats[2].value = this.data.paymentViaUPI.amount || 0;
+    this.stats[2].change = this.data.paymentViaUPI.count || 0;
+
     setTimeout(() => {
       this.stats.forEach((stat, index) => {
         const element = document.querySelectorAll('.animated-value')[
@@ -182,42 +183,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  stats = [
-    {
-      title: 'Total Sales',
-      value: 0,
-      icon: 'pi-indian-rupee',
-      change: 0,
-      changeText: 'completed orders',
-      iconColor: '#3b82f6',
-    },
-    {
-      title: 'Inventory Value',
-      value: 0,
-      icon: 'pi-box',
-      change: 0,
-      changeText: 'items in stock',
-      iconColor: '#06b6d4',
-    },
-    {
-      title: 'Gross Profit',
-      value: 0,
-      icon: 'pi-chart-line',
-      change: 0,
-      changeText: '% Profit Margin',
-      iconColor: '#f59e0b',
-    },
-    {
-      title: 'Total Employees',
-      value: 0,
-      icon: 'pi-users',
-      change: 0,
-      changeText: 'Active Employees',
-      iconColor: '#8b5cf6',
-    },
-  ];
-
-  platformId = inject(PLATFORM_ID);
+  animateValue(obj: HTMLElement, start: number, end: number, duration: number) {
+    let startTimestamp: number;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const value = Math.floor(progress * (end - start) + start);
+      obj.textContent = value.toString();
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
 
   initCharts() {
     if (isPlatformBrowser(this.platformId)) {
@@ -293,6 +271,7 @@ export class DashboardComponent implements OnInit {
       this.cd.markForCheck();
     }
   }
+
   updateBarChart(salesData: any[]) {
     const documentStyle = getComputedStyle(document.documentElement);
     this.data1 = {
@@ -318,8 +297,7 @@ export class DashboardComponent implements OnInit {
 
     this.cd.markForCheck(); // Ensure UI update
   }
-
-  updateDoughnutChart(dailyData: any[]) {
+ updateDoughnutChart(dailyData: any[]) {
     const documentStyle = getComputedStyle(document.documentElement);
     this.data2 = {
       labels: dailyData.map((item: any) => `${item.day}`),
@@ -349,22 +327,19 @@ export class DashboardComponent implements OnInit {
     };
     this.cd.markForCheck();
   }
-  loadSalesByCategory(): void {
-    const params: { periodOfCategory?: string } = {
-      periodOfCategory: this.selectedPeriodOfCategory,
-    };
-
-    this.dashboardService.getSalesByCategory(params).subscribe({
-      next: (response: ApiResponse) => {
+  loadSevenDaysSale(): void {
+    this.dashboardService.sevendaysTotalSale().subscribe({
+      next: (response: any) => {
         if (response.success) {
-          this.updateSalesByCategory(response.data);
+          this.updateDoughnutChart(response.data.dailyData);
         }
       },
       error: (error) => {
-        console.error('Error loading sales by category:', error);
+        console.error('Error loading 7-day sales:', error);
       },
     });
   }
+
 
   updateSalesByCategory(data: any): void {
     if (data && Array.isArray(data.categories)) {

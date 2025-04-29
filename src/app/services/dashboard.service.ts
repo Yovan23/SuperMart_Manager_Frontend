@@ -91,4 +91,10 @@ export class DashboardService {
           params: httpParams
         })
     }
+
+    cashierSummaryDetail(): Observable<ApiResponse> {
+        return this.http.get<ApiResponse>(`${this.apiUrl}/cashierSummaryDetail`, {
+            headers: getAuthHeaders()
+          })
+    }
 }    
