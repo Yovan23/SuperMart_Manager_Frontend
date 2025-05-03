@@ -63,21 +63,18 @@ export class LoginComponent {
     const loginData = this.loginForm.value;
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        // Token is stored in AuthService's setSession
-        // Fetch user role using validateToken
         this.authService.validateToken().subscribe({
           next: (userResponse) => {
             this.isLoading = false;
             const userRole = userResponse.data?.role || 'unknown';
 
-            // Navigate based on role
             if (userRole === 'cashier') {
               this.router.navigate(['/dashboard/cashier']);
-            } else if (userRole === 'admin') {
+            } else if (userRole === 'admin' || userRole === 'inventoryManager') {
               this.router.navigate(['/dashboard/home']);
             } else {
               this.errorMessage = 'Unknown user role';
-              this.authService.logout(); // Clear tokens
+              this.authService.logout(); 
               return;
             }
             console.log('Login successful!', response, userResponse);
